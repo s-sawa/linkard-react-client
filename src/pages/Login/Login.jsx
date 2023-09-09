@@ -24,6 +24,8 @@ const Login = () => {
       .post("http://localhost/api/login", data)
       .then(function (response) {
         console.log(response);
+        console.log(response.data.user.id);
+
         // サーバーからのレスポンスデータからトークンを抽出
         const receivedToken = response.data.token;
 
@@ -35,7 +37,7 @@ const Login = () => {
         // トークンをクッキーに保存
         Cookies.set("token", receivedToken, { expires: 7 }); // 有効期限を設定
         // ログイン後に遷移させる
-        navigate("/logout");
+        navigate("/profile");
       })
       .catch(function (error) {
         console.log(error);
