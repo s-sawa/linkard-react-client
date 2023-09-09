@@ -3,6 +3,7 @@ import Login from "./pages/Login/Login";
 import Logout from "./pages/Logout/Logout";
 import Register from "./pages/Register/Register";
 import Cookies from "js-cookie";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 function App() {
   const token = Cookies.get("token");
@@ -17,6 +18,7 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </div>
   );
