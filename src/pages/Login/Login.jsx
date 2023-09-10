@@ -15,33 +15,20 @@ const Login = () => {
   const [token, setToken] = useState(Cookies.get("token") || null);
 
   const onSubmit = async (data) => {
+    
     console.log(data);
-    // try {
-    // axiosのインスタンスを使用してPOSTリクエストを送信
-    // postの中身は第１引数にエンドポイント、第２引数に渡すデータ
-
-    await axios
-      .post("http://localhost/api/login", data)
-      .then(function (response) {
-        console.log(response);
-        console.log(response.data.user.id);
-
-        // サーバーからのレスポンスデータからトークンを抽出
-        const receivedToken = response.data.token;
-
-        // トークンを変数に格納
-        setToken(receivedToken);
-
-        // トークンをコンソールに表示（確認用）
-        console.log(token);
-        // トークンをクッキーに保存
-        Cookies.set("token", receivedToken, { expires: 7 }); // 有効期限を設定
-        // ログイン後に遷移させる
-        navigate("/profile");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    try {
+      const response = await axios.post("http://localhost/api/login", data);
+      console.log(response);
+      console.log(response.data.user.id);
+      const receivedToken = response.data.token;
+      setToken(receivedToken);
+      console.log(token);
+      Cookies.set("token", receivedToken, { expires: 7 });
+      navigate("/profile");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -77,10 +64,8 @@ const Login = () => {
         />
         <p>{errors.password && <p>{errors.password.message}</p>}</p>
 
-        {/* <button type="submit">ログイン</button> */}
         <button type="submit">ログイン</button>
-        {/* <button type="submit">ログイン</button>
-        <Button colorScheme="blue">Button</Button> */}
+        <button onClick={() => navigate("/register")}>新規登録</button>
       </form>
     </div>
   );

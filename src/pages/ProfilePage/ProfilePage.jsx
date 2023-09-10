@@ -16,7 +16,7 @@ const ProfilePage = () => {
       })
       .then((response) => {
         setProfileData(response.data);
-        console.log(response.data.hobbies[0].name);
+        // console.log(response.data.hobbies[0].name);
         console.log(response.data);
       })
       .catch((error) => {
@@ -33,9 +33,22 @@ const ProfilePage = () => {
       <h1>プロフィール</h1>
       <p>ニックネーム: {profileData.user.name}</p>
       <p>Email: {profileData.user.email}</p>
-      <p>趣味: {profileData.hobbies[0].name}</p>
-      {/* <p>趣味:{prodile.data.user.hobbies[0]name}</p> */}
-      {/* user.hobbies[0].name */}
+      <p>
+        趣味:{" "}
+        {profileData.hobbies && profileData.hobbies.length > 0
+          ? profileData.hobbies[0].name
+          : "情報なし"}
+      </p>
+      {profileData.user.profile_image_path && (
+        <div>
+          <p>プロフィール画像:</p>
+          <img
+            src={`http://localhost/${profileData.user.profile_image_path}`}
+            alt="プロフィール画像"
+            style={{ width: "100px", height: "100px" }}
+          />
+        </div>
+      )}
       {/* 他のプロフィール情報を表示 */}
     </div>
   );
