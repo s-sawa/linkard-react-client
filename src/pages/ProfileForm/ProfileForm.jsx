@@ -53,7 +53,7 @@ const ProfileForm = () => {
     });
 
     data.others.forEach((otherObj, index) => {
-      formData.append(`others[${index}][name]`, otherObj.other);
+      formData.append(`others[${index}][name]`, otherObj.name);
     });
 
     formData.append("title", data.title);
@@ -63,7 +63,7 @@ const ProfileForm = () => {
       formData.append("profile_image", image);
     }
     if (freeImage) {
-      formData.append("free_image", image);
+      formData.append("free_image", freeImage);
     }
     console.log([...formData.entries()]);
 
