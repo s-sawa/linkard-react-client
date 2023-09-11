@@ -7,24 +7,44 @@ const ProfileForm = () => {
   const { register, handleSubmit, errors, control } = useForm({
     defaultValues: {
       hobbies: [{ hobby: "" }],
+      others: [{ other: "" }],
     },
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append: appendHobbies } = useFieldArray({
     control,
     name: "hobbies",
   });
+  const { fields: fieldsOther, append: appendOther } = useFieldArray({
+    control,
+    name: "others",
+  });
 
+  // profile画像
   const [image, setImage] = useState(null);
+  // フリー投稿画像
+  const [freeImage, setFreeImage] = useState(null);
   const [token, setToken] = useState(Cookies.get("token") || null);
 
   const onImageChange = (event) => {
+    // eventで選択された画像ファイルをfile格納
     const file = event.target.files[0];
+    // imageをfileに更新する
     setImage(file);
+  };
+  const onFreeImageChange = (event) => {
+    // eventで選択された画像ファイルをfile格納
+    const file = event.target.files[0];
+    // imageをfileに更新する
+    setFreeImage(file);
   };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+    // appendを使ってobject形式で、formDataに入れていく
+    // ()の中のキー (birthday)はテーブルのカラム名と一致させる
+    // バリューのdataはhook-formのregisterで登録した入力値が入っている
+    console.log(data);
     formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
 
@@ -32,8 +52,18 @@ const ProfileForm = () => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
     });
 
+    data.others.forEach((otherObj, index) => {
+      formData.append(`others[${index}][name]`, otherObj.other);
+    });
+
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+
     if (image) {
       formData.append("profile_image", image);
+    }
+    if (freeImage) {
+      formData.append("free_image", image);
     }
     console.log([...formData.entries()]);
 
@@ -73,7 +103,9 @@ const ProfileForm = () => {
         </div>
         <div>
           <label>プロフィール画像:</label>
+          {/* 画像が選択されたらonImageChange関数が実行される */}
           <input type="file" accept="image/*" onChange={onImageChange} />
+          {/* 選択画像の表示 */}
           {image && (
             <img
               src={URL.createObjectURL(image)}
@@ -84,19 +116,59 @@ const ProfileForm = () => {
         </div>
 
         <div>
+          <hr />
           <label>趣味:</label>
-          {fields.map((field, index) => (
-            <div key={field.id}>
-              <input
-                name={`hobbies[${index}].hobby`}
-                {...register(`hobbies[${index}].hobby`)}
-                defaultValue={field.hobby}
-              />
-            </div>
-          ))}
-          <button type="button" onClick={() => append({ hobby: "" })}>
+          {fields &&
+            fields.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`hobbies[${index}].hobby`}
+                  {...register(`hobbies[${index}].hobby`)}
+                  defaultValue={field.hobby}
+                />
+              </div>
+            ))}
+          <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
             ＋
           </button>
+        </div>
+        <div>
+          <hr />
+          <label>その他:</label>
+          {fieldsOther &&
+            fieldsOther.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`others[${index}].name`}
+                  {...register(`others[${index}].name`)}
+                  defaultValue={field.name}
+                />
+              </div>
+            ))}
+          <button type="button" onClick={() => appendOther({ other: "" })}>
+            ＋
+          </button>
+        </div>
+
+        {/* フリー投稿 */}
+        <div>
+          <hr />
+          <label>フリー投稿:</label>
+          <p>タイトル</p>
+          <input type="text" name="title" {...register("title")} />
+          <p>説明</p>
+          <textarea name="description" {...register("description")}></textarea>
+          <p>プロフィール画像:</p>
+          {/* 画像が選択されたらonImageChange関数が実行される */}
+          <input type="file" accept="image/*" onChange={onFreeImageChange} />
+          {/* 選択画像の表示 */}
+          {freeImage && (
+            <img
+              src={URL.createObjectURL(freeImage)}
+              alt="フリー投稿画像"
+              style={{ width: "100px", height: "100px" }}
+            />
+          )}
         </div>
 
         <div>
