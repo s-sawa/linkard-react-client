@@ -16,8 +16,10 @@ const ProfilePage = () => {
       })
       .then((response) => {
         setProfileData(response.data);
-        // console.log(response.data.hobbies[0].name);
-        console.log(response.data);
+        console.log(response.data.otherData);
+        console.log(profileData);
+        // console.log(profileData.hobbies[0])
+        // console.log(profileData.hobbies);
       })
       .catch((error) => {
         console.error("プロフィール情報の取得に失敗しました: ", error);
@@ -32,13 +34,6 @@ const ProfilePage = () => {
     <div>
       <h1>プロフィール</h1>
       <p>ニックネーム: {profileData.user.name}</p>
-      <p>Email: {profileData.user.email}</p>
-      <p>
-        趣味:{" "}
-        {profileData.hobbies && profileData.hobbies.length > 0
-          ? profileData.hobbies[0].name
-          : "情報なし"}
-      </p>
       {profileData.user.profile_image_path && (
         <div>
           <p>プロフィール画像:</p>
@@ -49,7 +44,28 @@ const ProfilePage = () => {
           />
         </div>
       )}
-      {/* 他のプロフィール情報を表示 */}
+      <p>趣味</p>
+      {profileData.hobbies.map((hobby, index) => (
+        <p key={index}>{hobby.hobby}</p>
+      ))}
+
+      <p>その他aaa</p>
+      {profileData.otherData.map((other, index) => (
+        <p key={index}>{other.name}</p>
+      ))}
+
+      <p>フリー投稿</p>
+      {profileData.freePosts[0].image_path && (
+        <div>
+          <p>{profileData.freePosts[0].title}</p>
+          <img
+            src={`http://localhost/${profileData.freePosts[0].image_path}`}
+            alt="フリー画像"
+            style={{ width: "100px", height: "100px" }}
+          />
+          <p>{profileData.freePosts[0].description}</p>
+        </div>
+      )}
     </div>
   );
 };
