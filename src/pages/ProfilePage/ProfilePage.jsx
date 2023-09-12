@@ -4,6 +4,7 @@ import axios from "axios";
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState(null);
+  const [otherLabel, setOtherLabel] = useState("その他"); // その他の項目名を保持する変数
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -16,11 +17,13 @@ const ProfilePage = () => {
       })
       .then((response) => {
         setProfileData(response.data);
-        console.log(response.data.otherData);
-        console.log(profileData);
-        // console.log(profileData.hobbies[0])
-        // console.log(profileData.hobbies);
+        console.log(response.data)
+        // 取得した項目名を設定
+        if (response.data.otherName) {
+          setOtherLabel(response.data.otherName);
+        }
       })
+
       .catch((error) => {
         console.error("プロフィール情報の取得に失敗しました: ", error);
       });
@@ -49,7 +52,7 @@ const ProfilePage = () => {
         <p key={index}>{hobby.hobby}</p>
       ))}
 
-      <p>その他aaa</p>
+      <p>{profileData.otherData[0].newOtherName}</p>
       {profileData.otherData.map((other, index) => (
         <p key={index}>{other.name}</p>
       ))}
