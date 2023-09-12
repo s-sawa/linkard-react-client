@@ -2,9 +2,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import "./ProfileForm.css"; // CSSファイルのインポート
 
 const ProfileForm = () => {
-  const { register, handleSubmit, errors, control } = useForm({
+  const { register, handleSubmit, getValues, errors, control } = useForm({
     defaultValues: {
       hobbies: [{ hobby: "" }],
       others: [{ other: "" }],
@@ -39,6 +40,16 @@ const ProfileForm = () => {
     setFreeImage(file);
   };
 
+  const [newOtherName, setNewOtherName] = useState("その他");
+
+  // その他の項目名変更ボタンがクリックされたときのハンドラ
+  const handleOtherNameChange = () => {
+    // フォームの新しい項目名を取得
+    const updatedOtherName = getValues("otherName"); // getValues を使用して値を取得
+    console.log(updatedOtherName);
+    setNewOtherName(updatedOtherName);
+  };
+
   const onSubmit = async (data) => {
     const formData = new FormData();
     // appendを使ってobject形式で、formDataに入れていく
@@ -55,6 +66,8 @@ const ProfileForm = () => {
     data.others.forEach((otherObj, index) => {
       formData.append(`others[${index}][name]`, otherObj.name);
     });
+
+    formData.append("newOtherName", newOtherName);
 
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -132,9 +145,36 @@ const ProfileForm = () => {
             ＋
           </button>
         </div>
-        <div>
+        {/* <div>
           <hr />
           <label>その他:</label>
+          {fieldsOther &&
+            fieldsOther.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`others[${index}].name`}
+                  {...register(`others[${index}].name`)}
+                  defaultValue={field.name}
+                />
+              </div>
+            ))}
+          <button type="button" onClick={() => appendOther({ other: "" })}>
+            ＋
+          </button>
+        </div> */}
+        {/* その他の項目名変更フォーム */}
+        <div>
+          <hr />
+          <label>{newOtherName}:</label>
+          <input
+            type="text"
+            name="otherName"
+            {...register("otherName")}
+            placeholder="好きな項目を追加"
+          />
+          <button type="button" onClick={handleOtherNameChange}>
+            項目名変更
+          </button>
           {fieldsOther &&
             fieldsOther.map((field, index) => (
               <div key={field.id}>
