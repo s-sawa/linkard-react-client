@@ -1,27 +1,18 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
-import ProfileLink from "../../components/ProfileLink/ProfileLink";
-import QRCodeModal from "../../components/QR/QRCodeModal";
 
-const ProfilePage = () => {
+const UserProfilePage = () => {
+  const { user_id } = useParams();
   const [profileData, setProfileData] = useState(null);
   const [otherLabel, setOtherLabel] = useState("その他"); // その他の項目名を保持する変数
-
-  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  const openQRModal = () => {
-    setIsQRModalOpen(true);
-  };
-
-  const closeQRModal = () => {
-    setIsQRModalOpen(false);
-  };
 
   useEffect(() => {
     const token = Cookies.get("token");
 
     axios
-      .get("http://localhost/api/profile/me", {
+      .get(`http://localhost/api/profile/${user_id}/preview`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,8 +49,6 @@ const ProfilePage = () => {
           />
         </div>
       )}
-      <button onClick={openQRModal}>QR</button>{" "}
-      {/* QRコードモーダルを開くボタン */}
       <p>趣味</p>
       {profileData.hobbies.map((hobby, index) => (
         <p key={index}>{hobby.hobby}</p>
@@ -80,14 +69,8 @@ const ProfilePage = () => {
           <p>{profileData.freePosts[0].description}</p>
         </div>
       )}
-      <ProfileLink username="your-username" />
-      <QRCodeModal
-        isOpen={isQRModalOpen}
-        onRequestClose={closeQRModal}
-        url={`http://localhost:5173/profile/${profileData.user.id}/preview`} // プロフィールページへのリンク
-      />
     </div>
   );
 };
 
-export default ProfilePage;
+export default UserProfilePage;
