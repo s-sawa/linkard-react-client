@@ -10,8 +10,7 @@ import ProfileEdit from "./pages/ProfileEdit/ProfileEdit";
 
 function App() {
   const token = Cookies.get("token");
-    const displayText = import.meta.env.VITE_DISPLAY_TEXT;
-
+  const displayText = import.meta.env.VITE_DISPLAY_TEXT;
 
   return (
     <div className="App">
@@ -24,7 +23,6 @@ function App() {
           element={token ? <Navigate to="/logout" /> : <Register />}
         />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile/setup" element={<ProfileForm />} />
         <Route path="/profile" element={<ProfilePage />} />
