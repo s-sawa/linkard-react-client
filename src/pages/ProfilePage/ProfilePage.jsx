@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import ProfileLink from "../../components/ProfileLink/ProfileLink";
 import QRCodeModal from "../../components/QR/QRCodeModal";
+import DeleteProfileButton from "../../components/DeleteProfileButton/DeleteProfileButton";
+
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState(null);
@@ -86,6 +88,7 @@ const ProfilePage = () => {
         onRequestClose={closeQRModal}
         url={`http://localhost:5173/profile/${profileData.user.id}/preview`} // プロフィールページへのリンク
       />
+      <DeleteProfileButton />
     </div>
   );
 };
