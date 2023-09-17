@@ -7,16 +7,13 @@ const Logout = () => {
 
   // ログアウト処理を実行する関数
   const handleLogout = () => {
-    // Cookieからトークンを取得
     const token = Cookies.get("token");
 
     if (token) {
-      // リクエストヘッダーにトークンを含めるためのオブジェクトを作成
       const headers = {
         Authorization: `Bearer ${token}`,
       }; //response サーバーからのデータやHTTPステータスコード、ヘッダー情報などが含まれる
 
-      // サーバーにログアウトのPOSTリクエストを送信
       axios
         .post("http://localhost/api/logout", null, { headers })
         .then((response) => {

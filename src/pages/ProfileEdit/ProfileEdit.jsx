@@ -186,6 +186,10 @@ const ProfileEdit = () => {
                   {...register(`hobbies[${index}].hobby`)}
                   defaultValue={field.hobby}
                 />
+                <button type="button" onClick={() => remove(index)}>
+                  削除
+                </button>{" "}
+                {/* 削除ボタンを追加 */}
               </div>
             ))}
           <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
