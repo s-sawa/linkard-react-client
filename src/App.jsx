@@ -24,6 +24,7 @@ function App() {
           element={token ? <Navigate to="/logout" /> : <Register />}
         />
         <Route path="/login" element={<Login />} />
+        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile/setup" element={<ProfileForm />} />
         <Route path="/profile" element={<ProfilePage />} />
