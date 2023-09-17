@@ -12,11 +12,19 @@ const ProfileForm = () => {
     },
   });
 
-  const { fields, append: appendHobbies } = useFieldArray({
+  const {
+    fields,
+    append: appendHobbies,
+    remove: removeHobby,
+  } = useFieldArray({
     control,
     name: "hobbies",
   });
-  const { fields: fieldsOther, append: appendOther } = useFieldArray({
+  const {
+    fields: fieldsOther,
+    append: appendOther,
+    remove: removeOther,
+  } = useFieldArray({
     control,
     name: "others",
   });
@@ -139,30 +147,15 @@ const ProfileForm = () => {
                   {...register(`hobbies[${index}].hobby`)}
                   defaultValue={field.hobby}
                 />
+                <button type="button" onClick={() => removeHobby(index)}>
+                  削除
+                </button>
               </div>
             ))}
           <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
             ＋
           </button>
         </div>
-        {/* <div>
-          <hr />
-          <label>その他:</label>
-          {fieldsOther &&
-            fieldsOther.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  name={`others[${index}].name`}
-                  {...register(`others[${index}].name`)}
-                  defaultValue={field.name}
-                />
-              </div>
-            ))}
-          <button type="button" onClick={() => appendOther({ other: "" })}>
-            ＋
-          </button>
-        </div> */}
-        {/* その他の項目名変更フォーム */}
         <div>
           <hr />
           <label>{newOtherName}:</label>
@@ -183,6 +176,9 @@ const ProfileForm = () => {
                   {...register(`others[${index}].name`)}
                   defaultValue={field.name}
                 />
+                <button type="button" onClick={() => removeOther(index)}>
+                  削除
+                </button>
               </div>
             ))}
           <button type="button" onClick={() => appendOther({ other: "" })}>

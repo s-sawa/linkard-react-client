@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  // 環境変数からAPIのベースURLを取得
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const {
     register,
     handleSubmit,
@@ -15,10 +17,9 @@ const Login = () => {
   const [token, setToken] = useState(Cookies.get("token") || null);
 
   const onSubmit = async (data) => {
-    
-    console.log(data);
     try {
-      const response = await axios.post("http://localhost/api/login", data);
+      const response = await axios.post(`${API_BASE_URL}/api/login`, data); // APIのURLを動的に設定
+      // const response = await axios.post("http://localhost/api/login", data);
       console.log(response);
       console.log(response.data.user.id);
       const receivedToken = response.data.token;
