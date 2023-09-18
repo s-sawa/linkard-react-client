@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 
 const ProfileEdit = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const [profileData, setProfileData] = useState(null);
   const token = Cookies.get("token") || null;
 
@@ -32,7 +34,7 @@ const ProfileEdit = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get("http://localhost/api/profile/me", {
+        const response = await axios.get(`${API_BASE_URL}/api/profile/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -127,7 +129,7 @@ const ProfileEdit = () => {
     console.log([...formData.entries()]);
 
     try {
-      await axios.post("http://localhost/api/profile/me", formData, {
+      await axios.post(`${API_BASE_URL}/api/profile/me`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -188,8 +190,7 @@ const ProfileEdit = () => {
                 />
                 <button type="button" onClick={() => remove(index)}>
                   削除
-                </button>{" "}
-                {/* 削除ボタンを追加 */}
+                </button>
               </div>
             ))}
           <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
@@ -216,6 +217,9 @@ const ProfileEdit = () => {
                   {...register(`others[${index}].name`)}
                   defaultValue={field.name}
                 />
+                <button type="button" onClick={() => removeOther(index)}>
+                  削除
+                </button>
               </div>
             ))}
           <button type="button" onClick={() => appendOther({ name: "" })}>
