@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
+import FollowButton from "../../components/FollowButton/FollowButton";
+import GroupSelection from "../../components/GroupSelection/GroupSelection";
+
 
 const UserProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -22,6 +25,7 @@ const UserProfilePage = () => {
             },
           }
         );
+        console.log(user_id);
 
         setProfileData(response.data);
         console.log(response.data);
@@ -45,6 +49,9 @@ const UserProfilePage = () => {
   return (
     <div>
       <h1>プロフィール</h1>
+      {/* <GroupSelection API_BASE_URL={API_BASE_URL} /> */}
+
+      <FollowButton API_BASE_URL={API_BASE_URL} userId={user_id} />
       <p>ニックネーム: {profileData.user.name}</p>
       {profileData.user.profile_image_path && (
         <div>
