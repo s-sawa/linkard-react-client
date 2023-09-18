@@ -5,6 +5,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import "./ProfileForm.css"; // CSSファイルのインポート
 
 const ProfileForm = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const { register, handleSubmit, getValues, errors, control } = useForm({
     defaultValues: {
       hobbies: [{ hobby: "" }],
@@ -90,7 +92,7 @@ const ProfileForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost/api/profile/me",
+        `${API_BASE_URL}/api/profile/me`,
         formData,
         {
           headers: {
