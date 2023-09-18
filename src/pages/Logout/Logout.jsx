@@ -3,36 +3,35 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const navigate = useNavigate(); // useNavigateを初期化
 
   // ログアウト処理を実行する関数
-  const handleLogout = () => {
+  const handleLogout = async () => {
     const token = Cookies.get("token");
 
     if (token) {
       const headers = {
         Authorization: `Bearer ${token}`,
-      }; //response サーバーからのデータやHTTPステータスコード、ヘッダー情報などが含まれる
+      };
 
-      axios
-        .post("http://localhost/api/logout", null, { headers })
-        .then((response) => {
-          // ログアウト成功時の処理
-          Cookies.remove("token"); // トークンをCookieから削除
-          console.log("ログアウトしました");
-          navigate("/login");
-        })
-        .catch((error) => {
-          // ログアウトエラー時の処理
-          console.log("ログアウトエラー：", error);
+      try {
+        const response = await axios.post(`${API_BASE_URL}/api/logout`, null, {
+          headers,
         });
+
+        Cookies.remove("token"); // トークンをCookieから削除
+        console.log("ログアウトしました");
+        navigate("/login");
+      } catch (error) {
+        console.log("ログアウトエラー：", error);
+      }
     } else {
-      // トークンが存在しない場合の処理
       console.log("トークンがありません");
     }
   };
 
-  // コンポーネントのレンダリング
   return (
     <div>
       <button type="button" onClick={handleLogout}>
