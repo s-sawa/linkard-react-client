@@ -4,31 +4,38 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 const UserProfilePage = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const { user_id } = useParams();
   const [profileData, setProfileData] = useState(null);
   const [otherLabel, setOtherLabel] = useState("その他"); // その他の項目名を保持する変数
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const fetchData = async () => {
+      try {
+        const token = Cookies.get("token");
+        const response = await axios.get(
+          `${API_BASE_URL}/api/profile/${user_id}/preview`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    axios
-      .get(`http://localhost/api/profile/${user_id}/preview`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
         setProfileData(response.data);
         console.log(response.data);
+
         // 取得した項目名を設定
         if (response.data.otherName) {
           setOtherLabel(response.data.otherName);
         }
-      })
-
-      .catch((error) => {
+      } catch (error) {
         console.error("プロフィール情報の取得に失敗しました: ", error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (!profileData) {
@@ -43,7 +50,7 @@ const UserProfilePage = () => {
         <div>
           <p>プロフィール画像:</p>
           <img
-            src={`http://localhost/${profileData.user.profile_image_path}`}
+            src={`${API_BASE_URL}/${profileData.user.profile_image_path}`}
             alt="プロフィール画像"
             style={{ width: "100px", height: "100px" }}
           />
@@ -62,7 +69,7 @@ const UserProfilePage = () => {
         <div>
           <p>{profileData.freePosts[0].title}</p>
           <img
-            src={`http://localhost/${profileData.freePosts[0].image_path}`}
+            src={`${API_BASE_URL}/${profileData.freePosts[0].image_path}`}
             alt="フリー画像"
             style={{ width: "100px", height: "100px" }}
           />

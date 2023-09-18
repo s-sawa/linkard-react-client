@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const {
     register,
     handleSubmit,
@@ -17,17 +19,15 @@ const Register = () => {
   const onSubmit = async (data) => {
     console.log(data);
 
-    await axios
-      .post("http://localhost/api/register", data)
-      .then(function (response) {
-        console.log(response.status);
-        if (response.status === 204) {
-          navigate("/login");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/register`, data);
+      console.log(response.status);
+      if (response.status === 204) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

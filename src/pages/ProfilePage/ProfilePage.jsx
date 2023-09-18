@@ -5,8 +5,10 @@ import ProfileLink from "../../components/ProfileLink/ProfileLink";
 import QRCodeModal from "../../components/QR/QRCodeModal";
 import DeleteProfileButton from "../../components/DeleteProfileButton/DeleteProfileButton";
 
-
 const ProfilePage = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const [profileData, setProfileData] = useState(null);
   const [otherLabel, setOtherLabel] = useState("その他"); // その他の項目名を保持する変数
 
@@ -23,7 +25,7 @@ const ProfilePage = () => {
     const token = Cookies.get("token");
 
     axios
-      .get("http://localhost/api/profile/me", {
+      .get(`${API_BASE_URL}/api/profile/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,7 +56,7 @@ const ProfilePage = () => {
         <div>
           <p>プロフィール画像:</p>
           <img
-            src={`http://localhost/${profileData.user.profile_image_path}`}
+            src={`${API_BASE_URL}/${profileData.user.profile_image_path}`}
             alt="プロフィール画像"
             style={{ width: "100px", height: "100px" }}
           />
@@ -75,7 +77,7 @@ const ProfilePage = () => {
         <div>
           <p>{profileData.freePosts[0].title}</p>
           <img
-            src={`http://localhost/${profileData.freePosts[0].image_path}`}
+            src={`${API_BASE_URL}/${profileData.freePosts[0].image_path}`}
             alt="フリー画像"
             style={{ width: "100px", height: "100px" }}
           />
@@ -86,7 +88,8 @@ const ProfilePage = () => {
       <QRCodeModal
         isOpen={isQRModalOpen}
         onRequestClose={closeQRModal}
-        url={`http://localhost:5173/profile/${profileData.user.id}/preview`} // プロフィールページへのリンク
+        // url={`${API_BASE_URL}/profile/${profileData.user.id}/preview`} // プロフィールページへのリンク
+        url={`${BASE_URL}/profile/${profileData.user.id}/preview`} // プロフィールページへのリンク
       />
       <DeleteProfileButton />
     </div>
