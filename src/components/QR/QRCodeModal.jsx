@@ -1,6 +1,5 @@
 // QRCodeModal.js
 
-import React from "react";
 import Modal from "react-modal";
 import QRCode from "qrcode.react"; // QRコード生成ライブラリ
 

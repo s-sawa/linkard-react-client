@@ -51,7 +51,7 @@ const UserProfilePage = () => {
       <h1>プロフィール</h1>
       {/* <GroupSelection API_BASE_URL={API_BASE_URL} /> */}
 
-      <FollowButton API_BASE_URL={API_BASE_URL} userId={user_id} />
+      <FollowButton API_BASE_URL={API_BASE_URL} toUserId={user_id} />
       <p>ニックネーム: {profileData.user.name}</p>
       {profileData.user.profile_image_path && (
         <div>
