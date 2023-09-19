@@ -1,43 +1,39 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AddGroupButton from "../AddGroupButton/AddGroupButton";
 import { useForm } from "react-hook-form";
+import useIsFollowing from "../../hooks/useIsFollowing";
+import useGroups from "../../hooks/useGroups";
 
-const FollowButton = ({ API_BASE_URL, userId }) => {
-  const [groups, setGroups] = useState([]);
+const FollowButton = ({ API_BASE_URL, toUserId }) => {
   const [reloadGroups, setReloadGroups] = useState(false);
   const { register, handleSubmit, setValue } = useForm();
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const token = Cookies.get("token");
-        const response = await axios.get(`${API_BASE_URL}/api/groups`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setGroups(response.data);
-      } catch (error) {
-        console.error("グループの取得に失敗しました: ", error);
-      }
-    };
-    fetchGroups();
-  }, [reloadGroups]);
+  const { groups, loading: groupsLoading } = useGroups(
+    API_BASE_URL,
+    reloadGroups
+  );
+
+  // フォローしているかどうか
+  const { isFollowing, loading } = useIsFollowing(API_BASE_URL, toUserId);
+
+  const isLoading = loading || groupsLoading;
 
   const onSubmit = async (data) => {
+    console.log(toUserId);
     try {
       const token = Cookies.get("token");
       const response = await axios.post(
-        `${API_BASE_URL}/api/users/${userId}/follow`,
-        { userId, groupId: data.group },
+        `${API_BASE_URL}/api/users/${toUserId}/follow`,
+        { userId: Number(toUserId), groupId: Number(data.group) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+      console.log(response);
 
       if (response.data.success) {
         alert("フォローしました！");
@@ -52,23 +48,31 @@ const FollowButton = ({ API_BASE_URL, userId }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <select
-          {...register("group")}
-          onChange={(e) => setValue("group", e.target.value)}
-        >
-          {groups.map((group) => (
-            <option key={group.id} value={group.id}>
-              {group.name}
-            </option>
-          ))}
-        </select>
-        <button type="submit">フォローする</button>
-      </form>
-      <AddGroupButton
-        API_BASE_URL={API_BASE_URL}
-        onGroupAdded={() => setReloadGroups(!reloadGroups)}
-      />
+      {isLoading ? (
+        <p>ロード中...</p>
+      ) : (
+        <>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <select
+              {...register("group")}
+              onChange={(e) => setValue("group", e.target.value)}
+            >
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+            <button type="submit">
+              {isFollowing ? "フォローを解除する" : "フォローする"}
+            </button>
+          </form>
+          <AddGroupButton
+            API_BASE_URL={API_BASE_URL}
+            onGroupAdded={() => setReloadGroups(!reloadGroups)}
+          />
+        </>
+      )}
     </div>
   );
 };
