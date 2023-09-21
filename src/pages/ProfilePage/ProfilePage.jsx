@@ -8,6 +8,7 @@ import "./ProfilePage.css";
 import { getTokenFromCookie } from "../../utils/cookies";
 import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
 import BarcodeScanner from "../../components/QR/BarcodeScanner";
+import CameraModal from "../../components/CameraModal/CameraModal";
 
 const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -31,6 +32,7 @@ const ProfilePage = () => {
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
 
   useEffect(() => {
     const token = getTokenFromCookie();
@@ -114,10 +116,13 @@ const ProfilePage = () => {
           <button onClick={() => setShowScanner(false)}>Close Scanner</button>
         </div>
       )} */}
-      <div>
-        <button onClick={() => setShowScanner(true)}>Start QR Scanning</button>
+      {/* <div>
+        <button onClick={() => setIsCameraModalOpen(true)}>
+          Start QR Scanning
+        </button>
         {showScanner && <BarcodeScanner onScan={handleScanResult} />}
-      </div>
+      </div> */}
+      <CameraModal />
 
       <div className="profile-content">
         <div className="item-content">
