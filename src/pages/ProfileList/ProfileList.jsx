@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
 import axios from "axios";
 import useGroups from "../../hooks/useGroups";
+import { getTokenFromCookie } from "../../utils/cookies";
 
 const ProfileList = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -13,7 +13,7 @@ const ProfileList = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const token = Cookies.get("token");
+      const token = getTokenFromCookie();
 
       let endpoint = `${API_BASE_URL}/api/users/following`;
       if (groupId) {

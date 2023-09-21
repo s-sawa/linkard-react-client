@@ -1,19 +1,31 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import "./ProfileForm.css"; // CSSファイルのインポート
+import { useNavigate } from "react-router-dom";
+import { getTokenFromCookie } from "../../utils/cookies";
 
 const ProfileForm = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  const { register, handleSubmit, getValues, errors, control } = useForm({
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    control,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       hobbies: [{ hobby: "" }],
       others: [{ other: "" }],
+      others2: [{ other2: "" }],
+      others3: [{ other3: "" }],
     },
   });
 
+
+  
   const {
     fields,
     append: appendHobbies,
@@ -31,11 +43,29 @@ const ProfileForm = () => {
     name: "others",
   });
 
+  const {
+    fields: fieldsOther2,
+    append: appendOther2,
+    remove: removeOther2,
+  } = useFieldArray({
+    control,
+    name: "others2",
+  });
+
+  const {
+    fields: fieldsOther3,
+    append: appendOther3,
+    remove: removeOther3,
+  } = useFieldArray({
+    control,
+    name: "others3",
+  });
+
   // profile画像
   const [image, setImage] = useState(null);
   // フリー投稿画像
   const [freeImage, setFreeImage] = useState(null);
-  const [token, setToken] = useState(Cookies.get("token") || null);
+  const token = getTokenFromCookie();
 
   const onImageChange = (event) => {
     // eventで選択された画像ファイルをfile格納
@@ -50,7 +80,12 @@ const ProfileForm = () => {
     setFreeImage(file);
   };
 
+  // その他1
   const [newOtherName, setNewOtherName] = useState("その他");
+  // その他2
+  const [newOtherName2, setNewOtherName2] = useState("その他");
+  // その他3
+  const [newOtherName3, setNewOtherName3] = useState("その他");
 
   // その他の項目名変更ボタンがクリックされたときのハンドラ
   const handleOtherNameChange = () => {
@@ -59,6 +94,14 @@ const ProfileForm = () => {
     console.log(updatedOtherName);
     setNewOtherName(updatedOtherName);
   };
+  const handleOtherNameChange2 = () => {
+    const updatedOtherName = getValues("otherName2");
+    setNewOtherName2(updatedOtherName);
+  };
+  const handleOtherNameChange3 = () => {
+    const updatedOtherName = getValues("otherName3");
+    setNewOtherName3(updatedOtherName);
+  };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -66,6 +109,7 @@ const ProfileForm = () => {
     // ()の中のキー (birthday)はテーブルのカラム名と一致させる
     // バリューのdataはhook-formのregisterで登録した入力値が入っている
     console.log(data);
+    formData.append("name", data.name);
     formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
 
@@ -76,8 +120,16 @@ const ProfileForm = () => {
     data.others.forEach((otherObj, index) => {
       formData.append(`others[${index}][name]`, otherObj.name);
     });
+    data.others2.forEach((otherObj, index) => {
+      formData.append(`others2[${index}][name]`, otherObj.name);
+    });
+    data.others3.forEach((otherObj, index) => {
+      formData.append(`others3[${index}][name]`, otherObj.name);
+    });
 
     formData.append("newOtherName", newOtherName);
+    formData.append("newOtherName2", newOtherName2);
+    formData.append("newOtherName3", newOtherName3);
 
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -88,6 +140,21 @@ const ProfileForm = () => {
     if (freeImage) {
       formData.append("free_image", freeImage);
     }
+    if (data.facebook_link) {
+      formData.append("social_links[0][platform]", "facebook");
+      formData.append("social_links[0][url]", data.facebook_link);
+    }
+
+    if (data.twitter_link) {
+      formData.append("social_links[1][platform]", "twitter");
+      formData.append("social_links[1][url]", data.twitter_link);
+    }
+
+    if (data.instagram_link) {
+      formData.append("social_links[2][platform]", "instagram");
+      formData.append("social_links[2][url]", data.instagram_link);
+    }
+
     console.log([...formData.entries()]);
 
     try {
@@ -102,11 +169,11 @@ const ProfileForm = () => {
         }
       );
       console.log(response);
-      console.log(response.data.user.id);
-      const receivedToken = response.data.token;
-      setToken(receivedToken);
-      console.log(token);
-      Cookies.set("token", receivedToken, { expires: 7 });
+      // const receivedToken = response.data.token;
+      // setToken(receivedToken);
+      // console.log(token);
+      // Cookies.set("token", receivedToken, { expires: 7 });
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -116,6 +183,10 @@ const ProfileForm = () => {
     <div>
       <div>ProfileForm</div>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label>ニックネーム:</label>
+          <input type="text" name="name" {...register("name")} />
+        </div>
         <div>
           <label>誕生日:</label>
           <input type="date" name="birthday" {...register("birthday")} />
@@ -158,6 +229,7 @@ const ProfileForm = () => {
             ＋
           </button>
         </div>
+        {/* その他1 */}
         <div>
           <hr />
           <label>{newOtherName}:</label>
@@ -165,7 +237,7 @@ const ProfileForm = () => {
             type="text"
             name="otherName"
             {...register("otherName")}
-            placeholder="好きな項目を追加"
+            placeholder="好きな項目名に変更"
           />
           <button type="button" onClick={handleOtherNameChange}>
             項目名変更
@@ -187,16 +259,77 @@ const ProfileForm = () => {
             ＋
           </button>
         </div>
+        {/* その他2 */}
+        <div>
+          <hr />
+          <label>{newOtherName2}:</label>
+          <input
+            type="text"
+            name="otherName2"
+            {...register("otherName2")}
+            placeholder="好きな項目名に変更"
+          />
+          <button type="button" onClick={handleOtherNameChange2}>
+            項目名変更
+          </button>
+          {fieldsOther2 &&
+            fieldsOther2.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`others2[${index}].name`}
+                  {...register(`others2[${index}].name`)}
+                  defaultValue={field.name}
+                />
+                <button type="button" onClick={() => removeOther2(index)}>
+                  削除
+                </button>
+              </div>
+            ))}
+          <button type="button" onClick={() => appendOther2({ other2: "" })}>
+            ＋
+          </button>
+        </div>
+
+        {/* その他3 */}
+        <div>
+          <hr />
+          <label>{newOtherName3}:</label>
+          <input
+            type="text"
+            name="otherName3"
+            {...register("otherName3")}
+            placeholder="好きな項目名に変更"
+          />
+          <button type="button" onClick={handleOtherNameChange3}>
+            項目名変更
+          </button>
+          {fieldsOther3 &&
+            fieldsOther3.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`others3[${index}].name`}
+                  {...register(`others3[${index}].name`)}
+                  defaultValue={field.name}
+                />
+                <button type="button" onClick={() => removeOther3(index)}>
+                  削除
+                </button>
+              </div>
+            ))}
+          <button type="button" onClick={() => appendOther3({ other3: "" })}>
+            ＋
+          </button>
+        </div>
 
         {/* フリー投稿 */}
         <div>
           <hr />
-          <label>フリー投稿:</label>
+          <label>フリー入力欄:</label>
           <p>タイトル</p>
           <input type="text" name="title" {...register("title")} />
-          <p>説明</p>
+          <p>内容</p>
           <textarea name="description" {...register("description")}></textarea>
-          <p>プロフィール画像:</p>
+          <p>画像:</p>
           {/* 画像が選択されたらonImageChange関数が実行される */}
           <input type="file" accept="image/*" onChange={onFreeImageChange} />
           {/* 選択画像の表示 */}
@@ -204,9 +337,35 @@ const ProfileForm = () => {
             <img
               src={URL.createObjectURL(freeImage)}
               alt="フリー投稿画像"
-              style={{ width: "100px", height: "100px" }}
+              style={{ width: "100px", height: "100px", objectFit: "cover" }}
             />
           )}
+        </div>
+
+        {/* SNSリンク */}
+        <div>
+          <hr />
+          <p>Facebook URL:</p>
+          <input
+            type="url"
+            name="facebook_link"
+            {...register("facebook_link")}
+            placeholder="https://facebook.com/yourname"
+          />
+          <p>X(Twitter) URL:</p>
+          <input
+            type="url"
+            name="twitter_link"
+            {...register("twitter_link")}
+            placeholder="https://twitter.com/yourname"
+          />
+          <p>Instagram URL:</p>
+          <input
+            type="url"
+            name="instagram_link"
+            {...register("instagram_link")}
+            placeholder="https://instagram.com/yourname"
+          />
         </div>
 
         <div>

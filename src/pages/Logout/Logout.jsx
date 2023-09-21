@@ -1,16 +1,16 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { getTokenFromCookie } from "../../utils/cookies";
 
 const Logout = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const token = getTokenFromCookie();
 
   const navigate = useNavigate(); // useNavigateを初期化
 
   // ログアウト処理を実行する関数
   const handleLogout = async () => {
-    const token = Cookies.get("token");
-
     if (token) {
       const headers = {
         Authorization: `Bearer ${token}`,
