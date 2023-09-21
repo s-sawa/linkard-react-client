@@ -1,0 +1,75 @@
+.profile-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.profile-card img {
+    max-width: 100%;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-content {
+    margin-bottom: 20px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 項目のヘッダー部分に適用するスタイル */
+.item-header {
+    font-weight: bold;
+    color: #333;
+    padding-bottom: 5px;
+    font-size: 1.1em;
+}
+
+/* 項目のコンテンツ部分に適用するスタイル */
+.item-content {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.no-style-img {
+    border-radius: 0;
+    margin-bottom: 0;
+    max-width: none;
+}
+
+/* バッジのスタイル */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;  /* 角丸を作成 */
+    background-color: #3498db;  /* バッジの背景色 */
+    color: #fff;  /* 文字色 */
+    font-size: 0.8em;  /* フォントサイズの調整 */
+    margin: 5px;  /* バッジ同士の間隔 */
+    transition: background-color 0.3s;  /* ホバーエフェクトのアニメーション */
+}
+
+/* ホバー時のスタイル変更 */
+.badge:hover {
+    background-color: #2980b9;
+}
+
+a {
+  margin-right: 6px; /* 例: 右側に10pxのマージンを追加 */
+}
