@@ -1,13 +1,15 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { getTokenFromCookie } from "../../utils/cookies";
+import { useNavigate } from "react-router-dom";
 
 const ProfileEdit = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
-  const token = Cookies.get("token") || null;
+  const token = getTokenFromCookie();
 
   const { register, handleSubmit, getValues, setValue, control } = useForm({});
 
@@ -19,6 +21,7 @@ const ProfileEdit = () => {
     control,
     name: "hobbies",
   });
+
   const {
     fields: fieldsOther,
     append: appendOther,
@@ -26,6 +29,23 @@ const ProfileEdit = () => {
   } = useFieldArray({
     control,
     name: "others",
+  });
+  const {
+    fields: fieldsOther2,
+    append: appendOther2,
+    remove: removeOther2,
+  } = useFieldArray({
+    control,
+    name: "others2",
+  });
+
+  const {
+    fields: fieldsOther3,
+    append: appendOther3,
+    remove: removeOther3,
+  } = useFieldArray({
+    control,
+    name: "others3",
   });
 
   const [image, setImage] = useState(null);
@@ -47,40 +67,56 @@ const ProfileEdit = () => {
         setValue("title", response.data.freePosts[0].title);
         setValue("description", response.data.freePosts[0].description);
         setValue("otherName", response.data.otherData[0].newOtherName);
+        setValue("otherName2", response.data.otherData2[0].newOtherName2);
+        setValue("otherName3", response.data.otherData3[0].newOtherName3);
         setNewOtherName(response.data.otherData[0].newOtherName || "その他");
+        setNewOtherName2(response.data.otherData2[0].newOtherName2 || "その他");
+        setNewOtherName3(response.data.otherData3[0].newOtherName3 || "その他");
 
-        console.log("Before removing:", fields, fieldsOther);
         fields.length && fields.forEach((_, index) => remove(index));
         fieldsOther.length &&
           fieldsOther.forEach((_, index) => removeOther(index));
-        console.log("After removing:", fields, fieldsOther);
 
-        console.log(image);
+        fieldsOther2.length &&
+          fieldsOther2.forEach((_, index) => removeOther2(index));
+
+        fieldsOther3.length &&
+          fieldsOther3.forEach((_, index) => removeOther3(index));
 
         // hobbiesデータのセット
-        console.log("Before appending hobbies:", fields);
         if (response.data.hobbies && response.data.hobbies.length > 0) {
           for (const hobby of response.data.hobbies) {
             appendHobbies({ hobby: hobby.hobby });
           }
         }
-        console.log("After appending hobbies:", fields);
 
-        console.log("Before appending otherData:", fieldsOther);
+        // other1データのセット
         if (response.data.otherData && response.data.otherData.length > 0) {
           for (const other of response.data.otherData) {
             appendOther({ name: other.name });
           }
         }
-        console.log("After appending otherData:", fieldsOther);
-        console.log(response.data.otherData[0]);
+
+        // other2データのセット
+        if (response.data.otherData2 && response.data.otherData2.length > 0) {
+          for (const other2 of response.data.otherData2) {
+            appendOther2({ name: other2.name });
+          }
+        }
+
+        // other3データのセット
+        if (response.data.otherData3 && response.data.otherData3.length > 0) {
+          for (const other3 of response.data.otherData3) {
+            appendOther3({ name: other3.name });
+          }
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchProfileData();
-  }, [setValue, token, appendHobbies, appendOther]);
+  }, [setValue, token, appendHobbies, appendOther, appendOther2, appendOther3]);
 
   const onImageChange = (event) => {
     const file = event.target.files[0];
@@ -95,14 +131,27 @@ const ProfileEdit = () => {
     setFreeImage(file);
   };
 
-  //   const [newOtherName, setNewOtherName] = useState("その他");
   const [newOtherName, setNewOtherName] = useState(
     profileData?.otherData[0]?.newOtherName || "その他"
+  );
+  const [newOtherName2, setNewOtherName2] = useState(
+    profileData?.otherData2[0]?.newOtherName2 || "その他"
+  );
+  const [newOtherName3, setNewOtherName3] = useState(
+    profileData?.otherData3[0]?.newOtherName3 || "その他"
   );
 
   const handleOtherNameChange = () => {
     const updatedOtherName = getValues("otherName");
     setNewOtherName(updatedOtherName);
+  };
+  const handleOtherNameChange2 = () => {
+    const updatedOtherName = getValues("otherName2");
+    setNewOtherName2(updatedOtherName);
+  };
+  const handleOtherNameChange3 = () => {
+    const updatedOtherName = getValues("otherName3");
+    setNewOtherName3(updatedOtherName);
   };
 
   const onSubmit = async (data) => {
@@ -116,7 +165,15 @@ const ProfileEdit = () => {
     data.others.forEach((otherObj, index) => {
       formData.append(`others[${index}][name]`, otherObj.name);
     });
+    data.others2.forEach((otherObj2, index) => {
+      formData.append(`others2[${index}][name]`, otherObj2.name);
+    });
+    data.others3.forEach((otherObj3, index) => {
+      formData.append(`others3[${index}][name]`, otherObj3.name);
+    });
     formData.append("newOtherName", newOtherName);
+    formData.append("newOtherName2", newOtherName2);
+    formData.append("newOtherName3", newOtherName3);
     formData.append("title", data.title);
     formData.append("description", data.description);
     if (image) {
@@ -136,6 +193,7 @@ const ProfileEdit = () => {
           "X-HTTP-Method-Override": "PUT", // PUTに置き換える記述を書く
         },
       });
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -224,6 +282,66 @@ const ProfileEdit = () => {
             ))}
           <button type="button" onClick={() => appendOther({ name: "" })}>
             {/* <button type="button" onClick={() => appendOther({ other: "" })}> */}
+            ＋
+          </button>
+        </div>
+
+        <div>
+          <hr />
+          <label>{newOtherName2}:</label>
+          <input
+            type="text"
+            name="otherName2"
+            {...register("otherName2")}
+            placeholder="好きな項目を追加"
+          />
+          <button type="button" onClick={handleOtherNameChange2}>
+            項目名変更
+          </button>
+          {fieldsOther2 &&
+            fieldsOther2.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`others2[${index}].name`}
+                  {...register(`others2[${index}].name`)}
+                  defaultValue={field.name}
+                />
+                <button type="button" onClick={() => removeOther2(index)}>
+                  削除
+                </button>
+              </div>
+            ))}
+          <button type="button" onClick={() => appendOther2({ name: "" })}>
+            ＋
+          </button>
+        </div>
+
+        <div>
+          <hr />
+          <label>{newOtherName3}:</label>
+          <input
+            type="text"
+            name="otherName3"
+            {...register("otherName3")}
+            placeholder="好きな項目を追加"
+          />
+          <button type="button" onClick={handleOtherNameChange3}>
+            項目名変更
+          </button>
+          {fieldsOther3 &&
+            fieldsOther3.map((field, index) => (
+              <div key={field.id}>
+                <input
+                  name={`others3[${index}].name`}
+                  {...register(`others3[${index}].name`)}
+                  defaultValue={field.name}
+                />
+                <button type="button" onClick={() => removeOther3(index)}>
+                  削除
+                </button>
+              </div>
+            ))}
+          <button type="button" onClick={() => appendOther3({ name: "" })}>
             ＋
           </button>
         </div>

@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -66,4 +66,72 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+/* index.css */
+
+/* リセット & グローバルスタイル */
+body, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    box-sizing: border-box;
+    margin: 0 ;
+}
+
+/* モバイル向けのデフォルトのスタイル */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+    padding-left: 0;
+}
+
+nav li {
+    margin: 0 10px;
+}
+
+/* タブレット向けのスタイル (例: 768px以上のデバイス) */
+@media (min-width: 768px) {
+    header {
+        padding: 20px 40px;
+    }
+
+    nav ul {
+        justify-content: flex-start;
+    }
+}
+
+/* デスクトップ向けのスタイル (例: 1024px以上のデバイス) */
+@media (min-width: 1024px) {
+    header {
+        padding: 30px 60px;
+    }
+
+    nav ul {
+        display: block;
+    }
+
+    nav li {
+        display: inline-block;
+        margin-right: 20px;
+    }
 }

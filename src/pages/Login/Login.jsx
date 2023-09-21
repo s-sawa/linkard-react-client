@@ -26,7 +26,7 @@ const Login = () => {
       setToken(receivedToken);
       console.log(token);
       Cookies.set("token", receivedToken, { expires: 7 });
-      navigate("/profile");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
