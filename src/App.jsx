@@ -7,12 +7,14 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import ProfileForm from "./pages/ProfileForm/ProfileForm";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import ProfileEdit from "./pages/ProfileEdit/ProfileEdit";
+import ProfileList from "./pages/ProfileList/ProfileList";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const token = Cookies.get("token");
 
   return (
-    <div className="App">
+    <div className="container">
       <Routes>
         {/* <Route path="/" element={<Home />} /> */}
         <Route
@@ -22,10 +24,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile/setup" element={<ProfileForm />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/" element={<ProfilePage />} />
+        {/* <Route path="/profile" element={<ProfilePage />} /> */}
+        <Route path="/profile/list" element={<ProfileList />} />
         <Route path="/profile/edit" element={<ProfileEdit />} />
         <Route path="/profile/:user_id/preview" element={<UserProfilePage />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
