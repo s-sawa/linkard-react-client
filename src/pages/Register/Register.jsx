@@ -34,9 +34,9 @@ const Register = () => {
     <div className="form-container">
       <h1>新規登録</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="名前">名前</label>
+        {/* <label htmlFor="名前">名前</label> */}
         {/* registerを使うとdataにinputで入力された値を含めることができる */}
-        <input
+        {/* <input
           id="name"
           type="text"
           {...register("name", {
@@ -44,7 +44,7 @@ const Register = () => {
             minLength: { value: 4, message: "4文字以上で入力してください" },
           })}
         />
-        <p>{errors.name && <p>{errors.name.message}</p>}</p>
+        <p>{errors.name && <p>{errors.name.message}</p>}</p> */}
 
         <label htmlFor="email">メールアドレス</label>
         <input

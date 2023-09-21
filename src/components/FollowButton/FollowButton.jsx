@@ -1,10 +1,10 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useState } from "react";
 import AddGroupButton from "../AddGroupButton/AddGroupButton";
 import { useForm } from "react-hook-form";
 import useIsFollowing from "../../hooks/useIsFollowing";
 import useGroups from "../../hooks/useGroups";
+import { getTokenFromCookie } from "../../utils/cookies";
 
 const FollowButton = ({ API_BASE_URL, toUserId }) => {
   const [reloadGroups, setReloadGroups] = useState(false);
@@ -23,7 +23,7 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
   const onSubmit = async (data) => {
     console.log(toUserId);
     try {
-      const token = Cookies.get("token");
+      const token = getTokenFromCookie();
       const response = await axios.post(
         `${API_BASE_URL}/api/users/${toUserId}/follow`,
         { userId: Number(toUserId), groupId: Number(data.group) },
