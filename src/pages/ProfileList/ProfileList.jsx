@@ -42,7 +42,7 @@ const ProfileList = () => {
 
   return (
     <div>
-      <select onChange={(e) => setGroupId(e.target.value)}>
+      <select onChange={(e) => setGroupId(Number(e.target.value))}>
         <option value="">All Users</option>
         {groups.map((group) => (
           <option key={group.id} value={group.id}>

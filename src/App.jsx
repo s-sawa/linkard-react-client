@@ -9,6 +9,9 @@ import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import ProfileEdit from "./pages/ProfileEdit/ProfileEdit";
 import ProfileList from "./pages/ProfileList/ProfileList";
 import Footer from "./components/Footer/Footer";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 function App() {
   const token = Cookies.get("token");
