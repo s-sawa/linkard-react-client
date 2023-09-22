@@ -16,9 +16,16 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   const [showScanner, setShowScanner] = useState(false);
+
   const handleScanResult = (result) => {
-    console.log("Scanned QR Code:", result);
-    setShowScanner(false); // Optionally, close the scanner after a successful scan
+    console.log("Scanned QR Code:", result); // 読み取ったURLを確認
+    setShowScanner(false);
+
+    if (result) {
+      const url = new URL(result);
+      const relativePath = url.pathname; // pathname部分を取得して
+      navigate(relativePath); // navigateに渡す
+    }
   };
 
   const [profileData, setProfileData] = useState(null);
@@ -78,6 +85,14 @@ const ProfilePage = () => {
             alt="プロフィール画像"
           />
         )}
+        <div className="item-content">
+          <p className="item-header">ニックネーム:</p>
+          <p>{profileData.user.name}</p>
+        </div>
+        <div>
+          <p className="item-header">コメント</p>
+          <p>{profileData.user.comment}</p>
+        </div>
       </div>
       {/* SNS */}
       <div>
@@ -104,32 +119,10 @@ const ProfilePage = () => {
         </a>
       </div>
       <button onClick={openQRModal}>QR</button>
-      {/* <button onClick={() => setShowScanner(true)}>Start QR Scanning</button>
-      {showScanner && (
-        <div>
-          <BarcodeScanner
-            onScan={(data) => {
-              console.log("Scanned QR Code:", data);
-              setShowScanner(false); // Optionally, close the scanner after a successful scan
-            }}
-          />
-          <button onClick={() => setShowScanner(false)}>Close Scanner</button>
-        </div>
-      )} */}
-      {/* <div>
-        <button onClick={() => setIsCameraModalOpen(true)}>
-          Start QR Scanning
-        </button>
-        {showScanner && <BarcodeScanner onScan={handleScanResult} />}
-      </div> */}
-      <CameraModal />
+
+      <CameraModal onScan={handleScanResult} />
 
       <div className="profile-content">
-        <div className="item-content">
-          <p className="item-header">ニックネーム:</p>
-          <p>{profileData.user.name}</p>
-        </div>
-
         <div className="item-content">
           <p className="item-header">趣味</p>
           {profileData.hobbies.map((hobby, index) => (
