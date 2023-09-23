@@ -31,7 +31,7 @@ const AddGroupButton = ({ API_BASE_URL, onGroupAdded }) => {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <input {...register("name")} placeholder="グループ名" required />
-          <button type="submit">送信</button>
+          <button type="submit">追加する</button>
         </form>
       )}
     </div>

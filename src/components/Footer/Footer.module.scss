@@ -1,0 +1,26 @@
+.footer {
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  background-color: #f0f2f5; // 任意の背景色を設定
+  padding: 10px;
+  box-shadow: 0px -2px 5px 0px rgba(0, 0, 0, 0.1); // オプション: 上部に影を追加
+  //   margin-top: 20px;
+
+  a {
+    color: #333; // 任意の文字色を設定
+    margin: 0 15px; // 任意のマージンを設定
+    text-decoration: none; // リンクの下線を削除
+    &:hover {
+      color: #007bff; // 任意のホバー色を設定
+    }
+  }
+}
+
+.link__icon-name {
+  font-size: 1rem;
+}
