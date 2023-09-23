@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import Modal from "react-modal";
 import BarcodeScanner from "../QR/BarcodeScanner";
+import { BsFillCameraFill } from "react-icons/bs";
 
 Modal.setAppElement("#root");
 
@@ -21,7 +22,8 @@ const CameraModal = ({ onScan }) => {
 
   return (
     <div>
-      <button onClick={openModal}>カメラを開始</button>
+      {/* <button onClick={openModal}>カメラを開始</button> */}
+      <BsFillCameraFill size={32} onClick={openModal} style={{ cursor: "pointer" }} />
 
       <Modal
         isOpen={isModalOpen}

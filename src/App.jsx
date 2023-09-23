@@ -10,6 +10,7 @@ import ProfileEdit from "./pages/ProfileEdit/ProfileEdit";
 import ProfileList from "./pages/ProfileList/ProfileList";
 import Footer from "./components/Footer/Footer";
 import Modal from "react-modal";
+import Setting from "./pages/Setting/Setting";
 
 Modal.setAppElement("#root");
 
@@ -22,7 +23,7 @@ function App() {
         {/* <Route path="/" element={<Home />} /> */}
         <Route
           path="/register"
-          element={token ? <Navigate to="/logout" /> : <Register />}
+          element={token ? <Navigate to="/" /> : <Register />}
         />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
@@ -32,6 +33,7 @@ function App() {
         <Route path="/profile/list" element={<ProfileList />} />
         <Route path="/profile/edit" element={<ProfileEdit />} />
         <Route path="/profile/:user_id/preview" element={<UserProfilePage />} />
+        <Route path="/setting" element={<Setting />} />
       </Routes>
       <Footer />
     </div>

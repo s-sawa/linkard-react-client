@@ -5,10 +5,13 @@ import { useForm } from "react-hook-form";
 import useIsFollowing from "../../hooks/useIsFollowing";
 import useGroups from "../../hooks/useGroups";
 import { getTokenFromCookie } from "../../utils/cookies";
+import { useNavigate } from "react-router-dom";
+import { Modal } from "antd";
 
 const FollowButton = ({ API_BASE_URL, toUserId }) => {
   const [reloadGroups, setReloadGroups] = useState(false);
   const { register, handleSubmit, setValue } = useForm();
+  const navigate = useNavigate();
 
   const { groups, loading: groupsLoading } = useGroups(
     API_BASE_URL,
@@ -33,13 +36,14 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
           },
         }
       );
-      console.log(response);
 
-      if (response.data.success) {
-        alert("フォローしました！");
-      } else {
-        alert("フォローに失敗しました。");
-      }
+      Modal.confirm({
+        title: "確認",
+        content: "リストページに遷移してよろしいですか？",
+        onOk() {
+          navigate("/profile/list");
+        },
+      });
     } catch (error) {
       console.error("フォローに失敗しました: ", error);
       alert("エラーが発生しました。");

@@ -1,137 +1,43 @@
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 10px;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+body {
+  font-size: 16px;
+  line-height: 1.6;
+  font-family: 'Arial', sans-serif;
+}
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 0 20px; */
+  
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  text-decoration: none;
+  color: #0066cc;
+  &:hover {
+    text-decoration: underline;
+  }
 }
-a:hover {
-  color: #535bf2;
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
-
-/* index.css */
-
-/* リセット & グローバルスタイル */
-body, h1, h2, h3, p {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-.container {
-    padding: 20px;
-    margin: 0 auto;
-    max-width: 1200px;
-    box-sizing: border-box;
-    margin: 0 ;
-}
-
-/* モバイル向けのデフォルトのスタイル */
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    text-align: center;
-}
-
-nav ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-around;
-    padding-left: 0;
-}
-
-nav li {
-    margin: 0 10px;
-}
-
-/* タブレット向けのスタイル (例: 768px以上のデバイス) */
-@media (min-width: 768px) {
-    header {
-        padding: 20px 40px;
-    }
-
-    nav ul {
-        justify-content: flex-start;
-    }
-}
-
-/* デスクトップ向けのスタイル (例: 1024px以上のデバイス) */
-@media (min-width: 1024px) {
-    header {
-        padding: 30px 60px;
-    }
-
-    nav ul {
-        display: block;
-    }
-
-    nav li {
-        display: inline-block;
-        margin-right: 20px;
-    }
+  background-color: #f5f1f1;
+  color: #333;
 }

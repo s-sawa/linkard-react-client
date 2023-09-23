@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import useGroups from "../../hooks/useGroups";
 import { getTokenFromCookie } from "../../utils/cookies";
+import ProfileCard from "../../components/ProfileCard/ProfileCard";
 
 const ProfileList = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -27,7 +28,7 @@ const ProfileList = () => {
           },
         });
         setUsers(response.data);
-        console.log(response.data)
+        console.log(response);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -50,14 +51,17 @@ const ProfileList = () => {
           </option>
         ))}
       </select>
-
-      <ul>
-        {users.length === 0 ? (
-          <li>No users available</li>
-        ) : (
-          users.map((user) => <li key={user.id}>{user.name}</li>)
-        )}
-      </ul>
+      {users.length === 0 ? (
+        <p>No users available</p>
+      ) : (
+        users.map((user) => (
+          <ProfileCard
+            key={user.id}
+            profileData={user}
+            API_BASE_URL={API_BASE_URL}
+          />
+        ))
+      )}
     </div>
   );
 };
