@@ -2,29 +2,31 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // import ProfileLink from "../../components/ProfileLink/ProfileLink";
 import QRCodeModal from "../../components/QR/QRCodeModal";
-import DeleteProfileButton from "../../components/DeleteProfileButton/DeleteProfileButton";
 import { useNavigate } from "react-router-dom";
-import "./ProfilePage.css";
+// import "./ProfilePage.css";
 import { getTokenFromCookie } from "../../utils/cookies";
-import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
-import BarcodeScanner from "../../components/QR/BarcodeScanner";
 import CameraModal from "../../components/CameraModal/CameraModal";
+import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import { BsQrCode } from "react-icons/bs";
+import { AiFillEdit } from "react-icons/ai";
+import styles from "./ProfilePage.module.scss";
+import useConfirmModal from "../../hooks/useConfirmModal";
 
 const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
-
-  const [showScanner, setShowScanner] = useState(false);
+  // useConfirmModal.jsxからreturnされたconfirmModal関数が、confirmModal変数に格納される
+  const confirmModal = useConfirmModal();
 
   const handleScanResult = (result) => {
-    console.log("Scanned QR Code:", result); // 読み取ったURLを確認
-    setShowScanner(false);
-
     if (result) {
       const url = new URL(result);
       const relativePath = url.pathname; // pathname部分を取得して
-      navigate(relativePath); // navigateに渡す
+      // 3つの引数を関数にわたしている
+      confirmModal("確認", "フォローページに移動します", () => {
+        navigate(relativePath);
+      });
     }
   };
 
@@ -39,7 +41,7 @@ const ProfilePage = () => {
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
-  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  // const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
 
   useEffect(() => {
     const token = getTokenFromCookie();
@@ -51,8 +53,8 @@ const ProfilePage = () => {
         },
       })
       .then((response) => {
-        setProfileData(response.data);
-        console.log(response.data);
+        setProfileData(response.data.user);
+        console.log(response.data.user);
       })
 
       .catch((error) => {
@@ -64,10 +66,11 @@ const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  if (!profileData.hobbies || profileData.hobbies.length === 0) {
+  if (!profileData.name) {
+    // if (!profileData.hobbies || profileData.hobbies.length === 0) {
     return (
       <div>
-        <p>プロフィールが未入力です。</p>
+        <p>プロフィールが未入力です</p>
         <button onClick={() => navigate("/profile/setup")}>
           プロフィールを入力する
         </button>
@@ -76,119 +79,22 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="profile-card">
-      <div className="profile-header">
-        <h1>プロフィール</h1>
-        {profileData.user.profile_image_path && (
-          <img
-            src={`${API_BASE_URL}/${profileData.user.profile_image_path}`}
-            alt="プロフィール画像"
-          />
-        )}
-        <div className="item-content">
-          <p className="item-header">ニックネーム:</p>
-          <p>{profileData.user.name}</p>
-        </div>
-        <div>
-          <p className="item-header">コメント</p>
-          <p>{profileData.user.comment}</p>
-        </div>
+    <div className={styles["profile-page"]}>
+      <div className={styles["profile-page__icons-wrapper"]}>
+        <AiFillEdit size={32} onClick={() => navigate("./profile/edit")} />
+
+        <BsQrCode
+          size={32}
+          onClick={openQRModal}
+          style={{ cursor: "pointer" }}
+        />
+        <CameraModal onScan={handleScanResult} />
       </div>
-      {/* SNS */}
-      <div>
-        <a
-          href="https://twitter.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaXTwitter size={24} />
-        </a>
-        <a
-          href="https://twitter.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaFacebook size={24} />
-        </a>
-        <a
-          href="https://twitter.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaInstagram size={24} />
-        </a>
-      </div>
-      <button onClick={openQRModal}>QR</button>
-
-      <CameraModal onScan={handleScanResult} />
-
-      <div className="profile-content">
-        <div className="item-content">
-          <p className="item-header">趣味</p>
-          {profileData.hobbies.map((hobby, index) => (
-            <span key={index} className="badge">
-              {hobby.hobby}
-            </span>
-          ))}
-        </div>
-
-        {/* その他1 */}
-        <div className="item-content">
-          <p className="item-header">{profileData.otherData[0].newOtherName}</p>
-          {profileData.otherData.map((other, index) => (
-            <span key={index} className="badge">
-              {other.name}
-            </span>
-          ))}
-        </div>
-
-        {/* その他2 */}
-        <div className="item-content">
-          <p className="item-header">
-            {profileData.otherData2[0].newOtherName2}
-          </p>
-          {profileData.otherData2.map((other, index) => (
-            <span key={index} className="badge">
-              {other.name}
-            </span>
-          ))}
-        </div>
-
-        {/* その他3 */}
-        <div className="item-content">
-          <p className="item-header">
-            {profileData.otherData3[0].newOtherName3}
-          </p>
-          {profileData.otherData3.map((other, index) => (
-            <span key={index} className="badge">
-              {other.name}
-            </span>
-          ))}
-        </div>
-
-        <div className="item-content">
-          <p className="item-header">フリー投稿</p>
-          {profileData.freePosts[0].image_path && (
-            <div>
-              <p>{profileData.freePosts[0].title}</p>
-              <img
-                className="no-style-img"
-                src={`${API_BASE_URL}/${profileData.freePosts[0].image_path}`}
-                alt="フリー画像"
-              />
-              <p>{profileData.freePosts[0].description}</p>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="profile-actions">
-        {/* <ProfileLink username="your-username" /> */}
-        <DeleteProfileButton />
-      </div>
+      <ProfileCard profileData={profileData} API_BASE_URL={API_BASE_URL} />
       <QRCodeModal
         isOpen={isQRModalOpen}
         onRequestClose={closeQRModal}
-        url={`${BASE_URL}/profile/${profileData.user.id}/preview`}
+        url={`${BASE_URL}/profile/${profileData.id}/preview`}
       />
     </div>
   );
