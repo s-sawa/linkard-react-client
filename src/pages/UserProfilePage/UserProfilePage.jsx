@@ -4,11 +4,10 @@ import axios from "axios";
 import FollowButton from "../../components/FollowButton/FollowButton";
 import { getTokenFromCookie } from "../../utils/cookies";
 
-const UserProfilePage = ({ userId }) => {
-  // ← userIdをpropsとして受け取る
+const UserProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  // const { user_id } = useParams(); ← この行は不要なので削除
+  const { user_id } = useParams();
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
@@ -16,7 +15,7 @@ const UserProfilePage = ({ userId }) => {
       try {
         const token = getTokenFromCookie();
         const response = await axios.get(
-          `${API_BASE_URL}/api/profile/${userId}/preview`, // ← user_id を userId に置き換え
+          `${API_BASE_URL}/api/profile/${user_id}/preview`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -24,13 +23,14 @@ const UserProfilePage = ({ userId }) => {
           }
         );
         setProfileData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("プロフィール情報の取得に失敗しました: ", error);
       }
     };
 
     fetchData();
-  }, [userId, API_BASE_URL]); // ← 依存配列にuserIdを追加
+  }, []);
 
   if (!profileData) {
     return <div>Loading...</div>;
@@ -40,7 +40,7 @@ const UserProfilePage = ({ userId }) => {
     <div>
       <h1>プロフィール</h1>
       {/* <GroupSelection API_BASE_URL={API_BASE_URL} /> */}
-      <FollowButton API_BASE_URL={API_BASE_URL} toUserId={userId} />
+      <FollowButton API_BASE_URL={API_BASE_URL} toUserId={user_id} />
       <div className="item-content">
         <p className="item-header">ニックネーム:</p>
         <p>{profileData.user.name}</p>

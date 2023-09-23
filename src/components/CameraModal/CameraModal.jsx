@@ -1,24 +1,29 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Modal from "react-modal";
 import BarcodeScanner from "../QR/BarcodeScanner";
+import { BsFillCameraFill } from "react-icons/bs";
 
-Modal.setAppElement("#root"); // #rootはアプリのルート要素のIDです。
+Modal.setAppElement("#root");
 
-const CameraModal = () => {
+const CameraModal = ({ onScan }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+  const scannerRef = useRef();
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    if (scannerRef.current) {
+      scannerRef.current.stopScan();
+    }
     setIsModalOpen(false);
   };
 
   return (
     <div>
-      <button onClick={openModal}>カメラを開始</button>
+      {/* <button onClick={openModal}>カメラを開始</button> */}
+      <BsFillCameraFill size={32} onClick={openModal} style={{ cursor: "pointer" }} />
 
       <Modal
         isOpen={isModalOpen}
@@ -26,17 +31,20 @@ const CameraModal = () => {
         contentLabel="カメラモーダル"
         style={{
           content: {
-            backgroundColor: "white", // 背景色を白に設定
-            border: "1px solid black", // 枠線を追加
+            backgroundColor: "white",
+            border: "1px solid black",
           },
         }}
       >
-        <BarcodeScanner
-          onScan={(data) => {
-            console.log("Scanned QR Code:", data);
-            closeModal(); // QRコードをスキャンした後にモーダルを閉じます
-          }}
-        />
+        {isModalOpen && (
+          <BarcodeScanner
+            onScan={(data) => {
+              closeModal();
+              onScan(data);
+            }}
+            ref={scannerRef}
+          />
+        )}
         <button onClick={closeModal}>閉じる</button>
       </Modal>
     </div>
