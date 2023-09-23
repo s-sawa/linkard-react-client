@@ -69,6 +69,9 @@ const ProfileEdit = () => {
         setValue("otherName", response.data.otherData[0].newOtherName);
         setValue("otherName2", response.data.otherData2[0].newOtherName2);
         setValue("otherName3", response.data.otherData3[0].newOtherName3);
+        setValue("facebook_link", response.data.socialLinks[0].url);
+        setValue("twitter_link", response.data.socialLinks[1].url);
+        setValue("instagram_link", response.data.socialLinks[2].url);
         setNewOtherName(response.data.otherData[0].newOtherName || "その他");
         setNewOtherName2(response.data.otherData2[0].newOtherName2 || "その他");
         setNewOtherName3(response.data.otherData3[0].newOtherName3 || "その他");
@@ -157,7 +160,7 @@ const ProfileEdit = () => {
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
-    formData.append("birthday", data.birthday);
+    // formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
     data.hobbies.forEach((hobbyObj, index) => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
@@ -174,6 +177,9 @@ const ProfileEdit = () => {
     formData.append("newOtherName", newOtherName);
     formData.append("newOtherName2", newOtherName2);
     formData.append("newOtherName3", newOtherName3);
+    // formData.append("facebook_link", data.facebook_link);
+    // formData.append("twitter_link", data.twitter_link);
+    // formData.append("instagram_link", data.instagram_link);
     formData.append("title", data.title);
     formData.append("description", data.description);
     if (image) {
@@ -181,6 +187,20 @@ const ProfileEdit = () => {
     }
     if (freeImage) {
       formData.append("free_image", freeImage);
+    }
+    if (data.facebook_link) {
+      formData.append("social_links[0][platform]", "facebook");
+      formData.append("social_links[0][url]", data.facebook_link);
+    }
+
+    if (data.twitter_link) {
+      formData.append("social_links[1][platform]", "twitter");
+      formData.append("social_links[1][url]", data.twitter_link);
+    }
+
+    if (data.instagram_link) {
+      formData.append("social_links[2][platform]", "instagram");
+      formData.append("social_links[2][url]", data.instagram_link);
     }
 
     console.log([...formData.entries()]);
@@ -207,10 +227,10 @@ const ProfileEdit = () => {
           <label>ニックネーム:</label>
           <input type="text" name="name" {...register("name")} />
         </div>
-        <div>
+        {/* <div>
           <label>誕生日:</label>
           <input type="date" name="birthday" {...register("birthday")} />
-        </div>
+        </div> */}
         <div>
           <label>一言メッセージ:</label>
           <textarea name="comment" {...register("comment")}></textarea>
@@ -375,9 +395,34 @@ const ProfileEdit = () => {
             )}
           </div>
         </div>
+        {/* SNSリンク */}
+        <div>
+          <hr />
+          <p>Facebook URL:</p>
+          <input
+            type="url"
+            name="facebook_link"
+            {...register("facebook_link")}
+            placeholder="https://facebook.com/yourname"
+          />
+          <p>X(Twitter) URL:</p>
+          <input
+            type="url"
+            name="twitter_link"
+            {...register("twitter_link")}
+            placeholder="https://twitter.com/yourname"
+          />
+          <p>Instagram URL:</p>
+          <input
+            type="url"
+            name="instagram_link"
+            {...register("instagram_link")}
+            placeholder="https://instagram.com/yourname"
+          />
+        </div>
 
         <div>
-          <button type="submit">送信</button>
+          <button type="submit">更新する</button>
         </div>
       </form>
     </div>

@@ -1,3 +1,4 @@
+import { Modal } from "antd";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,14 @@ const DeleteProfileButton = () => {
   const token = Cookies.get("token");
 
   const handleDelete = async () => {
+    Modal.confirm({
+      title: "確認",
+      content: "フォローページに遷移します",
+      onOk() {
+        navigate(relativePath);
+      },
+    });
+    
     try {
       const response = await axios.delete(`${API_BASE_URL}/api/profile/me`, {
         headers: {
@@ -23,7 +32,7 @@ const DeleteProfileButton = () => {
       console.log(error);
     }
   };
-  return <button onClick={handleDelete}>プロフィール削除</button>;
+  return <button onClick={handleDelete}>アカウント削除</button>;
 };
 
 export default DeleteProfileButton;

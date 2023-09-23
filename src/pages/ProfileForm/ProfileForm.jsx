@@ -24,8 +24,6 @@ const ProfileForm = () => {
     },
   });
 
-
-  
   const {
     fields,
     append: appendHobbies,
@@ -110,7 +108,7 @@ const ProfileForm = () => {
     // バリューのdataはhook-formのregisterで登録した入力値が入っている
     console.log(data);
     formData.append("name", data.name);
-    formData.append("birthday", data.birthday);
+    // formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
 
     data.hobbies.forEach((hobbyObj, index) => {
@@ -187,10 +185,10 @@ const ProfileForm = () => {
           <label>ニックネーム:</label>
           <input type="text" name="name" {...register("name")} />
         </div>
-        <div>
+        {/* <div>
           <label>誕生日:</label>
           <input type="date" name="birthday" {...register("birthday")} />
-        </div>
+        </div> */}
         <div>
           <label>一言メッセージ:</label>
           <textarea name="comment" {...register("comment")}></textarea>
