@@ -11,7 +11,14 @@ const ProfileEdit = () => {
   const [profileData, setProfileData] = useState(null);
   const token = getTokenFromCookie();
 
-  const { register, handleSubmit, getValues, setValue, control } = useForm({});
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({});
 
   const {
     fields,
@@ -60,6 +67,8 @@ const ProfileEdit = () => {
           },
         });
         console.log(response.data);
+        console.log(response.data.socialLinks[0]); // これが undefined であれば、問題の箇所です。
+
         setProfileData(response.data);
         setValue("name", response.data.user.name);
         setValue("birthday", response.data.user.birthday);
@@ -69,12 +78,22 @@ const ProfileEdit = () => {
         setValue("otherName", response.data.otherData[0].newOtherName);
         setValue("otherName2", response.data.otherData2[0].newOtherName2);
         setValue("otherName3", response.data.otherData3[0].newOtherName3);
-        setValue("facebook_link", response.data.socialLinks[0].url);
-        setValue("twitter_link", response.data.socialLinks[1].url);
-        setValue("instagram_link", response.data.socialLinks[2].url);
+        // setValue("facebook_link", response.data.socialLinks[0].url);
+        // setValue("twitter_link", response.data.socialLinks[1].url);
+        // setValue("instagram_link", response.data.socialLinks[2].url);
+        if (response.data.socialLinks && response.data.socialLinks[0]) {
+          setValue("facebook_link", response.data.socialLinks[0].url);
+        }
+        if (response.data.socialLinks && response.data.socialLinks[1]) {
+          setValue("twitter_link", response.data.socialLinks[1].url);
+        }
+        if (response.data.socialLinks && response.data.socialLinks[2]) {
+          setValue("instagram_link", response.data.socialLinks[2].url);
+        }
         setNewOtherName(response.data.otherData[0].newOtherName || "その他");
         setNewOtherName2(response.data.otherData2[0].newOtherName2 || "その他");
         setNewOtherName3(response.data.otherData3[0].newOtherName3 || "その他");
+        console.log(response.data.otherData[0].newOtherName);
 
         fields.length && fields.forEach((_, index) => remove(index));
         fieldsOther.length &&
@@ -137,6 +156,7 @@ const ProfileEdit = () => {
   const [newOtherName, setNewOtherName] = useState(
     profileData?.otherData[0]?.newOtherName || "その他"
   );
+  console.log(profileData?.otherData[0]?.newOtherName);
   const [newOtherName2, setNewOtherName2] = useState(
     profileData?.otherData2[0]?.newOtherName2 || "その他"
   );
@@ -182,6 +202,7 @@ const ProfileEdit = () => {
     // formData.append("instagram_link", data.instagram_link);
     formData.append("title", data.title);
     formData.append("description", data.description);
+
     if (image) {
       formData.append("profile_image", image);
     }
@@ -225,19 +246,39 @@ const ProfileEdit = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label>ニックネーム:</label>
-          <input type="text" name="name" {...register("name")} />
+          <input
+            type="text"
+            name="name"
+            {...register("name", {
+              required: "入力必須です",
+              minLength: { value: 2, message: "2文字以上で入力してください" },
+            })}
+          />
         </div>
+        <p>{errors.name ? errors.name.message : null}</p>
         {/* <div>
           <label>誕生日:</label>
           <input type="date" name="birthday" {...register("birthday")} />
         </div> */}
         <div>
-          <label>一言メッセージ:</label>
-          <textarea name="comment" {...register("comment")}></textarea>
+          <label>コメント *</label>
+          <textarea
+            name="comment"
+            {...register("comment", {
+              required: "入力必須です",
+            })}
+          ></textarea>
         </div>
+        <p>{errors.comment ? errors.comment.message : null}</p>
+
         <div>
           <label htmlFor="image">プロフィール画像</label>
-          <input type="file" accept="image/*" onChange={onImageChange} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onImageChange}
+            required
+          />
           {image ? (
             <img
               src={URL.createObjectURL(image)}
@@ -257,18 +298,23 @@ const ProfileEdit = () => {
 
         <div>
           <hr />
-          <label>趣味:</label>
+          <label>趣味 *</label>
           {fields &&
             fields.map((field, index) => (
               <div key={field.id}>
                 <input
                   name={`hobbies[${index}].hobby`}
-                  {...register(`hobbies[${index}].hobby`)}
+                  {...register(`hobbies[${index}].hobby`, {
+                    required: "入力は必須です",
+                  })}
                   defaultValue={field.hobby}
                 />
                 <button type="button" onClick={() => remove(index)}>
                   削除
                 </button>
+                {errors.hobbies && errors.hobbies[index] && (
+                  <p>{errors.hobbies[index]?.hobby?.message}</p>
+                )}
               </div>
             ))}
           <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
