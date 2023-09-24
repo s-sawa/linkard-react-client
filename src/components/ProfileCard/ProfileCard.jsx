@@ -6,10 +6,12 @@ import { BsQrCode } from "react-icons/bs";
 import { useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
 import CameraModal from "../CameraModal/CameraModal";
+import useHandleLike from "../../hooks/useHandleLike";
 
 const ProfileCard = ({ profileData, API_BASE_URL }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
+  const handleLike = useHandleLike();
   const isShowEditButton = location.pathname === "/profile/list";
 
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
@@ -36,6 +38,7 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
   const freeImagePath = profileData.free_posts[0].image_path
     ? `${API_BASE_URL}/${profileData.free_posts[0].image_path}`
     : "";
+  console.log(profileData.social_links);
 
   return (
     <div className={styles["profile__container"]}>
@@ -88,7 +91,7 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
           {profileData.social_links &&
             profileData.social_links.map((link, index) => {
               switch (link.platform) {
-                case "Facebook":
+                case "facebook":
                   return (
                     <a
                       key={index}
@@ -100,7 +103,7 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
                       <FaFacebook size={30} />
                     </a>
                   );
-                case "Twitter":
+                case "twitter":
                   return (
                     <a
                       key={index}
@@ -112,7 +115,7 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
                       <FaTwitter size={30} />
                     </a>
                   );
-                case "Instagram":
+                case "instagram":
                   return (
                     <a
                       key={index}
@@ -134,23 +137,28 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
       <div className={styles["profile__sections"]}>
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>趣味</dt>
-
           <div className={styles["profile__section-item-wrapper"]}>
             {profileData.hobbies &&
               profileData.hobbies.map((hobby, index) => (
-                <dd key={index} className={styles["profile__section-item"]}>
-                  {hobby.hobby}
-                </dd>
+                <div
+                  key={index}
+                  className={styles["profile__section-item-wrapper"]}
+                >
+                  <dd className={styles["profile__section-item"]}>
+                    {hobby.hobby}
+                  </dd>
+                  <button onClick={() => handleLike(hobby.id)}>いいね</button>
+                </div>
               ))}
           </div>
         </dl>
 
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>
-            {profileData.others[0].newOtherName}:
+            {profileData.others[0].newOtherName}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
-            {profileData.others &&
+            {profileData.others[0].name &&
               profileData.others.map((other, index) => (
                 <dd key={index} className={styles["profile__section-item"]}>
                   {other.name}

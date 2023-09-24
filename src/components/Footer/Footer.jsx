@@ -8,9 +8,10 @@ import styles from "./Footer.module.scss";
 const Footer = () => {
   const location = useLocation();
   const path = location.pathname;
+  console.log(path)
 
   // 登録・ログイン画面ではフッターを表示させない
-  if (path === "/login" || path === "/register") {
+  if (path === "/login" || path === "/register" || path === "/profile/setup") {
     return null;
   }
 
