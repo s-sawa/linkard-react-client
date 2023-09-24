@@ -167,10 +167,6 @@ const ProfileForm = () => {
         }
       );
       console.log(response);
-      // const receivedToken = response.data.token;
-      // setToken(receivedToken);
-      // console.log(token);
-      // Cookies.set("token", receivedToken, { expires: 7 });
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -182,22 +178,38 @@ const ProfileForm = () => {
       <div>ProfileForm</div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label>ニックネーム:</label>
-          <input type="text" name="name" {...register("name")} />
+          <label>ニックネーム *</label>
+          <input
+            type="text"
+            name="name"
+            {...register("name", {
+              required: "入力必須です",
+              minLength: { value: 2, message: "2文字以上で入力してください" },
+            })}
+          />
         </div>
-        {/* <div>
-          <label>誕生日:</label>
-          <input type="date" name="birthday" {...register("birthday")} />
-        </div> */}
+        <p>{errors.name ? errors.name.message : null}</p>
+
         <div>
-          <label>一言メッセージ:</label>
-          <textarea name="comment" {...register("comment")}></textarea>
+          <label>コメント *</label>
+          <textarea
+            name="comment"
+            {...register("comment", {
+              required: "入力必須です",
+            })}
+          ></textarea>
         </div>
+        <p>{errors.comment ? errors.comment.message : null}</p>
+
         <div>
           <label>プロフィール画像:</label>
           {/* 画像が選択されたらonImageChange関数が実行される */}
-          <input type="file" accept="image/*" onChange={onImageChange} />
-          {/* 選択画像の表示 */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onImageChange}
+            required
+          />
           {image && (
             <img
               src={URL.createObjectURL(image)}
@@ -209,20 +221,26 @@ const ProfileForm = () => {
 
         <div>
           <hr />
-          <label>趣味:</label>
+          <label>趣味 *</label>
           {fields &&
             fields.map((field, index) => (
               <div key={field.id}>
                 <input
                   name={`hobbies[${index}].hobby`}
-                  {...register(`hobbies[${index}].hobby`)}
+                  {...register(`hobbies[${index}].hobby`, {
+                    required: "入力は必須です",
+                  })}
                   defaultValue={field.hobby}
                 />
                 <button type="button" onClick={() => removeHobby(index)}>
                   削除
                 </button>
+                {errors.hobbies && errors.hobbies[index] && (
+                  <p>{errors.hobbies[index]?.hobby?.message}</p>
+                )}
               </div>
             ))}
+
           <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
             ＋
           </button>
