@@ -19,7 +19,6 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/login`, data); // APIのURLを動的に設定
-      // const response = await axios.post("http://localhost/api/login", data);
       console.log(response);
       console.log(response.data.user.id);
       const receivedToken = response.data.token;
@@ -28,6 +27,7 @@ const Login = () => {
       Cookies.set("token", receivedToken, { expires: 7 });
       navigate("/");
     } catch (error) {
+      alert('ログイン失敗')
       console.log(error);
     }
   };
