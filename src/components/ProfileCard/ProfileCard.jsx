@@ -23,6 +23,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const showLikersModal = async (hobbyId) => {
     const likersList = await fetchLikers(hobbyId);
     console.log("likersList:", likersList); // 追加
+    
 
     showModal(likersList);
   };
@@ -41,6 +42,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
+  
   const handleScanResult = (result) => {
     if (result) {
       const url = new URL(result);
@@ -137,22 +139,6 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>趣味</dt>
           <div className={styles["profile__section-item-wrapper"]}>
-            {/* {profileData.hobbies &&
-              profileData.hobbies.map((hobby, index) => (
-                <div
-                  key={index}
-                  className={styles["profile__section-item-wrapper"]}
-                >
-                  <dd className={styles["profile__section-item"]}>
-                    {hobby.hobby}
-                  </dd>
-                  {isLikePage && (
-                    <div onClick={() => handleLike(hobby.id)}>
-                      {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
-                    </div>
-                  )}
-                </div>
-              ))} */}
             {profileData.hobbies &&
               profileData.hobbies.map((hobby, index) => (
                 <div
@@ -160,6 +146,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                   className={styles["profile__section-item-wrapper"]}
                 >
                   {isLikePage ? (
+                    // isLikePageがtrueのときの処理
                     <div onClick={() => handleLike(hobby.id)}>
                       <dd className={styles["profile__section-item"]}>
                         {hobby.hobby}
@@ -167,11 +154,14 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                       </dd>
                     </div>
                   ) : (
+                    // isLikePageがfalseのときの処理
                     <dd
                       className={styles["profile__section-item"]}
                       onClick={() => showLikersModal(hobby.id)}
                     >
                       {hobby.hobby}
+                      {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
+                
                     </dd>
                   )}
                 </div>
