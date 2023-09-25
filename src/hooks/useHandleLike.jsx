@@ -1,13 +1,90 @@
-import { useCallback } from "react";
+// import { useCallback } from "react";
+// import { getTokenFromCookie } from "../utils/cookies";
+// import axios from "axios";
+
+// const useHandleLike = () => {
+//   const token = getTokenFromCookie();
+//   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+//   const handleLike = useCallback(
+//     async (hobbyId) => {
+//       console.log(`Hobby ID ${hobbyId} has been liked!`);
+//       try {
+//         const response = await axios.post(
+//           `${API_BASE_URL}/api/hobbies/${hobbyId}/likes`,
+//           {},
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           }
+//         );
+//         console.log(response.data); // もしレスポンスデータを利用するならば
+//       } catch (error) {
+//         console.error("Like failed:", error); // より具体的なエラーメッセージ
+//       }
+//     },
+//     [API_BASE_URL, token]
+//   ); // 依存関係の配列に変数を追加
+
+//   return handleLike;
+// };
+
+// export default useHandleLike;
+
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { getTokenFromCookie } from "../utils/cookies";
 
 const useHandleLike = () => {
-  const handleLike = useCallback((hobbyId) => {
-    console.log(`Hobby ID ${hobbyId} has been liked!`);
-    // 実際にはここでAPI呼び出しや状態更新を行います。
-    console.log(hobbyId)
-  }, []);
+  const [likes, setLikes] = useState({}); // 各hobbyIdのいいね状態を管理するオブジェクト
+  const token = getTokenFromCookie();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  return handleLike;
+  const fetchLikeStatus = useCallback(
+    async (hobbyId) => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/api/hobbies/${hobbyId}/liked`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [hobbyId]: response.data.isLiked,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch like status:", error);
+      }
+    },
+    [API_BASE_URL, token]
+  );
+
+  const handleLike = useCallback(
+    async (hobbyId) => {
+      try {
+        const isLiked = likes[hobbyId] || false;
+        const method = isLiked ? "delete" : "post";
+        const response = await axios({
+          method,
+          url: `${API_BASE_URL}/api/hobbies/${hobbyId}/likes`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setLikes((prevLikes) => ({ ...prevLikes, [hobbyId]: !isLiked }));
+        console.log(response.data); // サーバーからのレスポンスをログに表示
+      } catch (error) {
+        console.error("Like action failed:", error); // エラーをログに表示
+      }
+    },
+    [API_BASE_URL, token, likes]
+  );
+
+  return { fetchLikeStatus, handleLike, likes };
 };
 
 export default useHandleLike;

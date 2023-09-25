@@ -3,16 +3,23 @@ import styles from "./ProfileCard.module.scss";
 import { Divider, Image } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BsQrCode } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
-import CameraModal from "../CameraModal/CameraModal";
 import useHandleLike from "../../hooks/useHandleLike";
+import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 
-const ProfileCard = ({ profileData, API_BASE_URL }) => {
+const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
-  const handleLike = useHandleLike();
-  const isShowEditButton = location.pathname === "/profile/list";
+  // const hobbyId = profileData?.hobbies[0].id;
+
+  const { fetchLikeStatus, handleLike, likes } = useHandleLike();
+
+  useEffect(() => {
+    profileData?.hobbies?.forEach((hobby) => {
+      fetchLikeStatus(hobby.id);
+    });
+  }, [profileData, fetchLikeStatus]);
 
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const openQRModal = () => {
@@ -38,7 +45,7 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
   const freeImagePath = profileData.free_posts[0].image_path
     ? `${API_BASE_URL}/${profileData.free_posts[0].image_path}`
     : "";
-  console.log(profileData.social_links);
+  console.log(profileData);
 
   return (
     <div className={styles["profile__container"]}>
@@ -56,25 +63,6 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
           <div className={styles["profile__name-container"]}>
             <div className={styles["profile__name"]}>{profileData.name}</div>
           </div>
-          {isShowEditButton ? null : (
-            <>
-              {/* <button
-                onClick={() => navigate("./profile/edit")}
-                className={styles["profile__edit-button"]}
-              >
-                aaa
-              </button>
-              <BsQrCode onClick={openQRModal} style={{ cursor: "pointer" }} />
-              <CameraModal onScan={handleScanResult} /> */}
-            </>
-          )}
-
-          {/* <button
-            onClick={() => navigate("./profile/edit")}
-            className={styles["profile__edit-button"]}
-          >
-            aaa
-          </button> */}
           <QRCodeModal
             isOpen={isQRModalOpen}
             onRequestClose={closeQRModal}
@@ -147,7 +135,11 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
                   <dd className={styles["profile__section-item"]}>
                     {hobby.hobby}
                   </dd>
-                  <button onClick={() => handleLike(hobby.id)}>いいね</button>
+                  {isLikePage && (
+                    <div onClick={() => handleLike(hobby.id)}>
+                      {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
+                    </div>
+                  )}
                 </div>
               ))}
           </div>
@@ -196,7 +188,6 @@ const ProfileCard = ({ profileData, API_BASE_URL }) => {
         </dl>
 
         <dl className={styles["profile__section"]}>
-          {/* <dt className={styles["profile__section-title"]}>Free Posts:</dt> */}
           <dt className={styles["profile__section-subtitle"]}>
             {profileData.free_posts[0].title}
           </dt>
