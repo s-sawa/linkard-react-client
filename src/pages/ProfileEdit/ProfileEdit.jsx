@@ -67,7 +67,6 @@ const ProfileEdit = () => {
           },
         });
         console.log(response.data);
-        console.log(response.data.socialLinks[0]); // これが undefined であれば、問題の箇所です。
 
         setProfileData(response.data);
         setValue("name", response.data.user.name);
@@ -277,7 +276,6 @@ const ProfileEdit = () => {
             type="file"
             accept="image/*"
             onChange={onImageChange}
-            required
           />
           {image ? (
             <img

@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
 import useHandleLike from "../../hooks/useHandleLike";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
+import useModal from "../../hooks/useModal";
+import useFetchLikers from "../../hooks/useFetchLikers";
+// import useModal from "antd/es/modal/useModal";
 
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -14,6 +17,15 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   // const hobbyId = profileData?.hobbies[0].id;
 
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
+  const { showModal, renderModal } = useModal();
+  const { likers, error, fetchLikers } = useFetchLikers();
+
+  const showLikersModal = async (hobbyId) => {
+    const likersList = await fetchLikers(hobbyId);
+    console.log("likersList:", likersList); // 追加
+
+    showModal(likersList);
+  };
 
   useEffect(() => {
     profileData?.hobbies?.forEach((hobby) => {
@@ -45,7 +57,6 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const freeImagePath = profileData.free_posts[0].image_path
     ? `${API_BASE_URL}/${profileData.free_posts[0].image_path}`
     : "";
-  console.log(profileData);
 
   return (
     <div className={styles["profile__container"]}>
@@ -126,7 +137,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>趣味</dt>
           <div className={styles["profile__section-item-wrapper"]}>
-            {profileData.hobbies &&
+            {/* {profileData.hobbies &&
               profileData.hobbies.map((hobby, index) => (
                 <div
                   key={index}
@@ -141,7 +152,31 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                     </div>
                   )}
                 </div>
+              ))} */}
+            {profileData.hobbies &&
+              profileData.hobbies.map((hobby, index) => (
+                <div
+                  key={index}
+                  className={styles["profile__section-item-wrapper"]}
+                >
+                  {isLikePage ? (
+                    <div onClick={() => handleLike(hobby.id)}>
+                      <dd className={styles["profile__section-item"]}>
+                        {hobby.hobby}
+                        {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
+                      </dd>
+                    </div>
+                  ) : (
+                    <dd
+                      className={styles["profile__section-item"]}
+                      onClick={() => showLikersModal(hobby.id)}
+                    >
+                      {hobby.hobby}
+                    </dd>
+                  )}
+                </div>
               ))}
+            {renderModal()} {/* ここでモーダルをレンダリング */}
           </div>
         </dl>
 
