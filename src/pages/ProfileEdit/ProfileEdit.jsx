@@ -77,9 +77,6 @@ const ProfileEdit = () => {
         setValue("otherName", response.data.otherData[0].newOtherName);
         setValue("otherName2", response.data.otherData2[0].newOtherName2);
         setValue("otherName3", response.data.otherData3[0].newOtherName3);
-        // setValue("facebook_link", response.data.socialLinks[0].url);
-        // setValue("twitter_link", response.data.socialLinks[1].url);
-        // setValue("instagram_link", response.data.socialLinks[2].url);
         if (response.data.socialLinks && response.data.socialLinks[0]) {
           setValue("facebook_link", response.data.socialLinks[0].url);
         }
@@ -110,6 +107,7 @@ const ProfileEdit = () => {
             appendHobbies({ hobby: hobby.hobby });
           }
         }
+        console.log("response.data.otherData", response.data.otherData);
 
         // other1データのセット
         if (response.data.otherData && response.data.otherData.length > 0) {
@@ -142,9 +140,6 @@ const ProfileEdit = () => {
   const onImageChange = (event) => {
     const file = event.target.files[0];
     setImage(file);
-    // setImage("profile_image_path", response.data.image_url);
-
-    // setImage(file);
   };
 
   const onFreeImageChange = (event) => {
@@ -184,9 +179,14 @@ const ProfileEdit = () => {
     data.hobbies.forEach((hobbyObj, index) => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
     });
+    // data.others.forEach((otherObj, index) => {
+    //   formData.append(`others[${index}][name]`, otherObj.name);
+    // });
     data.others.forEach((otherObj, index) => {
+      formData.append(`others[${index}][id]`, otherObj.id); // もし otherObj が id を持つ場合
       formData.append(`others[${index}][name]`, otherObj.name);
     });
+
     data.others2.forEach((otherObj2, index) => {
       formData.append(`others2[${index}][name]`, otherObj2.name);
     });
@@ -196,9 +196,6 @@ const ProfileEdit = () => {
     formData.append("newOtherName", newOtherName);
     formData.append("newOtherName2", newOtherName2);
     formData.append("newOtherName3", newOtherName3);
-    // formData.append("facebook_link", data.facebook_link);
-    // formData.append("twitter_link", data.twitter_link);
-    // formData.append("instagram_link", data.instagram_link);
     formData.append("title", data.title);
     formData.append("description", data.description);
 
@@ -255,10 +252,6 @@ const ProfileEdit = () => {
           />
         </div>
         <p>{errors.name ? errors.name.message : null}</p>
-        {/* <div>
-          <label>誕生日:</label>
-          <input type="date" name="birthday" {...register("birthday")} />
-        </div> */}
         <div>
           <label>コメント *</label>
           <textarea
@@ -272,11 +265,7 @@ const ProfileEdit = () => {
 
         <div>
           <label htmlFor="image">プロフィール画像</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onImageChange}
-          />
+          <input type="file" accept="image/*" onChange={onImageChange} />
           {image ? (
             <img
               src={URL.createObjectURL(image)}
@@ -319,6 +308,7 @@ const ProfileEdit = () => {
             ＋
           </button>
         </div>
+
         <div>
           <hr />
           <label>{newOtherName}:</label>
@@ -331,7 +321,8 @@ const ProfileEdit = () => {
           <button type="button" onClick={handleOtherNameChange}>
             項目名変更
           </button>
-          {fieldsOther &&
+          {/* あとでもとにもどす */}
+          {/* {fieldsOther &&
             fieldsOther.map((field, index) => (
               <div key={field.id}>
                 <input
@@ -344,8 +335,31 @@ const ProfileEdit = () => {
                 </button>
               </div>
             ))}
+
           <button type="button" onClick={() => appendOther({ name: "" })}>
-            {/* <button type="button" onClick={() => appendOther({ other: "" })}> */}
+            ＋
+          </button> */}
+          {fieldsOther &&
+            fieldsOther.map((field, index) => (
+              <div key={field.id}>
+                <input
+                type="hidden"
+                  name={`others[${index}].id`} // IDを含める
+                  {...register(`others[${index}].id`)}
+                  defaultValue={field.id} // field.idはユニークなIDが格納されていると仮定
+                />
+                <input
+                  name={`others[${index}].name`}
+                  {...register(`others[${index}].name`)}
+                  defaultValue={field.name}
+                />
+                <button type="button" onClick={() => removeOther(index)}>
+                  削除
+                </button>
+              </div>
+            ))}
+
+          <button type="button" onClick={() => appendOther({ name: "" })}>
             ＋
           </button>
         </div>

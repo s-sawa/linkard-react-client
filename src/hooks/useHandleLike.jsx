@@ -1,37 +1,3 @@
-// import { useCallback } from "react";
-// import { getTokenFromCookie } from "../utils/cookies";
-// import axios from "axios";
-
-// const useHandleLike = () => {
-//   const token = getTokenFromCookie();
-//   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-//   const handleLike = useCallback(
-//     async (hobbyId) => {
-//       console.log(`Hobby ID ${hobbyId} has been liked!`);
-//       try {
-//         const response = await axios.post(
-//           `${API_BASE_URL}/api/hobbies/${hobbyId}/likes`,
-//           {},
-//           {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           }
-//         );
-//         console.log(response.data); // もしレスポンスデータを利用するならば
-//       } catch (error) {
-//         console.error("Like failed:", error); // より具体的なエラーメッセージ
-//       }
-//     },
-//     [API_BASE_URL, token]
-//   ); // 依存関係の配列に変数を追加
-
-//   return handleLike;
-// };
-
-// export default useHandleLike;
-
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { getTokenFromCookie } from "../utils/cookies";
