@@ -67,12 +67,13 @@ const ProfileEdit = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data);
+        console.log(response.data.user.theme_colors.id);
 
         setProfileData(response.data);
         setValue("name", response.data.user.name);
         setValue("birthday", response.data.user.birthday);
         setValue("comment", response.data.user.comment);
+        setValue("themeId", response.data.user.theme_colors.id.toString());
         setValue("title", response.data.freePosts[0].title);
         setValue("description", response.data.freePosts[0].description);
         setValue("otherName", response.data.otherData[0].newOtherName);
@@ -90,7 +91,7 @@ const ProfileEdit = () => {
         setNewOtherName(response.data.otherData[0].newOtherName || "その他");
         setNewOtherName2(response.data.otherData2[0].newOtherName2 || "その他");
         setNewOtherName3(response.data.otherData3[0].newOtherName3 || "その他");
-        console.log(response.data.otherData[0].newOtherName);
+        console.log(response.data);
 
         fields.length && fields.forEach((_, index) => remove(index));
         fieldsOther.length &&
@@ -177,6 +178,8 @@ const ProfileEdit = () => {
     formData.append("name", data.name);
     // formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
+    formData.append("themeId", data.themeId);
+
     data.hobbies.forEach((hobbyObj, index) => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
     });
@@ -187,7 +190,6 @@ const ProfileEdit = () => {
       formData.append(`others[${index}][id]`, otherObj.id); // もし otherObj が id を持つ場合
       formData.append(`others[${index}][name]`, otherObj.name);
     });
-
     data.others2.forEach((otherObj2, index) => {
       formData.append(`others2[${index}][name]`, otherObj2.name);
     });
@@ -284,6 +286,33 @@ const ProfileEdit = () => {
               />
             )
           )}
+        </div>
+
+        <div>
+          <label>
+            テーマ1
+            <input
+              type="radio"
+              value="1"
+              {...register("themeId", { required: true })}
+            />
+          </label>
+          <label>
+            テーマ2
+            <input
+              type="radio"
+              value="2"
+              {...register("themeId", { required: true })}
+            />
+          </label>
+          <label>
+            テーマ3
+            <input
+              type="radio"
+              value="3"
+              {...register("themeId", { required: true })}
+            />
+          </label>
         </div>
 
         <div>

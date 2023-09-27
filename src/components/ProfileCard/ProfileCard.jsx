@@ -1,8 +1,8 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6";
 import styles from "./ProfileCard.module.scss";
-import { Divider, Image } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
-import { BsQrCode } from "react-icons/bs";
+import { Divider } from "antd";
+import { useNavigate } from "react-router-dom";
+// import { BsQrCode } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
 import useHandleLike from "../../hooks/useHandleLike";
@@ -102,6 +102,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
       navigate(relativePath); // navigateに渡す
     }
   };
+  // console.log(profileData.theme_color.color1);
 
   if (!profileData) return <div>Loading...</div>;
 
@@ -391,6 +392,12 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                 </p>
               </div>
             ))} */}
+          <div style={{ color: profileData.theme_colors.color1 }}>
+            このテキストの色は{profileData.theme_colors.color1}です。
+          </div>
+          <div style={{ color: profileData.theme_colors.color2 }}>
+            このテキストの色は{profileData.theme_colors.color2}です。
+          </div>
         </dl>
       </div>
       <Divider>{}</Divider>
