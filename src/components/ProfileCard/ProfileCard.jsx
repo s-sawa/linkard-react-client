@@ -9,30 +9,82 @@ import useHandleLike from "../../hooks/useHandleLike";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import useModal from "../../hooks/useModal";
 import useFetchLikers from "../../hooks/useFetchLikers";
-// import useModal from "antd/es/modal/useModal";
+import useHandleOtherLike from "../../hooks/useHandleOtherLike";
+import useFetchOtherLikers from "../../hooks/useFetchOtherLikers";
+import useHandleOther2Like from "../../hooks/useHandleOther2Like";
+import useFetchOther2Likers from "../../hooks/useFetchOther2Likers";
+import useFetchOther3Likers from "../../hooks/useFetchOther3Likers";
+import useHandleOther3Like from "../../hooks/useHandleOther3Like";
 
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
-  // const hobbyId = profileData?.hobbies[0].id;
 
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
+  const { fetchOtherLikeStatus, handleOtherLike, otherLikes } =
+    useHandleOtherLike();
+  const { fetchOther2LikeStatus, handleOther2Like, other2Likes } =
+    useHandleOther2Like();
+  const { fetchOther3LikeStatus, handleOther3Like, other3Likes } =
+    useHandleOther3Like();
+
   const { showModal, renderModal } = useModal();
   const { likers, error, fetchLikers } = useFetchLikers();
 
+  const { otherLikers, otherError, fetchOtherLikers } = useFetchOtherLikers();
+  const { other2Likers, other2Error, fetchOther2Likers } =
+    useFetchOther2Likers();
+  const { other3Likers, other3Error, fetchOther3Likers } =
+    useFetchOther3Likers();
+
   const showLikersModal = async (hobbyId) => {
     const likersList = await fetchLikers(hobbyId);
-    console.log("likersList:", likersList); // 追加
-    
-
     showModal(likersList);
+  };
+
+  const showOtherLikersModal = async (otherId) => {
+    const otherLikersList = await fetchOtherLikers(otherId);
+    showModal(otherLikersList);
+  };
+  const showOther2LikersModal = async (other2Id) => {
+    const other2LikersList = await fetchOther2Likers(other2Id);
+    showModal(other2LikersList);
+  };
+  const showOther3LikersModal = async (other3Id) => {
+    const other3LikersList = await fetchOther3Likers(other3Id);
+    showModal(other3LikersList);
   };
 
   useEffect(() => {
     profileData?.hobbies?.forEach((hobby) => {
       fetchLikeStatus(hobby.id);
     });
-  }, [profileData, fetchLikeStatus]);
+
+    // otherのlike statusも同様にfetch
+    profileData?.others?.forEach((other) => {
+      fetchOtherLikeStatus(other.id);
+    });
+
+    profileData?.others2?.forEach((other2) => {
+      fetchOther2LikeStatus(other2.id);
+    });
+
+    profileData?.others3?.forEach((other3) => {
+      fetchOther3LikeStatus(other3.id);
+    });
+
+    if (profileData?.hobbies) {
+      profileData.hobbies.forEach((hobby) => {
+        fetchLikers(hobby.id);
+      });
+    }
+  }, [
+    profileData,
+    fetchLikeStatus,
+    fetchOtherLikeStatus,
+    fetchOther2LikeStatus,
+    fetchOther3LikeStatus,
+  ]);
 
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const openQRModal = () => {
@@ -42,7 +94,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
-  
+
   const handleScanResult = (result) => {
     if (result) {
       const url = new URL(result);
@@ -160,8 +212,18 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                       onClick={() => showLikersModal(hobby.id)}
                     >
                       {hobby.hobby}
-                      {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
-                
+                      {otherLikes[hobby.id] ? (
+                        <FcLike />
+                      ) : (
+                        <FcLikePlaceholder />
+                      )}
+                      {/* {likers.some((liker) => liker.id === 2) ? (
+                        <FcLike />
+                      ) : (
+                        <FcLikePlaceholder />
+                      )} */}
+
+                      {/* {likes1[hobby.id] ? <FcLike /> : <FcLikePlaceholder />} */}
                     </dd>
                   )}
                 </div>
@@ -172,42 +234,122 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
 
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>
-            {profileData.others[0].newOtherName}
+            {profileData.others[0]?.newOtherName}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
-            {profileData.others[0].name &&
+            {profileData.others &&
               profileData.others.map((other, index) => (
-                <dd key={index} className={styles["profile__section-item"]}>
-                  {other.name}
-                </dd>
+                <div
+                  key={index}
+                  className={styles["profile__section-item-wrapper"]}
+                >
+                  {isLikePage ? (
+                    <div onClick={() => handleOtherLike(other.id)}>
+                      <dd className={styles["profile__section-item"]}>
+                        {other.name}
+                        {otherLikes[other.id] ? (
+                          <FcLike />
+                        ) : (
+                          <FcLikePlaceholder />
+                        )}
+                      </dd>
+                    </div>
+                  ) : (
+                    <dd
+                      className={styles["profile__section-item"]}
+                      onClick={() => showOtherLikersModal(other.id)}
+                    >
+                      {other.name}
+                      {otherLikes[other.id] ? (
+                        <FcLike />
+                      ) : (
+                        <FcLikePlaceholder />
+                      )}
+                    </dd>
+                  )}
+                </div>
               ))}
           </div>
         </dl>
 
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>
-            {profileData.others2[0].newOtherName2}:
+            {profileData.others2[0]?.newOtherName2}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
             {profileData.others2 &&
               profileData.others2.map((other, index) => (
-                <dd key={index} className={styles["profile__section-item"]}>
-                  {other.name}
-                </dd>
+                <div
+                  key={index}
+                  className={styles["profile__section-item-wrapper"]}
+                >
+                  {isLikePage ? (
+                    <div onClick={() => handleOther2Like(other.id)}>
+                      <dd className={styles["profile__section-item"]}>
+                        {other.name}
+                        {other2Likes[other.id] ? (
+                          <FcLike />
+                        ) : (
+                          <FcLikePlaceholder />
+                        )}
+                      </dd>
+                    </div>
+                  ) : (
+                    <dd
+                      className={styles["profile__section-item"]}
+                      onClick={() => showOther2LikersModal(other.id)}
+                    >
+                      {other.name}
+                      {other2Likes[other.id] ? (
+                        <FcLike />
+                      ) : (
+                        <FcLikePlaceholder />
+                      )}
+                    </dd>
+                  )}
+                </div>
               ))}
           </div>
         </dl>
 
         <dl className={styles["profile__section"]}>
           <dt className={styles["profile__section-title"]}>
-            {profileData.others3[0].newOtherName3}:
+            {profileData.others3[0]?.newOtherName3}
           </dt>
+
           <div className={styles["profile__section-item-wrapper"]}>
             {profileData.others3 &&
               profileData.others3.map((other, index) => (
-                <dd key={index} className={styles["profile__section-item"]}>
-                  {other.name}
-                </dd>
+                <div
+                  key={index}
+                  className={styles["profile__section-item-wrapper"]}
+                >
+                  {isLikePage ? (
+                    <div onClick={() => handleOther3Like(other.id)}>
+                      <dd className={styles["profile__section-item"]}>
+                        {other.name}
+                        <p></p>
+                        {other3Likes[other.id] ? (
+                          <FcLike />
+                        ) : (
+                          <FcLikePlaceholder />
+                        )}
+                      </dd>
+                    </div>
+                  ) : (
+                    <dd
+                      className={styles["profile__section-item"]}
+                      onClick={() => showOther3LikersModal(other.id)}
+                    >
+                      {other.name}
+                      {other3Likes[other.id] ? (
+                        <FcLike />
+                      ) : (
+                        <FcLikePlaceholder />
+                      )}
+                    </dd>
+                  )}
+                </div>
               ))}
           </div>
         </dl>
@@ -231,7 +373,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
             {profileData.free_posts[0].description}
           </p>
 
-          {profileData.freePosts &&
+          {/* {profileData.freePosts &&
             profileData.freePosts.map((post, index) => (
               <div key={index} className={styles["profile__section-post"]}>
                 <p className={styles["profile__section-post-title"]}>
@@ -248,7 +390,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                   {post.description}
                 </p>
               </div>
-            ))}
+            ))} */}
         </dl>
       </div>
       <Divider>{}</Divider>
