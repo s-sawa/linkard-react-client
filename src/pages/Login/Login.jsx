@@ -11,7 +11,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: "onSubmit" });
   const navigate = useNavigate(); // useNavigateを初期化
 
   const [token, setToken] = useState(Cookies.get("token") || null);
