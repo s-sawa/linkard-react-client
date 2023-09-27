@@ -20,7 +20,6 @@ const useFetchLikers = () => {
             },
           }
         );
-        console.log("Fetched likers: ", response.data); // APIのレスポンスをログ出力
         setLikers(response.data);
         return response.data; // 正常にデータを取得できた場合、データを返す
       } catch (error) {
