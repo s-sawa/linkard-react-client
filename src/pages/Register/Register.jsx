@@ -10,7 +10,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm({ mode: "onChange" });
+  } = useForm({ mode: "onSubmit" });
 
   const password = watch("password");
 

@@ -106,10 +106,10 @@ const ProfileForm = () => {
     // appendを使ってobject形式で、formDataに入れていく
     // ()の中のキー (birthday)はテーブルのカラム名と一致させる
     // バリューのdataはhook-formのregisterで登録した入力値が入っている
-    console.log(data);
     formData.append("name", data.name);
     // formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
+    formData.append("themeId", data.themeId);
 
     data.hobbies.forEach((hobbyObj, index) => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
@@ -217,6 +217,33 @@ const ProfileForm = () => {
               style={{ width: "100px", height: "100px" }}
             />
           )}
+        </div>
+
+        <div>
+          <label>
+            テーマ1
+            <input
+              type="radio"
+              value="1"
+              {...register("themeId", { required: true })}
+            />
+          </label>
+          <label>
+            テーマ2
+            <input
+              type="radio"
+              value="2"
+              {...register("themeId", { required: true })}
+            />
+          </label>
+          <label>
+            テーマ3
+            <input
+              type="radio"
+              value="3"
+              {...register("themeId", { required: true })}
+            />
+          </label>
         </div>
 
         <div>
