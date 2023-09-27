@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileEdit = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
@@ -275,7 +276,9 @@ const ProfileEdit = () => {
           ) : (
             profileData && (
               <img
-                src={`http://localhost/${profileData.user.profile_image_path}`}
+                src={`${BASE_URL}/${profileData.user.profile_image_path}`}
+                // src={`http://localhost/${profileData.user.profile_image_path}`}
+
                 alt="プロフィール画像"
                 style={{ width: "200px", height: "200px" }}
               />
@@ -343,7 +346,7 @@ const ProfileEdit = () => {
             fieldsOther.map((field, index) => (
               <div key={field.id}>
                 <input
-                type="hidden"
+                  type="hidden"
                   name={`others[${index}].id`} // IDを含める
                   {...register(`others[${index}].id`)}
                   defaultValue={field.id} // field.idはユニークなIDが格納されていると仮定
