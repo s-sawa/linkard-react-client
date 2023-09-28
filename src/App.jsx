@@ -11,6 +11,8 @@ import ProfileList from "./pages/ProfileList/ProfileList";
 import Footer from "./components/Footer/Footer";
 import Modal from "react-modal";
 import Setting from "./pages/Setting/Setting";
+import MultiStepForm from "./pages/ProfileForm/Step";
+import "./App.css";
 
 Modal.setAppElement("#root");
 
@@ -34,6 +36,7 @@ function App() {
         <Route path="/profile/edit" element={<ProfileEdit />} />
         <Route path="/profile/:user_id/preview" element={<UserProfilePage />} />
         <Route path="/setting" element={<Setting />} />
+        <Route path="/step1" element={<MultiStepForm />} />
       </Routes>
       <Footer />
     </div>
