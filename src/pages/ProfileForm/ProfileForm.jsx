@@ -1,14 +1,32 @@
-import axios from "axios";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import "./ProfileForm.css"; // CSSファイルのインポート
+import { Steps, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getTokenFromCookie } from "../../utils/cookies";
+import axios from "axios";
+
+const { Step } = Steps;
+
+const steps = [
+  {
+    title: "Step 1",
+    content: "First-content",
+  },
+  {
+    title: "Step 2",
+    content: "Second-content",
+  },
+  {
+    title: "Step 3",
+    content: "Last-content",
+  },
+];
 
 const ProfileForm = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   const navigate = useNavigate();
+
+  const [current, setCurrent] = useState(0);
   const {
     register,
     handleSubmit,
@@ -94,12 +112,26 @@ const ProfileForm = () => {
   };
   const handleOtherNameChange2 = () => {
     const updatedOtherName = getValues("otherName2");
+    console.log(updatedOtherName);
+
     setNewOtherName2(updatedOtherName);
   };
   const handleOtherNameChange3 = () => {
     const updatedOtherName = getValues("otherName3");
     setNewOtherName3(updatedOtherName);
   };
+
+  const onPrev = () => {
+    setCurrent(current - 1);
+  };
+
+  const onNext = () => {
+    setCurrent(current + 1);
+  };
+
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  // };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -174,248 +206,295 @@ const ProfileForm = () => {
   };
 
   return (
-    <div>
-      <div>ProfileForm</div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>ニックネーム *</label>
-          <input
-            type="text"
-            name="name"
-            {...register("name", {
-              required: "入力必須です",
-              minLength: { value: 2, message: "2文字以上で入力してください" },
-            })}
-          />
-        </div>
-        <p>{errors.name ? errors.name.message : null}</p>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Steps current={current}>
+        {steps.map((item) => (
+          <Step key={item.title} title={item.title} />
+        ))}
+      </Steps>
+      <div className="steps-content">
+        {current === 0 && (
+          <div>
+            <div>
+              <label>ニックネーム *</label>
+              <input
+                type="text"
+                name="name"
+                {...register("name", {
+                  required: "入力必須です",
+                  minLength: {
+                    value: 2,
+                    message: "2文字以上で入力してください",
+                  },
+                })}
+              />
+            </div>
+            <p>{errors.name ? errors.name.message : null}</p>
 
-        <div>
-          <label>コメント *</label>
-          <textarea
-            name="comment"
-            {...register("comment", {
-              required: "入力必須です",
-            })}
-          ></textarea>
-        </div>
-        <p>{errors.comment ? errors.comment.message : null}</p>
+            <div>
+              <label>コメント *</label>
+              <textarea
+                name="comment"
+                {...register("comment", {
+                  required: "入力必須です",
+                })}
+              ></textarea>
+            </div>
+            <p>{errors.comment ? errors.comment.message : null}</p>
 
-        <div>
-          <label>プロフィール画像:</label>
-          {/* 画像が選択されたらonImageChange関数が実行される */}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onImageChange}
-            required
-          />
-          {image && (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="プロフィール画像"
-              style={{ width: "100px", height: "100px" }}
-            />
-          )}
-        </div>
-
-        <div>
-          <label>
-            テーマ1
-            <input
-              type="radio"
-              value="1"
-              {...register("themeId", { required: true })}
-            />
-          </label>
-          <label>
-            テーマ2
-            <input
-              type="radio"
-              value="2"
-              {...register("themeId", { required: true })}
-            />
-          </label>
-          <label>
-            テーマ3
-            <input
-              type="radio"
-              value="3"
-              {...register("themeId", { required: true })}
-            />
-          </label>
-        </div>
-
-        <div>
-          <hr />
-          <label>趣味 *</label>
-          {fields &&
-            fields.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  name={`hobbies[${index}].hobby`}
-                  {...register(`hobbies[${index}].hobby`, {
-                    required: "入力は必須です",
-                  })}
-                  defaultValue={field.hobby}
+            <div>
+              <label>プロフィール画像:</label>
+              {/* 画像が選択されたらonImageChange関数が実行される */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onImageChange}
+                required
+              />
+              {image && (
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="プロフィール画像"
+                  style={{ width: "100px", height: "100px" }}
                 />
-                <button type="button" onClick={() => removeHobby(index)}>
-                  削除
-                </button>
-                {errors.hobbies && errors.hobbies[index] && (
-                  <p>{errors.hobbies[index]?.hobby?.message}</p>
-                )}
-              </div>
-            ))}
+              )}
+            </div>
 
-          <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
-            ＋
-          </button>
-        </div>
-        {/* その他1 */}
-        <div>
-          <hr />
-          <label>{newOtherName}:</label>
-          <input
-            type="text"
-            name="otherName"
-            {...register("otherName")}
-            placeholder="好きな項目名に変更"
-          />
-          <button type="button" onClick={handleOtherNameChange}>
-            項目名変更
-          </button>
-          {fieldsOther &&
-            fieldsOther.map((field, index) => (
-              <div key={field.id}>
+            <div>
+              <label>
+                テーマ1
                 <input
-                  name={`others[${index}].name`}
-                  {...register(`others[${index}].name`)}
-                  defaultValue={field.name}
+                  type="radio"
+                  value="1"
+                  {...register("themeId", { required: true })}
                 />
-                <button type="button" onClick={() => removeOther(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-          <button type="button" onClick={() => appendOther({ other: "" })}>
-            ＋
-          </button>
-        </div>
-        {/* その他2 */}
-        <div>
-          <hr />
-          <label>{newOtherName2}:</label>
-          <input
-            type="text"
-            name="otherName2"
-            {...register("otherName2")}
-            placeholder="好きな項目名に変更"
-          />
-          <button type="button" onClick={handleOtherNameChange2}>
-            項目名変更
-          </button>
-          {fieldsOther2 &&
-            fieldsOther2.map((field, index) => (
-              <div key={field.id}>
+              </label>
+              <label>
+                テーマ2
                 <input
-                  name={`others2[${index}].name`}
-                  {...register(`others2[${index}].name`)}
-                  defaultValue={field.name}
+                  type="radio"
+                  value="2"
+                  {...register("themeId", { required: true })}
                 />
-                <button type="button" onClick={() => removeOther2(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-          <button type="button" onClick={() => appendOther2({ other2: "" })}>
-            ＋
-          </button>
-        </div>
-
-        {/* その他3 */}
-        <div>
-          <hr />
-          <label>{newOtherName3}:</label>
-          <input
-            type="text"
-            name="otherName3"
-            {...register("otherName3")}
-            placeholder="好きな項目名に変更"
-          />
-          <button type="button" onClick={handleOtherNameChange3}>
-            項目名変更
-          </button>
-          {fieldsOther3 &&
-            fieldsOther3.map((field, index) => (
-              <div key={field.id}>
+              </label>
+              <label>
+                テーマ3
                 <input
-                  name={`others3[${index}].name`}
-                  {...register(`others3[${index}].name`)}
-                  defaultValue={field.name}
+                  type="radio"
+                  value="3"
+                  {...register("themeId", { required: true })}
                 />
-                <button type="button" onClick={() => removeOther3(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-          <button type="button" onClick={() => appendOther3({ other3: "" })}>
-            ＋
-          </button>
-        </div>
+              </label>
+            </div>
 
-        {/* フリー投稿 */}
-        <div>
-          <hr />
-          <label>フリー入力欄:</label>
-          <p>タイトル</p>
-          <input type="text" name="title" {...register("title")} />
-          <p>内容</p>
-          <textarea name="description" {...register("description")}></textarea>
-          <p>画像:</p>
-          {/* 画像が選択されたらonImageChange関数が実行される */}
-          <input type="file" accept="image/*" onChange={onFreeImageChange} />
-          {/* 選択画像の表示 */}
-          {freeImage && (
-            <img
-              src={URL.createObjectURL(freeImage)}
-              alt="フリー投稿画像"
-              style={{ width: "100px", height: "100px", objectFit: "cover" }}
-            />
-          )}
-        </div>
+            <div>
+              <hr />
+              <label>趣味 *</label>
+              {fields &&
+                fields.map((field, index) => (
+                  <div key={field.id}>
+                    <input
+                      name={`hobbies[${index}].hobby`}
+                      {...register(`hobbies[${index}].hobby`, {
+                        required: "入力は必須です",
+                      })}
+                      defaultValue={field.hobby}
+                    />
+                    <button type="button" onClick={() => removeHobby(index)}>
+                      削除
+                    </button>
+                    {errors.hobbies && errors.hobbies[index] && (
+                      <p>{errors.hobbies[index]?.hobby?.message}</p>
+                    )}
+                  </div>
+                ))}
 
-        {/* SNSリンク */}
-        <div>
-          <hr />
-          <p>Facebook URL:</p>
-          <input
-            type="url"
-            name="facebook_link"
-            {...register("facebook_link")}
-            placeholder="https://facebook.com/yourname"
-          />
-          <p>X(Twitter) URL:</p>
-          <input
-            type="url"
-            name="twitter_link"
-            {...register("twitter_link")}
-            placeholder="https://twitter.com/yourname"
-          />
-          <p>Instagram URL:</p>
-          <input
-            type="url"
-            name="instagram_link"
-            {...register("instagram_link")}
-            placeholder="https://instagram.com/yourname"
-          />
-        </div>
+              <button
+                type="button"
+                onClick={() => appendHobbies({ hobby: "" })}
+              >
+                ＋
+              </button>
+            </div>
+          </div>
+        )}
+        {current === 1 && (
+          <div>
+            <div>
+              <hr />
+              <label>{newOtherName}:</label>
+              <input
+                type="text"
+                name="otherName"
+                {...register("otherName")}
+                placeholder="好きな項目名に変更"
+              />
+              <button type="button" onClick={handleOtherNameChange}>
+                項目名変更
+              </button>
+              {fieldsOther &&
+                fieldsOther.map((field, index) => (
+                  <div key={field.id}>
+                    <input
+                      name={`others[${index}].name`}
+                      {...register(`others[${index}].name`)}
+                      defaultValue={field.name}
+                    />
+                    <button type="button" onClick={() => removeOther(index)}>
+                      削除
+                    </button>
+                  </div>
+                ))}
+              <button type="button" onClick={() => appendOther({ other: "" })}>
+                ＋
+              </button>
+            </div>
+            {/* その他2 */}
+            <div>
+              <label>{newOtherName2}:</label>
+              <input
+                type="text"
+                name="otherName2"
+                {...register("otherName2")}
+                placeholder="好きな項目名に変更"
+              />
+              <button type="button" onClick={handleOtherNameChange2}>
+                項目名変更
+              </button>
+              {fieldsOther2 &&
+                fieldsOther2.map((field, index) => (
+                  <div key={field.id}>
+                    <input
+                      name={`others2[${index}].name`}
+                      {...register(`others2[${index}].name`)}
+                      defaultValue={field.name}
+                    />
+                    <button type="button" onClick={() => removeOther2(index)}>
+                      削除
+                    </button>
+                  </div>
+                ))}
+              <button
+                type="button"
+                onClick={() => appendOther2({ other2: "" })}
+              >
+                ＋
+              </button>
+            </div>
 
-        <div>
-          <button type="submit">送信</button>
-        </div>
-      </form>
-    </div>
+            {/* その他3 */}
+            <div>
+              <label>{newOtherName3}:</label>
+              <input
+                type="text"
+                name="otherName3"
+                {...register("otherName3")}
+                placeholder="好きな項目名に変更"
+              />
+              <button type="button" onClick={handleOtherNameChange3}>
+                項目名変更
+              </button>
+              {fieldsOther3 &&
+                fieldsOther3.map((field, index) => (
+                  <div key={field.id}>
+                    <input
+                      name={`others3[${index}].name`}
+                      {...register(`others3[${index}].name`)}
+                      defaultValue={field.name}
+                    />
+                    <button type="button" onClick={() => removeOther3(index)}>
+                      削除
+                    </button>
+                  </div>
+                ))}
+              <button
+                type="button"
+                onClick={() => appendOther3({ other3: "" })}
+              >
+                ＋
+              </button>
+            </div>
+          </div>
+        )}
+        {current === 2 && (
+          <div>
+            <div>
+              <hr />
+              <label>フリー入力欄:</label>
+              <p>タイトル</p>
+              <input type="text" name="title" {...register("title")} />
+              <p>内容</p>
+              <textarea
+                name="description"
+                {...register("description")}
+              ></textarea>
+              <p>画像:</p>
+              {/* 画像が選択されたらonImageChange関数が実行される */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onFreeImageChange}
+              />
+              {/* 選択画像の表示 */}
+              {freeImage && (
+                <img
+                  src={URL.createObjectURL(freeImage)}
+                  alt="フリー投稿画像"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+
+            {/* SNSリンク */}
+            <div>
+              <hr />
+              <p>Facebook URL:</p>
+              <input
+                type="url"
+                name="facebook_link"
+                {...register("facebook_link")}
+                placeholder="https://facebook.com/yourname"
+              />
+              <p>X(Twitter) URL:</p>
+              <input
+                type="url"
+                name="twitter_link"
+                {...register("twitter_link")}
+                placeholder="https://twitter.com/yourname"
+              />
+              <p>Instagram URL:</p>
+              <input
+                type="url"
+                name="instagram_link"
+                {...register("instagram_link")}
+                placeholder="https://instagram.com/yourname"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="steps-action">
+        {current < steps.length - 1 && (
+          <Button type="primary" onClick={() => onNext()}>
+            Next
+          </Button>
+        )}
+        {current === steps.length - 1 && (
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        )}
+        {current > 0 && (
+          <Button style={{ margin: "0 8px" }} onClick={() => onPrev()}>
+            Previous
+          </Button>
+        )}
+      </div>
+    </form>
   );
 };
 
