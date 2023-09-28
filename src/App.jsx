@@ -11,6 +11,7 @@ import ProfileList from "./pages/ProfileList/ProfileList";
 import Footer from "./components/Footer/Footer";
 import Modal from "react-modal";
 import Setting from "./pages/Setting/Setting";
+import "./App.css";
 
 Modal.setAppElement("#root");
 
