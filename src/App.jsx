@@ -11,6 +11,7 @@ import ProfileList from "./pages/ProfileList/ProfileList";
 import Footer from "./components/Footer/Footer";
 import Modal from "react-modal";
 import Setting from "./pages/Setting/Setting";
+import "./App.css";
 
 Modal.setAppElement("#root");
 
@@ -20,7 +21,6 @@ function App() {
   return (
     <div className="container">
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
         <Route
           path="/register"
           element={token ? <Navigate to="/" /> : <Register />}

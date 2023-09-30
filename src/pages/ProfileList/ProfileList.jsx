@@ -59,6 +59,7 @@ const ProfileList = () => {
             key={user.id}
             profileData={user}
             API_BASE_URL={API_BASE_URL}
+            isLikePage={true}
           />
         ))
       )}

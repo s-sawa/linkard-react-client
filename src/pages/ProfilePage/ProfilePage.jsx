@@ -90,7 +90,7 @@ const ProfilePage = () => {
         />
         <CameraModal onScan={handleScanResult} />
       </div>
-      <ProfileCard profileData={profileData} API_BASE_URL={API_BASE_URL} />
+      <ProfileCard profileData={profileData} API_BASE_URL={API_BASE_URL} isLikePage={false} />
       <QRCodeModal
         isOpen={isQRModalOpen}
         onRequestClose={closeQRModal}
