@@ -60,7 +60,6 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
       fetchLikeStatus(hobby.id);
     });
 
-    // otherのlike statusも同様にfetch
     profileData?.others?.forEach((other) => {
       fetchOtherLikeStatus(other.id);
     });

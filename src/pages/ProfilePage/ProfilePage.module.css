@@ -1,0 +1,7 @@
+.profile-page__icons-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 2.8rem;
+  padding: 1rem 0;
+  background-color: antiquewhite;
+}/*# sourceMappingURL=ProfilePage.module.css.map */
