@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import styles from "./Register.module.scss";
 
 const Register = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -13,15 +14,11 @@ const Register = () => {
   } = useForm({ mode: "onSubmit" });
 
   const password = watch("password");
-
   const navigate = useNavigate(); // useNavigateを初期化
-
   const onSubmit = async (data) => {
     console.log(data);
-
     try {
       const response = await axios.post(`${API_BASE_URL}/api/register`, data);
-      console.log(response.status);
       if (response.status === 204) {
         navigate("/login");
       }
@@ -31,22 +28,15 @@ const Register = () => {
   };
 
   return (
-    <div className="form-container">
-      <h1>新規登録</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* <label htmlFor="名前">名前</label> */}
-        {/* registerを使うとdataにinputで入力された値を含めることができる */}
-        {/* <input
-          id="name"
-          type="text"
-          {...register("name", {
-            required: "名前は必須です",
-            minLength: { value: 4, message: "4文字以上で入力してください" },
-          })}
-        />
-        <p>{errors.name && <p>{errors.name.message}</p>}</p> */}
-
-        <label htmlFor="email">メールアドレス</label>
+    <div className={styles["register-container"]}>
+      <h1 className={styles["register-container__title"]}>新規登録</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={styles["register-container__form"]}
+      >
+        <label htmlFor="email" className={styles["register-container__label"]}>
+          メールアドレス
+        </label>
         <input
           type="email"
           id="email"
@@ -57,10 +47,20 @@ const Register = () => {
               message: "有効なEmailアドレスを入力してください",
             },
           })}
+          className={styles["register-container__input"]}
         />
-        {errors.email && <p>{errors.email.message}</p>}
+        {errors.email && (
+          <p className={styles["register-container__error"]}>
+            {errors.email.message}
+          </p>
+        )}
 
-        <label htmlFor="password">パスワード</label>
+        <label
+          htmlFor="password"
+          className={styles["register-container__label"]}
+        >
+          パスワード
+        </label>
         <input
           id="password"
           type="password"
@@ -68,9 +68,21 @@ const Register = () => {
             required: "パスワードは必須です",
             minLength: { value: 8, message: "8文字以上で入力してください" },
           })}
+          className={styles["register-container__input"]}
         />
-        <p>{errors.password && <p>{errors.password.message}</p>}</p>
-        <label htmlFor="password_confirmation">password（確認）</label>
+        {errors.password && (
+          <p className={styles["register-container__error"]}>
+            {errors.password.message}
+          </p>
+        )}
+
+        <label
+          htmlFor="password_confirmation"
+          className={styles["register-container__label"]}
+        >
+          パスワード
+          <span className={styles["register-container__sublabel"]}>（確認）</span>
+        </label>
         <input
           id="password_confirmation"
           type="password"
@@ -79,13 +91,17 @@ const Register = () => {
             validate: (value) =>
               value === password || "パスワードが一致しません",
           })}
+          className={styles["register-container__input"]}
         />
-        <p>
-          {errors.password_confirmation
-            ? errors.password_confirmation.message
-            : null}
-        </p>
-        <button type="submit">登録する</button>
+        {errors.password_confirmation && (
+          <p className={styles["register-container__error"]}>
+            {errors.password_confirmation.message}
+          </p>
+        )}
+
+        <button type="submit" className={styles["register-container__button"]}>
+          登録する
+        </button>
       </form>
     </div>
   );

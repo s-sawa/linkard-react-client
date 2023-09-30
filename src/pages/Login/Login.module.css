@@ -1,0 +1,62 @@
+.login__form-container {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+  margin-top: 10rem;
+  padding: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.login__branding {
+  display: flex;
+  justify-content: center;
+}
+
+.login__title {
+  margin: 3rem 0rem;
+  letter-spacing: 0.5rem;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login__label {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.login__input {
+  padding: 0.6rem;
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login__error-message {
+  color: #e74c3c;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.login__submit-button,
+.login__register-button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login__submit-button {
+  background-color: #7ab5af;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+
+.login__register-button {
+  background-color: #7ab5af;
+  color: #fff;
+}/*# sourceMappingURL=Login.module.css.map */
