@@ -241,7 +241,7 @@ const ProfileEdit = () => {
 
   return (
     <div>
-      <div>ProfileForm</div>
+      <div></div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label>ニックネーム:</label>
@@ -477,7 +477,7 @@ const ProfileEdit = () => {
             ) : (
               profileData && (
                 <img
-                  src={`http://localhost/${profileData.freePosts[0].image_path}`}
+                  src={`${API_BASE_URL}/${profileData.freePosts[0].image_path}`}
                   alt="プロフィール画像"
                   style={{ width: "200px", height: "200px" }}
                 />
