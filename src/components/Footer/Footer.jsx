@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FaHome, FaSearch } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { AiOutlineSetting } from "react-icons/ai";
 import { FaPeopleGroup } from "react-icons/fa6";
 

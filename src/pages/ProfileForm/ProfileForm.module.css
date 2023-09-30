@@ -1,0 +1,178 @@
+@charset "UTF-8";
+.form__steps {
+  padding: 5rem;
+}
+
+.form__content {
+  margin: 2rem;
+}
+
+.form__group {
+  margin-bottom: 1rem;
+}
+
+.form__label,
+.form__legend,
+.form__sublabel {
+  font-size: 1.6rem;
+}
+
+.form__input,
+.form__textarea {
+  padding: 0.5rem;
+  font-size: 2rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* 入力欄の角を丸く */
+}
+
+.form__image-preview {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.form__image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form__label-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.form__image {
+  margin-top: 1rem;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.form__free-image {
+  margin-top: 1rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.form__file-input {
+  display: none;
+}
+
+.form__custom-file-label {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 4px;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.form__hobby,
+.form__other {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem; /* 各趣味の入力欄の間のマージン */
+}
+
+.form__input-hobby,
+.form__input-change-category,
+.form__input-other {
+  width: 90%;
+  margin-right: 0.6rem;
+}
+
+.form__label-color-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form__label-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__radio {
+  margin-right: 2rem;
+}
+
+.color-combination {
+  display: flex;
+}
+
+.color1,
+.color2,
+.color3 {
+  display: flex;
+  flex-direction: column;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid #ccc;
+}
+
+.color1 {
+  background-color: red;
+}
+
+.color2 {
+  background-color: blue;
+}
+
+.color3 {
+  background-color: green;
+}
+
+.form__label-icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.form__label-other {
+  margin-right: 0.6rem;
+}
+
+.form__label-comment {
+  font-size: 1rem;
+  color: #808080;
+}
+
+.steps-action {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.steps-action .button--primary {
+  background-color: #e7e7e7; /* 灰色 */
+  padding: 1rem 2rem;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+.steps-action .button--secondary {
+  background-color: #e7e7e7; /* 灰色 */
+  padding: 1rem 2rem;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+.steps-action .button--submit {
+  background-color: #3db6df; /* Light Blue */
+  padding: 1rem 2rem;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 5px;
+  font-size: 1.6rem;
+  text-align: center;
+}/*# sourceMappingURL=ProfileForm.module.css.map */

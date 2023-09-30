@@ -278,7 +278,7 @@ const ProfileEdit = () => {
           ) : (
             profileData && (
               <img
-                src={`${BASE_URL}/${profileData.user.profile_image_path}`}
+                src={`${API_BASE_URL}/${profileData.user.profile_image_path}`}
                 // src={`http://localhost/${profileData.user.profile_image_path}`}
 
                 alt="プロフィール画像"
