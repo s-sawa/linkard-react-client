@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // import ProfileLink from "../../components/ProfileLink/ProfileLink";
 import QRCodeModal from "../../components/QR/QRCodeModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import "./ProfilePage.css";
 import { getTokenFromCookie } from "../../utils/cookies";
 import CameraModal from "../../components/CameraModal/CameraModal";
@@ -16,6 +16,8 @@ const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
+  const param = useParams();
+  console.log(param.user_id);
   // useConfirmModal.jsxからreturnされたconfirmModal関数が、confirmModal変数に格納される
   const confirmModal = useConfirmModal();
 
@@ -31,8 +33,6 @@ const ProfilePage = () => {
   };
 
   const [profileData, setProfileData] = useState(null);
-  // const [otherLabel, setOtherLabel] = useState("その他"); // その他の項目名を保持する変数
-
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const openQRModal = () => {
     setIsQRModalOpen(true);
@@ -41,25 +41,23 @@ const ProfilePage = () => {
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
-  // const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
 
   useEffect(() => {
-    const token = getTokenFromCookie();
-
-    axios
-      .get(`${API_BASE_URL}/api/profile/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchData = async () => {
+      const token = getTokenFromCookie();
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/profile/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setProfileData(response.data.user);
-        console.log(response.data.user);
-      })
-
-      .catch((error) => {
+      } catch (error) {
         console.error("プロフィール情報の取得に失敗しました: ", error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (!profileData) {
@@ -67,7 +65,6 @@ const ProfilePage = () => {
   }
 
   if (!profileData.name) {
-    // if (!profileData.hobbies || profileData.hobbies.length === 0) {
     return (
       <div>
         <p>プロフィールが未入力です</p>
@@ -90,7 +87,11 @@ const ProfilePage = () => {
         />
         <CameraModal onScan={handleScanResult} />
       </div>
-      <ProfileCard profileData={profileData} API_BASE_URL={API_BASE_URL} isLikePage={false} />
+      <ProfileCard
+        profileData={profileData}
+        API_BASE_URL={API_BASE_URL}
+        isLikePage={false}
+      />
       <QRCodeModal
         isOpen={isQRModalOpen}
         onRequestClose={closeQRModal}
