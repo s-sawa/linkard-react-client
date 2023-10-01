@@ -1,8 +1,6 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6";
 import styles from "./ProfileCard.module.scss";
 import { Divider } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
-// import { BsQrCode } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
 import useHandleLike from "../../hooks/useHandleLike";
@@ -18,7 +16,6 @@ import useHandleOther3Like from "../../hooks/useHandleOther3Like";
 
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const navigate = useNavigate();
 
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
   const { fetchOtherLikeStatus, handleOtherLike, otherLikes } =
@@ -55,9 +52,9 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
     showModal(other3LikersList);
   };
 
-  // const { user_id } = useParams();
-
   useEffect(() => {
+    console.log("useEffect has run!"); // useEffectが実行された時にコンソールに表示される
+    console.log("profileData", profileData); 
     profileData?.hobbies?.forEach((hobby) => {
       fetchLikeStatus(hobby.id);
     });
@@ -88,22 +85,23 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   ]);
 
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  const openQRModal = () => {
-    setIsQRModalOpen(true);
-  };
+  // 多分使ってない
+  // const openQRModal = () => {
+  //   setIsQRModalOpen(true);
+  // };
 
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
 
-  const handleScanResult = (result) => {
-    if (result) {
-      const url = new URL(result);
-      const relativePath = url.pathname; // pathname部分を取得して
-      navigate(relativePath); // navigateに渡す
-    }
-  };
-  // console.log(profileData.theme_color.color1);
+  // 多分使ってない
+  // const handleScanResult = (result) => {
+  //   if (result) {
+  //     const url = new URL(result);
+  //     const relativePath = url.pathname;
+  //     navigate(relativePath);
+  //   }
+  // };
 
   if (!profileData) return <div>Loading...</div>;
 
@@ -214,18 +212,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       onClick={() => showLikersModal(hobby.id)}
                     >
                       {hobby.hobby}
-                      {otherLikes[hobby.id] ? (
-                        <FcLike />
-                      ) : (
-                        <FcLikePlaceholder />
-                      )}
-                      {/* {likers.some((liker) => liker.id === 2) ? (
-                        <FcLike />
-                      ) : (
-                        <FcLikePlaceholder />
-                      )} */}
-
-                      {/* {likes1[hobby.id] ? <FcLike /> : <FcLikePlaceholder />} */}
+                      {hobby.isLiked ? <FcLike /> : <FcLikePlaceholder />}
                     </dd>
                   )}
                 </div>
@@ -262,11 +249,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       onClick={() => showOtherLikersModal(other.id)}
                     >
                       {other.name}
-                      {otherLikes[other.id] ? (
-                        <FcLike />
-                      ) : (
-                        <FcLikePlaceholder />
-                      )}
+                      {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
                     </dd>
                   )}
                 </div>
@@ -302,11 +285,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       onClick={() => showOther2LikersModal(other.id)}
                     >
                       {other.name}
-                      {other2Likes[other.id] ? (
-                        <FcLike />
-                      ) : (
-                        <FcLikePlaceholder />
-                      )}
+                      {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
                     </dd>
                   )}
                 </div>
@@ -344,11 +323,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       onClick={() => showOther3LikersModal(other.id)}
                     >
                       {other.name}
-                      {other3Likes[other.id] ? (
-                        <FcLike />
-                      ) : (
-                        <FcLikePlaceholder />
-                      )}
+                      {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
                     </dd>
                   )}
                 </div>
@@ -374,25 +349,6 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
           >
             {profileData.free_posts[0].description}
           </p>
-
-          {/* {profileData.freePosts &&
-            profileData.freePosts.map((post, index) => (
-              <div key={index} className={styles["profile__section-post"]}>
-                <p className={styles["profile__section-post-title"]}>
-                  {post.title}
-                </p>
-                {post.image_path && (
-                  <img
-                    src={`${API_BASE_URL}/${post.image_path}`}
-                    alt={post.title}
-                    className={styles["profile__section-post-image"]}
-                  />
-                )}
-                <p className={styles["profile__section-post-description"]}>
-                  {post.description}
-                </p>
-              </div>
-            ))} */}
           <div style={{ color: profileData.theme_colors.color1 }}>
             このテキストの色は{profileData.theme_colors.color1}です。
           </div>

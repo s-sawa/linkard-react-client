@@ -18,7 +18,6 @@ const useHandleOther3Like = () => {
             },
           }
         );
-        console.log(other3Id);
         setOther3Likes((prevLikes) => ({
           ...prevLikes,
           [other3Id]: response.data.isLiked,
@@ -46,7 +45,6 @@ const useHandleOther3Like = () => {
           ...prevLikes,
           [other3Id]: !isLiked,
         }));
-        console.log(response.data);
       } catch (error) {
         console.error("Like action failed for other3:", error); // otherをother3に変更
       }

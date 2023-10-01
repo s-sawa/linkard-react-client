@@ -9,7 +9,6 @@ const useHandleOtherLike = () => {
 
   const fetchOtherLikeStatus = useCallback(
     async (otherId) => {
-
       try {
         const response = await axios.get(
           `${API_BASE_URL}/api/others/${otherId}/liked`,
@@ -19,7 +18,6 @@ const useHandleOtherLike = () => {
             },
           }
         );
-        console.log(otherId)
         setOtherLikes((prevLikes) => ({
           // setLikes を setOtherLikes に変更
           ...prevLikes,
@@ -34,8 +32,6 @@ const useHandleOtherLike = () => {
 
   const handleOtherLike = useCallback(
     async (otherId) => {
-                console.log(otherId);
-
       try {
         const isLiked = otherLikes[otherId] || false; // likes を otherLikes に変更
         const method = isLiked ? "delete" : "post";
@@ -51,7 +47,6 @@ const useHandleOtherLike = () => {
           ...prevLikes,
           [otherId]: !isLiked,
         }));
-        console.log(response.data);
       } catch (error) {
         console.error("Like action failed:", error);
       }
