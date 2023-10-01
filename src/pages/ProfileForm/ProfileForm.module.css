@@ -17,6 +17,16 @@
   font-size: 1.6rem;
 }
 
+.form__label-required {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(248, 75, 75);
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  border-radius: 10%;
+}
+
 .form__input,
 .form__textarea {
   padding: 0.5rem;

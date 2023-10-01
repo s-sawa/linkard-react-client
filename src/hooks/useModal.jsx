@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from "react";
-import { Modal } from "antd"; // antdからModalをインポート
+import { useState, useCallback } from "react";
+import { Modal } from "antd";
+import { Link } from "react-router-dom";
 
 const useModal = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -8,7 +9,6 @@ const useModal = () => {
   const showModal = useCallback((likersList) => {
     // likersListが配列でない場合は、コンソールにエラーメッセージを出力
     if (!Array.isArray(likersList)) {
-      console.error("likersList is not an array:", likersList);
       return;
     }
     setLikers(likersList);
@@ -31,7 +31,9 @@ const useModal = () => {
       <Modal open={isVisible} onCancel={hideModal} footer={null}>
         <ul>
           {likers.map((liker, index) => (
-            <li key={index}>{liker.name}</li>
+            <li key={index}>
+              <Link to={`/profile/${liker.id}/preview`} onClick={hideModal}>{liker.name} </Link>
+            </li>
           ))}
         </ul>
       </Modal>
