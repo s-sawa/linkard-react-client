@@ -59,14 +59,14 @@ const ProfilePage = () => {
           },
         });
         setProfileData(response.data.user);
-        console.log(response.data.user);
+        // console.log(response.data.user.hobbies);
       } catch (error) {
         console.error("プロフィール情報の取得に失敗しました: ", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [user_id]);
 
   if (!profileData) {
     return <div>Loading...</div>;

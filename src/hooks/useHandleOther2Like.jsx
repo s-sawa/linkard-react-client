@@ -18,7 +18,6 @@ const useHandleOther2Like = () => {
             },
           }
         );
-        console.log(other2Id);
         setOther2Likes((prevLikes) => ({
           ...prevLikes,
           [other2Id]: response.data.isLiked,
@@ -46,7 +45,6 @@ const useHandleOther2Like = () => {
           ...prevLikes,
           [other2Id]: !isLiked,
         }));
-        console.log(response.data);
       } catch (error) {
         console.error("Like action failed for other2:", error); // otherをother2に変更
       }

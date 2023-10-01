@@ -9,6 +9,8 @@ const useHandleLike = () => {
 
   const fetchLikeStatus = useCallback(
     async (hobbyId) => {
+      console.log("fetchLikeStatus is called with hobbyId:", hobbyId); // 関数が呼び出された際のhobbyIdを表示
+
       try {
         const response = await axios.get(
           `${API_BASE_URL}/api/hobbies/${hobbyId}/liked`,
@@ -22,6 +24,7 @@ const useHandleLike = () => {
           ...prevLikes,
           [hobbyId]: response.data.isLiked,
         }));
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch like status:", error);
       }
