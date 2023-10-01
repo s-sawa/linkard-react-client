@@ -1,0 +1,35 @@
+.modal {
+  &__link {
+    display: flex;
+    align-items: center;
+    color: #000000;
+    text-decoration: none;
+    padding: 1rem;
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+  &__list {
+    padding: 0;
+    list-style: none;
+    overflow-y: auto;
+    max-height: 30rem; // 300px
+  }
+  &__item {
+    border-bottom: 1px solid #eaeaea;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  &__image {
+    width: 6rem; // 40px
+    height: 6rem; // 40px
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+  }
+  &__name {
+    font-weight: 600;
+    font-size: 1.6rem; // 16px
+  }
+}
