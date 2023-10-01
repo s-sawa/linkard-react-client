@@ -230,7 +230,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                   )}
                 </div>
               ))}
-            {renderModal()} {/* ここでモーダルをレンダリング */}
+            {renderModal()}
           </div>
         </dl>
 

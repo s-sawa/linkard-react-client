@@ -59,6 +59,7 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
       ) : (
         <>
           <form onSubmit={handleSubmit(onSubmit)}>
+            {!isFollowing && (
             <select
               {...register("group")}
               onChange={(e) => setValue("group", e.target.value)}
@@ -69,15 +70,20 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
                 </option>
               ))}
             </select>
+
+            ) }
             <button type="submit">
               {/* {isFollowing ? "フォローを解除する" : "フォローする"} */}
               {buttonLabel}
             </button>
           </form>
-          <AddGroupButton
-            API_BASE_URL={API_BASE_URL}
-            onGroupAdded={() => setReloadGroups(!reloadGroups)}
-          />
+          {!isFollowing && (
+            <AddGroupButton
+              API_BASE_URL={API_BASE_URL}
+              onGroupAdded={() => setReloadGroups(!reloadGroups)}
+            />
+
+          )}
         </>
       )}
     </div>

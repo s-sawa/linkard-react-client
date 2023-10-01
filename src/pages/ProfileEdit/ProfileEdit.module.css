@@ -30,7 +30,7 @@
   width: 100px;
   height: 100px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .form__image-wrapper {
@@ -48,13 +48,13 @@
   margin-top: 1rem;
   border-radius: 50%;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .form__free-image {
   margin-top: 1rem;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .form__file-input {
@@ -149,6 +149,7 @@
   align-items: center;
   gap: 2rem;
 }
+
 .steps-action .button--primary {
   background-color: #e7e7e7; /* 灰色 */
   padding: 1rem 2rem;
@@ -158,6 +159,7 @@
   font-size: 1.6rem;
   text-align: center;
 }
+
 .steps-action .button--secondary {
   background-color: #e7e7e7; /* 灰色 */
   padding: 1rem 2rem;
@@ -167,6 +169,7 @@
   font-size: 1.6rem;
   text-align: center;
 }
+
 .steps-action .button--submit {
   background-color: #3db6df; /* Light Blue */
   padding: 1rem 2rem;
@@ -175,4 +178,4 @@
   border-radius: 5px;
   font-size: 1.6rem;
   text-align: center;
-}/*# sourceMappingURL=ProfileForm.module.css.map */
+} /*# sourceMappingURL=ProfileEdit.module.css.map */

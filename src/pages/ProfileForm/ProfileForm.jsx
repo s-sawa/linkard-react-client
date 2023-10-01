@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Steps, Button, Modal } from "antd";
+import { Steps, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getTokenFromCookie } from "../../utils/cookies";
 import axios from "axios";
@@ -33,7 +33,6 @@ const ProfileForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [isModalVisible3, setIsModalVisible3] = useState(false);
-  console.log(isModalVisible);
 
   const [current, setCurrent] = useState(0);
   const {
@@ -107,9 +106,9 @@ const ProfileForm = () => {
   };
 
   // その他1
-  const [newOtherName, setNewOtherName] = useState("その他");
+  const [newOtherName, setNewOtherName] = useState("好きな音楽");
   // その他2
-  const [newOtherName2, setNewOtherName2] = useState("その他");
+  const [newOtherName2, setNewOtherName2] = useState("今したい事");
   // その他3
   const [newOtherName3, setNewOtherName3] = useState("今後の目標");
 
@@ -217,6 +216,7 @@ const ProfileForm = () => {
         current={current}
         className={styles["form__steps"]}
         responsive={false}
+        size="small"
       >
         {steps.map((item) => (
           <Step
@@ -258,7 +258,10 @@ const ProfileForm = () => {
             </div>
 
             <div className={styles["form__group"]}>
-              <label className={styles["form__label"]}>ニックネーム *</label>
+              <label className={styles["form__label"]}>
+                ニックネーム
+                <span className={styles["form__label-required"]}>必須</span>
+              </label>
               <input
                 type="text"
                 name="name"
@@ -277,7 +280,10 @@ const ProfileForm = () => {
             </p>
 
             <div className={styles["form__group"]}>
-              <label className={styles["form__label"]}>コメント *</label>
+              <label className={styles["form__label"]}>
+                コメント
+                <span className={styles["form__label-required"]}>必須</span>
+              </label>
               <textarea
                 name="comment"
                 className={styles["form__textarea"]}
@@ -291,7 +297,8 @@ const ProfileForm = () => {
             </p>
             <div className={styles["form__group"]}>
               <legend className={styles["form__legend"]}>
-                テーマカラー選択 *
+                テーマカラー選択
+                <span className={styles["form__label-required"]}>必須</span>
               </legend>
               <div className={styles["form__label-wrapper"]}>
                 <label
@@ -346,7 +353,10 @@ const ProfileForm = () => {
             </div>
 
             <div className={styles["form__group"]}>
-              <label className={styles["form__label"]}>趣味 *</label>
+              <label className={styles["form__label"]}>
+                趣味
+                <span className={styles["form__label-required"]}>必須</span>
+              </label>
               {fields &&
                 fields.map((field, index) => (
                   <div key={field.id} className={styles["form__hobby"]}>
@@ -725,23 +735,6 @@ const ProfileForm = () => {
           </div>
         )}
       </div>
-      {/* <div className="steps-action">
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => onNext()}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <button type="submit" className={styles["submit-button"]}>
-            登録する
-          </button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={() => onPrev()}>
-            Previous
-          </Button>
-        )}
-      </div> */}
       <div className={styles["steps-action"]}>
         {current < steps.length - 1 && (
           <button
@@ -749,7 +742,7 @@ const ProfileForm = () => {
             onClick={() => onNext()}
             className={styles["button--primary"]}
           >
-          次へ
+            次へ
           </button>
         )}
         {current === steps.length - 1 && (
@@ -768,8 +761,6 @@ const ProfileForm = () => {
           </button>
         )}
       </div>
-
-    
     </form>
   );
 };
