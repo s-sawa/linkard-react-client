@@ -29,7 +29,8 @@ const useIsFollowing = (API_BASE_URL, toUserId) => {
     checkFollowingStatus();
   }, [API_BASE_URL, toUserId]);
 
-  return { isFollowing, loading };
+  return { isFollowing, setIsFollowing, loading };
+  // return { isFollowing, loading };
 };
 
 export default useIsFollowing;

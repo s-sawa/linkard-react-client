@@ -23,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
         {/* /login, /register以外のルートに対して以下がマッチする (path="/*" ワイルドカードのため) */}
         <Route
           path="/*"
