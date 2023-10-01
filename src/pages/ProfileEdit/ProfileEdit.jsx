@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { getTokenFromCookie } from "../../utils/cookies";
 import { useNavigate } from "react-router-dom";
+import styles from "./ProfileEdit.module.scss";
+
 
 const ProfileEdit = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -176,16 +178,12 @@ const ProfileEdit = () => {
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
-    // formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
     formData.append("themeId", data.themeId);
 
     data.hobbies.forEach((hobbyObj, index) => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
     });
-    // data.others.forEach((otherObj, index) => {
-    //   formData.append(`others[${index}][name]`, otherObj.name);
-    // });
     data.others.forEach((otherObj, index) => {
       formData.append(`others[${index}][id]`, otherObj.id); // もし otherObj が id を持つ場合
       formData.append(`others[${index}][name]`, otherObj.name);
@@ -223,7 +221,7 @@ const ProfileEdit = () => {
       formData.append("social_links[2][url]", data.instagram_link);
     }
 
-    console.log([...formData.entries()]);
+    // console.log([...formData.entries()]);
 
     try {
       await axios.post(`${API_BASE_URL}/api/profile/me`, formData, {

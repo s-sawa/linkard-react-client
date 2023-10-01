@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddGroupButton from "../AddGroupButton/AddGroupButton";
 import { useForm } from "react-hook-form";
 import useIsFollowing from "../../hooks/useIsFollowing";
@@ -19,31 +19,33 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
   );
 
   // フォローしているかどうか
-  const { isFollowing, loading } = useIsFollowing(API_BASE_URL, toUserId);
-
+  const { isFollowing, setIsFollowing, loading } = useIsFollowing(
+    API_BASE_URL,
+    toUserId
+  );
   const isLoading = loading || groupsLoading;
 
+  const [buttonLabel, setButtonLabel] = useState(
+    isFollowing ? "フォロー解除する" : "フォローする"
+  );
+
+  useEffect(() => {
+    setButtonLabel(isFollowing ? "フォロー解除する" : "フォローする");
+  }, [isFollowing]);
+
   const onSubmit = async (data) => {
-    console.log(toUserId);
     try {
       const token = getTokenFromCookie();
-      const response = await axios.post(
-        `${API_BASE_URL}/api/users/${toUserId}/follow`,
-        { userId: Number(toUserId), groupId: Number(data.group) },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      Modal.confirm({
-        title: "確認",
-        content: "リストページに遷移してよろしいですか？",
-        onOk() {
-          navigate("/profile/list");
+      const method = isFollowing ? "delete" : "post";
+      const response = await axios({
+        method: method, // ここで動的にメソッドを設定
+        url: `${API_BASE_URL}/api/users/${toUserId}/follow`,
+        data: { userId: Number(toUserId), groupId: Number(data.group) }, // POSTのボディデータ
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
+      setIsFollowing(!isFollowing); // 状態を反転させる
     } catch (error) {
       console.error("フォローに失敗しました: ", error);
       alert("エラーが発生しました。");
@@ -68,7 +70,8 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
               ))}
             </select>
             <button type="submit">
-              {isFollowing ? "フォローを解除する" : "フォローする"}
+              {/* {isFollowing ? "フォローを解除する" : "フォローする"} */}
+              {buttonLabel}
             </button>
           </form>
           <AddGroupButton

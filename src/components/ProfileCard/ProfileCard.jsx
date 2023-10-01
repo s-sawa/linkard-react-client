@@ -1,7 +1,7 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6";
 import styles from "./ProfileCard.module.scss";
 import { Divider } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import { BsQrCode } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
@@ -16,7 +16,7 @@ import useFetchOther2Likers from "../../hooks/useFetchOther2Likers";
 import useFetchOther3Likers from "../../hooks/useFetchOther3Likers";
 import useHandleOther3Like from "../../hooks/useHandleOther3Like";
 
-const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
+const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
 
@@ -54,6 +54,8 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
     const other3LikersList = await fetchOther3Likers(other3Id);
     showModal(other3LikersList);
   };
+
+  // const { user_id } = useParams();
 
   useEffect(() => {
     profileData?.hobbies?.forEach((hobby) => {
@@ -197,7 +199,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                   key={index}
                   className={styles["profile__section-item-wrapper"]}
                 >
-                  {isLikePage ? (
+                  {toUserId || isLikePage ? (
                     // isLikePageがtrueのときの処理
                     <div onClick={() => handleLike(hobby.id)}>
                       <dd className={styles["profile__section-item"]}>
@@ -243,7 +245,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                   key={index}
                   className={styles["profile__section-item-wrapper"]}
                 >
-                  {isLikePage ? (
+                  {toUserId || isLikePage ? (
                     <div onClick={() => handleOtherLike(other.id)}>
                       <dd className={styles["profile__section-item"]}>
                         {other.name}
@@ -283,7 +285,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                   key={index}
                   className={styles["profile__section-item-wrapper"]}
                 >
-                  {isLikePage ? (
+                  {toUserId || isLikePage ? (
                     <div onClick={() => handleOther2Like(other.id)}>
                       <dd className={styles["profile__section-item"]}>
                         {other.name}
@@ -324,7 +326,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage }) => {
                   key={index}
                   className={styles["profile__section-item-wrapper"]}
                 >
-                  {isLikePage ? (
+                  {toUserId || isLikePage ? (
                     <div onClick={() => handleOther3Like(other.id)}>
                       <dd className={styles["profile__section-item"]}>
                         {other.name}

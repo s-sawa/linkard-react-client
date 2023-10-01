@@ -11,13 +11,13 @@ import { BsQrCode } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import styles from "./ProfilePage.module.scss";
 import useConfirmModal from "../../hooks/useConfirmModal";
+import FollowButton from "../../components/FollowButton/FollowButton";
 
 const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
-  const param = useParams();
-  console.log(param.user_id);
+  const { user_id } = useParams();
   // useConfirmModal.jsxからreturnされたconfirmModal関数が、confirmModal変数に格納される
   const confirmModal = useConfirmModal();
 
@@ -45,13 +45,21 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = getTokenFromCookie();
+      let endpoint = "";
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/profile/me`, {
+        if (user_id) {
+          endpoint = `api/profile/${user_id}/preview`;
+        } else {
+          endpoint = `api/profile/me`;
+        }
+        const response = await axios.get(`${API_BASE_URL}/${endpoint}`, {
+          // const response = await axios.get(`${API_BASE_URL}/api/profile/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setProfileData(response.data.user);
+        console.log(response.data.user);
       } catch (error) {
         console.error("プロフィール情報の取得に失敗しました: ", error);
       }
@@ -78,19 +86,28 @@ const ProfilePage = () => {
   return (
     <div className={styles["profile-page"]}>
       <div className={styles["profile-page__icons-wrapper"]}>
-        <AiFillEdit size={32} onClick={() => navigate("./profile/edit")} />
+        {!user_id ? (
+          <>
+            <AiFillEdit size={32} onClick={() => navigate("./profile/edit")} />
 
-        <BsQrCode
-          size={32}
-          onClick={openQRModal}
-          style={{ cursor: "pointer" }}
-        />
-        <CameraModal onScan={handleScanResult} />
+            <BsQrCode
+              size={32}
+              onClick={openQRModal}
+              style={{ cursor: "pointer" }}
+            />
+            <CameraModal onScan={handleScanResult} />
+          </>
+        ) : (
+          <>
+            <FollowButton API_BASE_URL={API_BASE_URL} toUserId={user_id} />
+          </>
+        )}
       </div>
       <ProfileCard
         profileData={profileData}
         API_BASE_URL={API_BASE_URL}
         isLikePage={false}
+        toUserId={user_id}
       />
       <QRCodeModal
         isOpen={isQRModalOpen}
