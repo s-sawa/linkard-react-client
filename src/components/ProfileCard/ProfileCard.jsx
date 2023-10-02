@@ -3,7 +3,6 @@ import styles from "./ProfileCard.module.scss";
 import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
 import useHandleLike from "../../hooks/useHandleLike";
-import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import useModal from "../../hooks/useModal";
 import useFetchLikers from "../../hooks/useFetchLikers";
 import useHandleOtherLike from "../../hooks/useHandleOtherLike";
@@ -25,7 +24,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
     profileData.theme_color_id === 3
       ? "#4d5156"
       : "#fff";
-  console.log(budgeTextColor);
+  // console.log(budgeTextColor);
   // const bubbleColor = profileData.theme_colors.color1;
 
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
@@ -134,11 +133,6 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
           />
         </div>
 
-        {/* <div
-          className={`${styles["profile__comment"]} ${styles["comment-bubble"]}`}
-        >
-          {profileData.comment}
-        </div> */}
         <div
           className={`${styles["profile__comment"]} ${styles["comment-bubble"]}`}
           style={{ "--bubble-color": budgeColor, color: budgeTextColor }}
@@ -425,6 +419,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
           )}
           <p
             className={styles["profile__section--free-post-image-description"]}
+            style={{
+              backgroundColor: budgeColor,
+              color: budgeTextColor,
+            }}
           >
             {profileData.free_posts[0].description}
           </p>
