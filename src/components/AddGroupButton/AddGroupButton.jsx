@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Cookies from "js-cookie";
+import styles from "./AddGroupButton.module.scss";
 
 const AddGroupButton = ({ API_BASE_URL, onGroupAdded }) => {
   const { register, handleSubmit } = useForm();
@@ -20,18 +21,30 @@ const AddGroupButton = ({ API_BASE_URL, onGroupAdded }) => {
 
       setShowForm(false);
     } catch (error) {
-      console.error("グループの追加に失敗しました: ", error);
+      // console.error("グループの追加に失敗しました: ", error);
     }
   };
 
   return (
-    <div>
+    <div className={styles.block}>
       {!showForm ? (
-        <button onClick={() => setShowForm(true)}>グループを追加</button>
+        <button
+          onClick={() => setShowForm(true)}
+          className={styles["block__button--add"]}
+        >
+          グループを追加
+        </button>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input {...register("name")} placeholder="グループ名" required />
-          <button type="submit">追加する</button>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.block__form}>
+          <input
+            {...register("name")}
+            placeholder="グループ名"
+            required
+            className={styles.block__input}
+          />
+          <button type="submit" className={styles["block__button--submit"]}>
+            追加する
+          </button>
         </form>
       )}
     </div>

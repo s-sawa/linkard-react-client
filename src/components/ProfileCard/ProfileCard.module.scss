@@ -35,8 +35,8 @@ $padding-desktop: 2rem;
   margin: 0 auto;
   margin-bottom: $padding-mobile;
   border-radius: 50%;
-  height: 18rem;
-  width: 18rem;
+  height: 14rem;
+  width: 14rem;
   object-fit: cover;
 }
 
@@ -71,12 +71,15 @@ $padding-desktop: 2rem;
   margin-bottom: $padding-mobile;
   font-size: 1.4rem;
   font-weight: bold;
+  width: 80%;
+  margin: 0 auto;
 }
 .comment-bubble {
   position: relative;
   background-color: var(--bubble-color, #f4ddd5); // ふきだしの背景色
   border-radius: 2em;
-  padding: 1em;
+  padding: 6px 12px;
+  // padding: 1em;
   margin-top: 2em; // 三角形を含む十分なスペースを確保
   text-align: center;
   border-radius: 12px; // 角を丸くする
@@ -169,8 +172,8 @@ $padding-desktop: 2rem;
 }
 
 .profile__section--free-post-image {
-  width: 80%;
-  height: 20rem;
+  width: 60%;
+  height: 200px;
   object-fit: cover;
   display: block;
   margin: 0 auto;
@@ -192,19 +195,27 @@ $padding-desktop: 2rem;
   margin-bottom: 0.5rem;
 }
 
-.profile__section-post-image {
-  width: 100%;
-  max-width: 300px;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: $padding-mobile;
-}
+// .profile__section-post-image {
+//   width: 500px;
+//   max-width: 300px;
+//   display: block;
+//   margin: 0 auto;
+//   margin-bottom: $padding-mobile;
+// }
 
-.profile__section-post-description {
-  margin-bottom: $padding-mobile;
-}
 
 .profile__section--free-post-image-description {
+  padding: 6px 12px; // 内側の余白
+  border-radius: 12px; // 角を丸くする
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); // シャドウ効果
+  color: #4d5156; // テキストの色
   font-size: 1.4rem;
   font-weight: bold;
+  display: flex; /* 子要素を横並びに配置 */
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+
 }
