@@ -33,7 +33,11 @@ const LogoutButton = () => {
 
   return (
     <div>
-      <button type="button" onClick={handleLogout}>
+      <button
+        type="button"
+        onClick={handleLogout}
+        style={{ marginBottom: "10rem" }}
+      >
         ログアウト
       </button>
     </div>
