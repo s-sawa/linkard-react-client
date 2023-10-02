@@ -7,6 +7,8 @@ import useGroups from "../../hooks/useGroups";
 import { getTokenFromCookie } from "../../utils/cookies";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
+import styles from "./FollowButton.module.scss";
+
 
 const FollowButton = ({ API_BASE_URL, toUserId }) => {
   const [reloadGroups, setReloadGroups] = useState(false);
@@ -32,6 +34,12 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
   useEffect(() => {
     setButtonLabel(isFollowing ? "フォロー解除する" : "フォローする");
   }, [isFollowing]);
+  useEffect(() => {
+    if (groups && groups.length > 0) {
+      setValue("group", groups[0].id); // 初期値を設定
+    }
+  }, [groups, setValue]);
+
 
   const onSubmit = async (data) => {
     try {
@@ -53,39 +61,43 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
   };
 
   return (
-    <div>
-      {isLoading ? (
-        <p>ロード中...</p>
-      ) : (
-        <>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {!isFollowing && (
+    <div className={styles["container"]}>
+      {!isFollowing && (
+        <AddGroupButton
+          API_BASE_URL={API_BASE_URL}
+          onGroupAdded={() => setReloadGroups(!reloadGroups)}
+          className={styles["add-group-button"]}
+        />
+      )}
+      {/* <AddGroupButton
+        API_BASE_URL={API_BASE_URL}
+        onGroupAdded={() => setReloadGroups(!reloadGroups)}
+        className={styles["add-group-button"]}
+      /> */}
+      <div className={styles["sub-container"]}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles["form"]}>
+          {!isFollowing && (
             <select
               {...register("group")}
               onChange={(e) => setValue("group", e.target.value)}
+              className={styles["form__select"]}
             >
               {groups.map((group) => (
-                <option key={group.id} value={group.id}>
+                <option
+                  key={group.id}
+                  value={group.id}
+                  className={styles["form__option"]}
+                >
                   {group.name}
                 </option>
               ))}
             </select>
-
-            ) }
-            <button type="submit">
-              {/* {isFollowing ? "フォローを解除する" : "フォローする"} */}
-              {buttonLabel}
-            </button>
-          </form>
-          {!isFollowing && (
-            <AddGroupButton
-              API_BASE_URL={API_BASE_URL}
-              onGroupAdded={() => setReloadGroups(!reloadGroups)}
-            />
-
           )}
-        </>
-      )}
+          <button type="submit" className={styles["form__button"]}>
+            {buttonLabel}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

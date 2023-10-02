@@ -621,9 +621,9 @@ const ProfileEdit = () => {
           <div className={styles["form__group"]}>
             <label className={styles["form__label"]}>フリー投稿:</label>
 
-            <p className={styles["form__label-comment"]}>タイトル</p>
+            {/* <p className={styles["form__label-comment"]}>タイトル</p> */}
             <div className={styles["form__image-wrapper"]}>
-              <p className={styles["form__label-comment"]}>フリー投稿画像:</p>
+              {/* <p className={styles["form__label-comment"]}>フリー投稿画像:</p> */}
 
               {freeImage ? (
                 <img
@@ -680,7 +680,7 @@ const ProfileEdit = () => {
           <div className={styles["form__group"]}>
             <p className={styles["form__sublabel"]}>Facebook URL:</p>
             <input
-              type="url"
+              type="text"
               name="facebook_link"
               {...register("facebook_link")}
               placeholder="https://facebook.com/yourname"
@@ -689,7 +689,7 @@ const ProfileEdit = () => {
 
             <p className={styles["form__sublabel"]}>X(Twitter) URL:</p>
             <input
-              type="url"
+              type="text"
               name="twitter_link"
               {...register("twitter_link")}
               placeholder="https://twitter.com/yourname"
@@ -698,7 +698,7 @@ const ProfileEdit = () => {
 
             <p className={styles["form__sublabel"]}>Instagram URL:</p>
             <input
-              type="url"
+              type="text"
               name="instagram_link"
               {...register("instagram_link")}
               placeholder="https://instagram.com/yourname"
