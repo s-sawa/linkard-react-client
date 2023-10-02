@@ -2,28 +2,38 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.scss";
+import { useState } from "react";
 
 const Register = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [responseStatus, setResponseStatus] = useState(0);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setError,
   } = useForm({ mode: "onSubmit" });
 
   const password = watch("password");
   const navigate = useNavigate(); // useNavigateを初期化
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       const response = await axios.post(`${API_BASE_URL}/api/register`, data);
+      setResponseStatus(response.status);
       if (response.status === 204) {
         navigate("/login");
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 422) {
+        // alert("入力されたメールアドレスは既に使用されています");
+        setError("email", {
+          type: "manual",
+          message: "入力されたメールアドレスは既に使用されています",
+        });
+      }
     }
   };
 
@@ -81,7 +91,9 @@ const Register = () => {
           className={styles["register-container__label"]}
         >
           パスワード
-          <span className={styles["register-container__sublabel"]}>（確認）</span>
+          <span className={styles["register-container__sublabel"]}>
+            （確認）
+          </span>
         </label>
         <input
           id="password_confirmation"

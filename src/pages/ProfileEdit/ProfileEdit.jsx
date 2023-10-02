@@ -10,7 +10,7 @@ import { Modal } from "antd";
 
 const ProfileEdit = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  // const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -66,6 +66,14 @@ const ProfileEdit = () => {
   const [image, setImage] = useState(null);
   const [freeImage, setFreeImage] = useState(null);
 
+  const colorThemes = [
+    ["#feeedc", "#bde1da", "#f5b5a7"],
+    ["#dbd2e8", "#dfe8f0", "#fff6a4"],
+    ["#ded3d6", "#c0e4f2", "#fffcd7"],
+    ["#555168", "#f5d7d6", "#e06b7b"],
+    ["#32405f", "#bdc6ca", "#889291"],
+  ];
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -74,7 +82,6 @@ const ProfileEdit = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data.user.theme_colors.id);
 
         setProfileData(response.data);
         setValue("name", response.data.user.name);
@@ -313,7 +320,7 @@ const ProfileEdit = () => {
             <p>{errors.comment ? errors.comment.message : null}</p>
           </div>
 
-          <div className={styles["form__group"]}>
+          {/* <div className={styles["form__group"]}>
             <legend className={styles["form__legend"]}>
               テーマカラー選択 *
             </legend>
@@ -345,9 +352,9 @@ const ProfileEdit = () => {
                   className={styles["form__radio"]}
                 />
                 <div className={styles["color-combination"]}>
-                  <div className={styles["color1"]}></div>
-                  <div className={styles["color2"]}></div>
-                  <div className={styles["color3"]}></div>
+                  <div className={styles["color4"]}></div>
+                  <div className={styles["color5"]}></div>
+                  <div className={styles["color6"]}></div>
                 </div>
               </label>
               <label
@@ -361,11 +368,44 @@ const ProfileEdit = () => {
                   className={styles["form__radio"]}
                 />
                 <div className={styles["color-combination"]}>
-                  <div className={styles["color1"]}></div>
-                  <div className={styles["color2"]}></div>
-                  <div className={styles["color3"]}></div>
+                  <div className={styles["color7"]}></div>
+                  <div className={styles["color8"]}></div>
+                  <div className={styles["color9"]}></div>
                 </div>
               </label>
+            </div>
+          </div> */}
+          <div className={styles["form__group"]}>
+            <legend className={styles["form__legend"]}>
+              テーマカラー選択 *
+            </legend>
+            <div className={styles["form__label-wrapper"]}>
+              {colorThemes.map((theme, index) => (
+                <label
+                  key={index}
+                  className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+                >
+                  {`テーマ${index + 1}`}
+                  <input
+                    type="radio"
+                    value={index + 1}
+                    {...register("themeId", { required: true })}
+                    className={styles["form__radio"]}
+                  />
+                  <div className={styles["color-combination"]}>
+                    {theme.map((colorCode, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          backgroundColor: colorCode,
+                          width: "4rem",
+                          height: "4rem",
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+                </label>
+              ))}
             </div>
           </div>
 
