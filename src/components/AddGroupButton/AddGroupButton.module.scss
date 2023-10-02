@@ -1,0 +1,33 @@
+.block {
+  &__button {
+    &--add {
+      padding: 0.5rem;
+      background-color: #a1a3a3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.4rem;
+      // その他のスタイルプロパティ
+    }
+    &--submit {
+      padding: 0.5rem;
+      background-color: #a1a3a3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.4rem;
+      margin-left: 2rem;
+      // その他のスタイルプロパティ
+    }
+  }
+  &__form {
+    // フォーム全体のスタイルプロパティ
+  }
+  &__input {
+    // インプット要素のスタイルプロパティ
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    // その他のスタイルプロパティ
+  }
+}
