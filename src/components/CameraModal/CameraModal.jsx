@@ -5,7 +5,7 @@ import { BsFillCameraFill } from "react-icons/bs";
 
 Modal.setAppElement("#root");
 
-const CameraModal = ({ onScan }) => {
+const CameraModal = ({ onScan, color }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scannerRef = useRef();
 
@@ -21,9 +21,13 @@ const CameraModal = ({ onScan }) => {
   };
 
   return (
-    <div>
+    <div style={{ minHeight: "32px", display: "flex", alignItems: "center" }}>
       {/* <button onClick={openModal}>カメラを開始</button> */}
-      <BsFillCameraFill size={32} onClick={openModal} style={{ cursor: "pointer" }} />
+      <BsFillCameraFill
+        size={32}
+        onClick={openModal}
+        style={{ cursor: "pointer", color: color }}
+      />
 
       <Modal
         isOpen={isModalOpen}

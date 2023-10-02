@@ -17,16 +17,6 @@
   font-size: 1.6rem;
 }
 
-.form__label-required {
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: white;
-  background-color: rgb(248, 75, 75);
-  padding: 0.5rem;
-  margin-left: 0.5rem;
-  border-radius: 10%;
-}
-
 .form__input,
 .form__textarea {
   padding: 0.5rem;
@@ -40,7 +30,7 @@
   width: 100px;
   height: 100px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .form__image-wrapper {
@@ -58,13 +48,13 @@
   margin-top: 1rem;
   border-radius: 50%;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .form__free-image {
   margin-top: 1rem;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .form__file-input {
@@ -127,15 +117,15 @@
 }
 
 .color1 {
-  background-color: red;
+  background-color: #feeedc;
 }
 
 .color2 {
-  background-color: blue;
+  background-color: #bde1da;
 }
 
 .color3 {
-  background-color: green;
+  background-color: #f5b5a7;
 }
 
 .form__label-icon-wrapper {
@@ -159,6 +149,7 @@
   align-items: center;
   gap: 2rem;
 }
+
 .steps-action .button--primary {
   background-color: #e7e7e7; /* 灰色 */
   padding: 1rem 2rem;
@@ -168,6 +159,7 @@
   font-size: 1.6rem;
   text-align: center;
 }
+
 .steps-action .button--secondary {
   background-color: #e7e7e7; /* 灰色 */
   padding: 1rem 2rem;
@@ -177,6 +169,7 @@
   font-size: 1.6rem;
   text-align: center;
 }
+
 .steps-action .button--submit {
   background-color: #3db6df; /* Light Blue */
   padding: 1rem 2rem;
@@ -185,4 +178,4 @@
   border-radius: 5px;
   font-size: 1.6rem;
   text-align: center;
-}/*# sourceMappingURL=ProfileForm.module.css.map */
+} /*# sourceMappingURL=ProfileEdit.module.css.map */

@@ -17,16 +17,6 @@
   font-size: 1.6rem;
 }
 
-.form__label-required {
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: white;
-  background-color: rgb(248, 75, 75);
-  padding: 0.5rem;
-  margin-left: 0.5rem;
-  border-radius: 10%;
-}
-
 .form__input,
 .form__textarea {
   padding: 0.5rem;
@@ -127,15 +117,15 @@
 }
 
 .color1 {
-  background-color: red;
+  background-color: #feeedc;
 }
 
 .color2 {
-  background-color: blue;
+  background-color: #bde1da;
 }
 
 .color3 {
-  background-color: green;
+  background-color: #f5b5a7;
 }
 
 .form__label-icon-wrapper {

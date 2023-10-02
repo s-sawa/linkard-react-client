@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Steps, Button, Modal } from "antd";
+import { Steps, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getTokenFromCookie } from "../../utils/cookies";
 import axios from "axios";
@@ -14,15 +14,15 @@ const { Step } = Steps;
 
 const steps = [
   {
-    title: "基本情報",
+    title: "step1",
     content: "First-content",
   },
   {
-    title: "追加情報1",
+    title: "step2",
     content: "Second-content",
   },
   {
-    title: "追加情報2",
+    title: "step3",
     content: "Last-content",
   },
 ];
@@ -33,7 +33,6 @@ const ProfileForm = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [isModalVisible3, setIsModalVisible3] = useState(false);
-  console.log(isModalVisible);
 
   const [current, setCurrent] = useState(0);
   const {
@@ -107,9 +106,9 @@ const ProfileForm = () => {
   };
 
   // その他1
-  const [newOtherName, setNewOtherName] = useState("その他");
+  const [newOtherName, setNewOtherName] = useState("好きな音楽");
   // その他2
-  const [newOtherName2, setNewOtherName2] = useState("その他");
+  const [newOtherName2, setNewOtherName2] = useState("今したい事");
   // その他3
   const [newOtherName3, setNewOtherName3] = useState("今後の目標");
 
@@ -138,6 +137,14 @@ const ProfileForm = () => {
   const onNext = () => {
     setCurrent(current + 1);
   };
+
+  const colorThemes = [
+    ["#feeedc", "#bde1da", "#f5b5a7"],
+    ["#dbd2e8", "#dfe8f0", "#fff6a4"],
+    ["#ded3d6", "#c0e4f2", "#fffcd7"],
+    ["#555168", "#f5d7d6", "#e06b7b"],
+    ["#32405f", "#bdc6ca", "#889291"],
+  ];
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -191,7 +198,7 @@ const ProfileForm = () => {
       formData.append("social_links[2][url]", data.instagram_link);
     }
 
-    console.log([...formData.entries()]);
+    // console.log([...formData.entries()]);
 
     try {
       const response = await axios.post(
@@ -204,7 +211,7 @@ const ProfileForm = () => {
           },
         }
       );
-      console.log(response);
+      // console.log(response);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -217,6 +224,7 @@ const ProfileForm = () => {
         current={current}
         className={styles["form__steps"]}
         responsive={false}
+        size="small"
       >
         {steps.map((item) => (
           <Step
@@ -258,7 +266,10 @@ const ProfileForm = () => {
             </div>
 
             <div className={styles["form__group"]}>
-              <label className={styles["form__label"]}>ニックネーム *</label>
+              <label className={styles["form__label"]}>
+                ニックネーム
+                <span className={styles["form__label-required"]}>必須</span>
+              </label>
               <input
                 type="text"
                 name="name"
@@ -277,7 +288,10 @@ const ProfileForm = () => {
             </p>
 
             <div className={styles["form__group"]}>
-              <label className={styles["form__label"]}>コメント *</label>
+              <label className={styles["form__label"]}>
+                コメント
+                <span className={styles["form__label-required"]}>必須</span>
+              </label>
               <textarea
                 name="comment"
                 className={styles["form__textarea"]}
@@ -289,9 +303,10 @@ const ProfileForm = () => {
             <p className={styles["form__error"]}>
               {errors.comment ? errors.comment.message : null}
             </p>
-            <div className={styles["form__group"]}>
+            {/* <div className={styles["form__group"]}>
               <legend className={styles["form__legend"]}>
-                テーマカラー選択 *
+                テーマカラー選択
+                <span className={styles["form__label-required"]}>必須</span>
               </legend>
               <div className={styles["form__label-wrapper"]}>
                 <label
@@ -343,10 +358,48 @@ const ProfileForm = () => {
                   </div>
                 </label>
               </div>
+            </div> */}
+
+            <div className={styles["form__group"]}>
+              <legend className={styles["form__legend"]}>
+                テーマカラー選択
+                <span className={styles["form__label-required"]}>必須</span>
+              </legend>
+              <div className={styles["form__label-wrapper"]}>
+                {colorThemes.map((theme, index) => (
+                  <label
+                    key={index}
+                    className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+                  >
+                    {`テーマ${index + 1}`}
+                    <input
+                      type="radio"
+                      value={index + 1}
+                      {...register("themeId", { required: true })}
+                      className={styles["form__radio"]}
+                    />
+                    <div className={styles["color-combination"]}>
+                      {theme.map((colorCode, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            backgroundColor: colorCode,
+                            width: "4rem",
+                            height: "4rem",
+                          }}
+                        ></div>
+                      ))}
+                    </div>
+                  </label>
+                ))}
+              </div>
             </div>
 
             <div className={styles["form__group"]}>
-              <label className={styles["form__label"]}>趣味 *</label>
+              <label className={styles["form__label"]}>
+                趣味
+                <span className={styles["form__label-required"]}>必須</span>
+              </label>
               {fields &&
                 fields.map((field, index) => (
                   <div key={field.id} className={styles["form__hobby"]}>
@@ -725,23 +778,6 @@ const ProfileForm = () => {
           </div>
         )}
       </div>
-      {/* <div className="steps-action">
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => onNext()}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <button type="submit" className={styles["submit-button"]}>
-            登録する
-          </button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={() => onPrev()}>
-            Previous
-          </Button>
-        )}
-      </div> */}
       <div className={styles["steps-action"]}>
         {current < steps.length - 1 && (
           <button
@@ -749,7 +785,7 @@ const ProfileForm = () => {
             onClick={() => onNext()}
             className={styles["button--primary"]}
           >
-          次へ
+            次へ
           </button>
         )}
         {current === steps.length - 1 && (
@@ -768,8 +804,6 @@ const ProfileForm = () => {
           </button>
         )}
       </div>
-
-    
     </form>
   );
 };

@@ -3,12 +3,19 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { getTokenFromCookie } from "../../utils/cookies";
 import { useNavigate } from "react-router-dom";
+import styles from "./ProfileEdit.module.scss";
+import { CgAddR } from "react-icons/cg";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { Modal } from "antd";
 
 const ProfileEdit = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  // const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(false);
+  const [isModalVisible3, setIsModalVisible3] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const token = getTokenFromCookie();
 
@@ -59,6 +66,14 @@ const ProfileEdit = () => {
   const [image, setImage] = useState(null);
   const [freeImage, setFreeImage] = useState(null);
 
+  const colorThemes = [
+    ["#feeedc", "#bde1da", "#f5b5a7"],
+    ["#dbd2e8", "#dfe8f0", "#fff6a4"],
+    ["#ded3d6", "#c0e4f2", "#fffcd7"],
+    ["#555168", "#f5d7d6", "#e06b7b"],
+    ["#32405f", "#bdc6ca", "#889291"],
+  ];
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -67,7 +82,6 @@ const ProfileEdit = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data.user.theme_colors.id);
 
         setProfileData(response.data);
         setValue("name", response.data.user.name);
@@ -109,7 +123,6 @@ const ProfileEdit = () => {
             appendHobbies({ hobby: hobby.hobby });
           }
         }
-        console.log("response.data.otherData", response.data.otherData);
 
         // other1データのセット
         if (response.data.otherData && response.data.otherData.length > 0) {
@@ -152,7 +165,6 @@ const ProfileEdit = () => {
   const [newOtherName, setNewOtherName] = useState(
     profileData?.otherData[0]?.newOtherName || "その他"
   );
-  console.log(profileData?.otherData[0]?.newOtherName);
   const [newOtherName2, setNewOtherName2] = useState(
     profileData?.otherData2[0]?.newOtherName2 || "その他"
   );
@@ -163,29 +175,28 @@ const ProfileEdit = () => {
   const handleOtherNameChange = () => {
     const updatedOtherName = getValues("otherName");
     setNewOtherName(updatedOtherName);
+    setIsModalVisible(false);
   };
   const handleOtherNameChange2 = () => {
     const updatedOtherName = getValues("otherName2");
     setNewOtherName2(updatedOtherName);
+    setIsModalVisible2(false);
   };
   const handleOtherNameChange3 = () => {
     const updatedOtherName = getValues("otherName3");
     setNewOtherName3(updatedOtherName);
+    setIsModalVisible3(false);
   };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
-    // formData.append("birthday", data.birthday);
     formData.append("comment", data.comment);
     formData.append("themeId", data.themeId);
 
     data.hobbies.forEach((hobbyObj, index) => {
       formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
     });
-    // data.others.forEach((otherObj, index) => {
-    //   formData.append(`others[${index}][name]`, otherObj.name);
-    // });
     data.others.forEach((otherObj, index) => {
       formData.append(`others[${index}][id]`, otherObj.id); // もし otherObj が id を持つ場合
       formData.append(`others[${index}][name]`, otherObj.name);
@@ -223,7 +234,7 @@ const ProfileEdit = () => {
       formData.append("social_links[2][url]", data.instagram_link);
     }
 
-    console.log([...formData.entries()]);
+    // console.log([...formData.entries()]);
 
     try {
       await axios.post(`${API_BASE_URL}/api/profile/me`, formData, {
@@ -241,278 +252,466 @@ const ProfileEdit = () => {
 
   return (
     <div>
-      <div>ProfileForm</div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>ニックネーム:</label>
-          <input
-            type="text"
-            name="name"
-            {...register("name", {
-              required: "入力必須です",
-              minLength: { value: 2, message: "2文字以上で入力してください" },
-            })}
-          />
-        </div>
-        <p>{errors.name ? errors.name.message : null}</p>
-        <div>
-          <label>コメント *</label>
-          <textarea
-            name="comment"
-            {...register("comment", {
-              required: "入力必須です",
-            })}
-          ></textarea>
-        </div>
-        <p>{errors.comment ? errors.comment.message : null}</p>
-
-        <div>
-          <label htmlFor="image">プロフィール画像</label>
-          <input type="file" accept="image/*" onChange={onImageChange} />
-          {image ? (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="プロフィール画像"
-              style={{ width: "200px", height: "200px" }}
-            />
-          ) : (
-            profileData && (
-              <img
-                src={`${API_BASE_URL}/${profileData.user.profile_image_path}`}
-                // src={`http://localhost/${profileData.user.profile_image_path}`}
-
-                alt="プロフィール画像"
-                style={{ width: "200px", height: "200px" }}
-              />
-            )
-          )}
-        </div>
-
-        <div>
-          <label>
-            テーマ1
-            <input
-              type="radio"
-              value="1"
-              {...register("themeId", { required: true })}
-            />
-          </label>
-          <label>
-            テーマ2
-            <input
-              type="radio"
-              value="2"
-              {...register("themeId", { required: true })}
-            />
-          </label>
-          <label>
-            テーマ3
-            <input
-              type="radio"
-              value="3"
-              {...register("themeId", { required: true })}
-            />
-          </label>
-        </div>
-
-        <div>
-          <hr />
-          <label>趣味 *</label>
-          {fields &&
-            fields.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  name={`hobbies[${index}].hobby`}
-                  {...register(`hobbies[${index}].hobby`, {
-                    required: "入力は必須です",
-                  })}
-                  defaultValue={field.hobby}
-                />
-                <button type="button" onClick={() => remove(index)}>
-                  削除
-                </button>
-                {errors.hobbies && errors.hobbies[index] && (
-                  <p>{errors.hobbies[index]?.hobby?.message}</p>
-                )}
-              </div>
-            ))}
-          <button type="button" onClick={() => appendHobbies({ hobby: "" })}>
-            ＋
-          </button>
-        </div>
-
-        <div>
-          <hr />
-          <label>{newOtherName}:</label>
-          <input
-            type="text"
-            name="otherName"
-            {...register("otherName")}
-            placeholder="好きな項目を追加"
-          />
-          <button type="button" onClick={handleOtherNameChange}>
-            項目名変更
-          </button>
-          {/* あとでもとにもどす */}
-          {/* {fieldsOther &&
-            fieldsOther.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  name={`others[${index}].name`}
-                  {...register(`others[${index}].name`)}
-                  defaultValue={field.name}
-                />
-                <button type="button" onClick={() => removeOther(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-
-          <button type="button" onClick={() => appendOther({ name: "" })}>
-            ＋
-          </button> */}
-          {fieldsOther &&
-            fieldsOther.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  type="hidden"
-                  name={`others[${index}].id`} // IDを含める
-                  {...register(`others[${index}].id`)}
-                  defaultValue={field.id} // field.idはユニークなIDが格納されていると仮定
-                />
-                <input
-                  name={`others[${index}].name`}
-                  {...register(`others[${index}].name`)}
-                  defaultValue={field.name}
-                />
-                <button type="button" onClick={() => removeOther(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-
-          <button type="button" onClick={() => appendOther({ name: "" })}>
-            ＋
-          </button>
-        </div>
-
-        <div>
-          <hr />
-          <label>{newOtherName2}:</label>
-          <input
-            type="text"
-            name="otherName2"
-            {...register("otherName2")}
-            placeholder="好きな項目を追加"
-          />
-          <button type="button" onClick={handleOtherNameChange2}>
-            項目名変更
-          </button>
-          {fieldsOther2 &&
-            fieldsOther2.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  name={`others2[${index}].name`}
-                  {...register(`others2[${index}].name`)}
-                  defaultValue={field.name}
-                />
-                <button type="button" onClick={() => removeOther2(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-          <button type="button" onClick={() => appendOther2({ name: "" })}>
-            ＋
-          </button>
-        </div>
-
-        <div>
-          <hr />
-          <label>{newOtherName3}:</label>
-          <input
-            type="text"
-            name="otherName3"
-            {...register("otherName3")}
-            placeholder="好きな項目を追加"
-          />
-          <button type="button" onClick={handleOtherNameChange3}>
-            項目名変更
-          </button>
-          {fieldsOther3 &&
-            fieldsOther3.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  name={`others3[${index}].name`}
-                  {...register(`others3[${index}].name`)}
-                  defaultValue={field.name}
-                />
-                <button type="button" onClick={() => removeOther3(index)}>
-                  削除
-                </button>
-              </div>
-            ))}
-          <button type="button" onClick={() => appendOther3({ name: "" })}>
-            ＋
-          </button>
-        </div>
-
-        {/* フリー投稿 */}
-        <div>
-          <hr />
-          <label>フリー投稿:</label>
-          <p>タイトル</p>
-          <input type="text" name="title" {...register("title")} />
-          <p>説明</p>
-          <textarea name="description" {...register("description")}></textarea>
-          <p>フリー投稿画像:</p>
-          <div>
-            <label htmlFor="image">フリー画像</label>
-            <input type="file" accept="image/*" onChange={onFreeImageChange} />
-            {freeImage ? (
-              <img
-                src={URL.createObjectURL(freeImage)}
-                alt="プロフィール画像"
-                style={{ width: "200px", height: "200px" }}
-              />
-            ) : (
-              profileData && (
+        <div className={styles["form__content"]}>
+          <div className={styles["form__group"]}>
+            <div className={styles["form__image-wrapper"]}>
+              {image ? (
                 <img
-                  src={`http://localhost/${profileData.freePosts[0].image_path}`}
+                  src={URL.createObjectURL(image)}
                   alt="プロフィール画像"
-                  style={{ width: "200px", height: "200px" }}
+                  className={styles["form__image"]}
+                  style={{ width: "100px", height: "100px" }}
                 />
-              )
-            )}
+              ) : (
+                profileData && (
+                  <img
+                    src={`${API_BASE_URL}/${profileData.user.profile_image_path}`}
+                    alt="プロフィール画像"
+                    className={styles["form__image"]}
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                )
+              )}
+              <div className={styles["form__file-wrapper"]}>
+                <input
+                  // id="fileInput"
+                  id="profileFileInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={onImageChange}
+                  className={styles["form__file-input"]}
+                />
+                <label
+                  htmlFor="profileFileInput"
+                  // htmlFor="fileInput"
+                  className={styles["form__custom-file-label"]}
+                >
+                  プロフィール画像を選択
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles["form__group"]}>
+            <label className={styles["form__label"]}>ニックネーム *</label>
+            <input
+              type="text"
+              name="name"
+              {...register("name", {
+                required: "入力必須です",
+                minLength: { value: 2, message: "2文字以上で入力してください" },
+              })}
+              className={styles["form__input"]}
+            />
+          </div>
+          {/* </div> */}
+          <p>{errors.name ? errors.name.message : null}</p>
+
+          <div className={styles["form__group"]}>
+            <label className={styles["form__label"]}>コメント *</label>
+            <textarea
+              name="comment"
+              {...register("comment", {
+                required: "入力必須です",
+              })}
+              className={styles["form__textarea"]}
+            ></textarea>
+            <p>{errors.comment ? errors.comment.message : null}</p>
+          </div>
+
+          {/* <div className={styles["form__group"]}>
+            <legend className={styles["form__legend"]}>
+              テーマカラー選択 *
+            </legend>
+            <div className={styles["form__label-wrapper"]}>
+              <label
+                className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+              >
+                テーマ1
+                <input
+                  type="radio"
+                  value="1"
+                  {...register("themeId", { required: true })}
+                  className={styles["form__radio"]}
+                />
+                <div className={styles["color-combination"]}>
+                  <div className={styles["color1"]}></div>
+                  <div className={styles["color2"]}></div>
+                  <div className={styles["color3"]}></div>
+                </div>
+              </label>
+              <label
+                className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+              >
+                テーマ2
+                <input
+                  type="radio"
+                  value="2"
+                  {...register("themeId", { required: true })}
+                  className={styles["form__radio"]}
+                />
+                <div className={styles["color-combination"]}>
+                  <div className={styles["color4"]}></div>
+                  <div className={styles["color5"]}></div>
+                  <div className={styles["color6"]}></div>
+                </div>
+              </label>
+              <label
+                className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+              >
+                テーマ3
+                <input
+                  type="radio"
+                  value="3"
+                  {...register("themeId", { required: true })}
+                  className={styles["form__radio"]}
+                />
+                <div className={styles["color-combination"]}>
+                  <div className={styles["color7"]}></div>
+                  <div className={styles["color8"]}></div>
+                  <div className={styles["color9"]}></div>
+                </div>
+              </label>
+            </div>
+          </div> */}
+          <div className={styles["form__group"]}>
+            <legend className={styles["form__legend"]}>
+              テーマカラー選択 *
+            </legend>
+            <div className={styles["form__label-wrapper"]}>
+              {colorThemes.map((theme, index) => (
+                <label
+                  key={index}
+                  className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+                >
+                  {`テーマ${index + 1}`}
+                  <input
+                    type="radio"
+                    value={index + 1}
+                    {...register("themeId", { required: true })}
+                    className={styles["form__radio"]}
+                  />
+                  <div className={styles["color-combination"]}>
+                    {theme.map((colorCode, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          backgroundColor: colorCode,
+                          width: "4rem",
+                          height: "4rem",
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles["form__group"]}>
+            <label className={styles["form__label"]}>趣味 *</label>
+            {fields &&
+              fields.map((field, index) => (
+                <div key={field.id} className={styles["form__hobby"]}>
+                  <input
+                    name={`hobbies[${index}].hobby`}
+                    {...register(`hobbies[${index}].hobby`, {
+                      required: "入力は必須です",
+                    })}
+                    defaultValue={field.hobby}
+                    className={`${styles["form__input"]} ${styles["form__input-hobby"]}`}
+                  />
+                  <AiOutlineDelete
+                    size={24}
+                    type="button"
+                    onClick={() => remove(index)}
+                    className={styles["form__button-remove"]}
+                  />
+                  {errors.hobbies && errors.hobbies[index] && (
+                    <p className={styles["form__error"]}>
+                      {errors.hobbies[index]?.hobby?.message}
+                    </p>
+                  )}
+                </div>
+              ))}
+
+            <CgAddR
+              size={24}
+              type="button"
+              onClick={() => appendHobbies({ hobby: "" })}
+              className={styles["form__button-append"]}
+            />
+          </div>
+
+          <div
+            className={`${styles["form__group"]} ${styles["form__flex-container"]}`}
+          >
+            <div className={styles["form__label-icon-wrapper"]}>
+              <label
+                className={`${styles["form__label"]} ${styles["form__label-other"]}`}
+              >
+                {newOtherName}:
+              </label>
+              <AiOutlineEdit
+                size={30}
+                type="button"
+                onClick={() => setIsModalVisible(true)}
+                className={styles["form__button-change"]}
+              />
+            </div>
+            <Modal
+              title="項目名を変更"
+              open={isModalVisible}
+              onCancel={() => setIsModalVisible(false)}
+              onOk={handleOtherNameChange}
+            >
+              <input
+                type="text"
+                name="otherName"
+                {...register("otherName")}
+                placeholder="好きな項目を追加"
+                className={`${styles["form__input"]} ${styles["form__input-change-category"]}`}
+              />
+            </Modal>
+
+            {fieldsOther &&
+              fieldsOther.map((field, index) => (
+                <div key={field.id} className={styles["form__other"]}>
+                  <input
+                    type="hidden"
+                    name={`others[${index}].id`}
+                    {...register(`others[${index}].id`)}
+                    defaultValue={field.id}
+                  />
+                  <input
+                    name={`others[${index}].name`}
+                    {...register(`others[${index}].name`)}
+                    defaultValue={field.name}
+                    className={`${styles["form__input"]} ${styles["form__input-other"]}`}
+                  />
+                  <AiOutlineDelete
+                    size={24}
+                    type="button"
+                    onClick={() => removeOther(index)}
+                    className={styles["form__button-remove"]}
+                  />
+                </div>
+              ))}
+
+            <CgAddR
+              size={24}
+              type="button"
+              onClick={() => appendOther({ name: "" })}
+              className={styles["form__button-append"]}
+            />
+          </div>
+
+          <div className={styles["form__group"]}>
+            <div className={styles["form__label-icon-wrapper"]}>
+              <label
+                className={`${styles["form__label"]} ${styles["form__label-other"]}`}
+              >
+                {newOtherName2}:
+              </label>
+              <AiOutlineEdit
+                size={30}
+                type="button"
+                onClick={() => setIsModalVisible2(true)}
+                className={styles["form__button-change"]}
+              />
+            </div>
+            <Modal
+              title="項目名を変更"
+              open={isModalVisible2}
+              onCancel={() => setIsModalVisible2(false)}
+              onOk={handleOtherNameChange2}
+            >
+              <input
+                type="text"
+                name="otherName2"
+                {...register("otherName2")}
+                placeholder="「その他」を好きな項目名に変更"
+                className={`${styles["form__input"]} ${styles["form__input-change-category"]}`}
+              />
+            </Modal>
+
+            {fieldsOther2 &&
+              fieldsOther2.map((field, index) => (
+                <div key={field.id} className={styles["form__item"]}>
+                  <input
+                    name={`others2[${index}].name`}
+                    {...register(`others2[${index}].name`)}
+                    defaultValue={field.name}
+                    className={`${styles["form__input"]} ${styles["form__input-other"]}`}
+                  />
+                  <AiOutlineDelete
+                    size={24}
+                    type="button"
+                    onClick={() => removeOther2(index)}
+                    className={styles["form__button-remove"]}
+                  />
+                </div>
+              ))}
+
+            <CgAddR
+              size={24}
+              type="button"
+              onClick={() => appendOther2({ name: "" })}
+              className={styles["form__button-append"]}
+            />
+          </div>
+
+          <div className={styles["form__group"]}>
+            <div className={styles["form__label-icon-wrapper"]}>
+              <label
+                className={`${styles["form__label"]} ${styles["form__label-other"]}`}
+              >
+                {newOtherName3}:
+              </label>
+              <AiOutlineEdit
+                size={30}
+                type="button"
+                onClick={() => setIsModalVisible3(true)}
+                className={styles["form__button-change"]}
+              />
+            </div>
+            <Modal
+              title="項目名を変更"
+              open={isModalVisible3}
+              onCancel={() => setIsModalVisible3(false)}
+              onOk={handleOtherNameChange3}
+            >
+              <input
+                type="text"
+                name="otherName3"
+                {...register("otherName3")}
+                placeholder="「その他」を好きな項目名に変更"
+                className={`${styles["form__input"]} ${styles["form__input-change-category"]}`}
+              />
+            </Modal>
+
+            {fieldsOther3 &&
+              fieldsOther3.map((field, index) => (
+                <div key={field.id} className={styles["form__item"]}>
+                  <input
+                    name={`others3[${index}].name`}
+                    {...register(`others3[${index}].name`)}
+                    defaultValue={field.name}
+                    className={`${styles["form__input"]} ${styles["form__input-other"]}`}
+                  />
+                  <AiOutlineDelete
+                    size={24}
+                    type="button"
+                    onClick={() => removeOther3(index)}
+                    className={styles["form__button-remove"]}
+                  />
+                </div>
+              ))}
+
+            <CgAddR
+              size={24}
+              type="button"
+              onClick={() => appendOther3({ name: "" })}
+              className={styles["form__button-append"]}
+            />
+          </div>
+
+          {/* フリー投稿 */}
+          <div className={styles["form__group"]}>
+            <label className={styles["form__label"]}>フリー投稿:</label>
+
+            <p className={styles["form__label-comment"]}>タイトル</p>
+            <div className={styles["form__image-wrapper"]}>
+              <p className={styles["form__label-comment"]}>フリー投稿画像:</p>
+
+              {freeImage ? (
+                <img
+                  src={URL.createObjectURL(freeImage)}
+                  alt="フリー投稿画像"
+                  className={styles["form__free-image"]}
+                  style={{ width: "320px", height: "180px" }}
+                />
+              ) : (
+                profileData &&
+                profileData.freePosts[0].image_path && (
+                  <img
+                    src={`${API_BASE_URL}/${profileData.freePosts[0].image_path}`}
+                    alt="フリー投稿画像"
+                    className={styles["form__free-image"]}
+                    style={{ width: "320px", height: "180px" }}
+                  />
+                )
+              )}
+              <div className={styles["form__file-wrapper"]}>
+                <input
+                  id="freeFileInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={onFreeImageChange}
+                  className={styles["form__file-input"]}
+                />
+                <label
+                  htmlFor="freeFileInput"
+                  className={styles["form__custom-file-label"]}
+                >
+                  投稿画像を選択
+                </label>
+              </div>
+            </div>
+
+            <p className={styles["form__sublabel"]}>タイトル</p>
+            <input
+              type="text"
+              name="title"
+              {...register("title")}
+              className={styles["form__input"]}
+            />
+
+            <p className={styles["form__sublabel"]}>内容</p>
+            <textarea
+              name="description"
+              {...register("description")}
+              className={styles["form__textarea"]}
+            ></textarea>
+          </div>
+
+          {/* SNSリンク */}
+          <div className={styles["form__group"]}>
+            <p className={styles["form__sublabel"]}>Facebook URL:</p>
+            <input
+              type="url"
+              name="facebook_link"
+              {...register("facebook_link")}
+              placeholder="https://facebook.com/yourname"
+              className={styles["form__input"]}
+            />
+
+            <p className={styles["form__sublabel"]}>X(Twitter) URL:</p>
+            <input
+              type="url"
+              name="twitter_link"
+              {...register("twitter_link")}
+              placeholder="https://twitter.com/yourname"
+              className={styles["form__input"]}
+            />
+
+            <p className={styles["form__sublabel"]}>Instagram URL:</p>
+            <input
+              type="url"
+              name="instagram_link"
+              {...register("instagram_link")}
+              placeholder="https://instagram.com/yourname"
+              className={styles["form__input"]}
+            />
           </div>
         </div>
-        {/* SNSリンク */}
-        <div>
-          <hr />
-          <p>Facebook URL:</p>
-          <input
-            type="url"
-            name="facebook_link"
-            {...register("facebook_link")}
-            placeholder="https://facebook.com/yourname"
-          />
-          <p>X(Twitter) URL:</p>
-          <input
-            type="url"
-            name="twitter_link"
-            {...register("twitter_link")}
-            placeholder="https://twitter.com/yourname"
-          />
-          <p>Instagram URL:</p>
-          <input
-            type="url"
-            name="instagram_link"
-            {...register("instagram_link")}
-            placeholder="https://instagram.com/yourname"
-          />
-        </div>
 
         <div>
-          <button type="submit">更新する</button>
+          {/* <button type="submit">更新する</button> */}
+          <button type="submit" className={styles["button--submit"]}>
+            更新する
+          </button>
         </div>
       </form>
     </div>
