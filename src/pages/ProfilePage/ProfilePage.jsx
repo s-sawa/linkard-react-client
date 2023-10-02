@@ -16,6 +16,7 @@ import FollowButton from "../../components/FollowButton/FollowButton";
 const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const navigate = useNavigate();
   const { user_id } = useParams();
   // useConfirmModal.jsxからreturnされたconfirmModal関数が、confirmModal変数に格納される
@@ -72,30 +73,56 @@ const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
+  // if (!profileData.name) {
+  //   return (
+  //     <div>
+  //       <p>プロフィールが未入力です</p>
+  //       <button onClick={() => navigate("/profile/setup")}>
+  //         プロフィールを入力する
+  //       </button>
+  //     </div>
+  //   );
+  // }
   if (!profileData.name) {
     return (
-      <div>
-        <p>プロフィールが未入力です</p>
-        <button onClick={() => navigate("/profile/setup")}>
+      <div className={styles["profile-setup"]}>
+        <p className={styles["profile-setup__text"]}>
+          プロフィールが未入力です
+        </p>
+        <button
+          onClick={() => navigate("/profile/setup")}
+          className={styles["profile-setup__button"]}
+        >
           プロフィールを入力する
         </button>
       </div>
     );
   }
 
+
   return (
     <div className={styles["profile-page"]}>
-      <div className={styles["profile-page__icons-wrapper"]}>
+      <div
+        className={styles["profile-page__icons-wrapper"]}
+        style={{ backgroundColor: profileData.theme_colors.color3 }}
+      >
         {!user_id ? (
           <>
-            <AiFillEdit size={32} onClick={() => navigate("./profile/edit")} />
+            <AiFillEdit
+              size={32}
+              onClick={() => navigate("./profile/edit")}
+              style={{ cursor: "pointer", color: "#4d5156" }}
+            />
 
             <BsQrCode
               size={32}
               onClick={openQRModal}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", color: "#4d5156" }}
             />
-            <CameraModal onScan={handleScanResult} />
+            <CameraModal
+              onScan={handleScanResult}
+              color={"#4d5156"}
+            />
           </>
         ) : (
           <>

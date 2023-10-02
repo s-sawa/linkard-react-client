@@ -1,96 +1,18 @@
-// .profile {
-//   // コンテナーに関する基本的なスタイリング
-//   &__container {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     text-align: center;
-
-//     > div, dl {
-//       display: flex;
-//       flex-direction: column;
-//       align-items: center;
-
-//       dt, dd, p {
-//         text-align: center;
-//       }
-//     }
-
-//     // SNSアイコンのコンテナー
-//     &__sub-container {
-//       display: flex;
-//       flex-direction: row;
-//       align-items: center;
-//       gap: 0.8rem; // アイコン間のスペース
-
-//       a {
-//         display: flex;
-//         align-items: center;
-//       }
-//     }
-//   }
-
-//   // 画像に関する基本的なスタイリング
-//   &__image--my-image {
-//     border-radius: 50%;
-//     object-fit: cover;
-//     width: 10rem;
-//     height: 10rem;
-
-//     // タブレット向けのスタイリング
-//     @media (min-width: 76.9rem) {
-//       width: 12.5rem;
-//       height: 12.5rem;
-//     }
-
-//     // デスクトップ向けのスタイリング
-//     @media (min-width: 102.5rem) {
-//       width: 15rem;
-//       height: 15rem;
-//     }
-//   }
-
-//   // リンクに関する基本的なスタイリング
-//   &__link {
-//     text-decoration: none;
-//     color: inherit;
-//   }
-
-//   // 名前に関する基本的なスタイリング
-//   &__name {
-//     font-size: 1.5rem;
-
-//     // タブレット向けのスタイリング
-//     @media (min-width: 76.9rem) {
-//       font-size: 1.75rem;
-//     }
-
-//     // デスクトップ向けのスタイリング
-//     @media (min-width: 102.5rem) {
-//       font-size: 2rem;
-//     }
-//   }
-// }
-// 共通のスタイルや変数のセットアップ
 $padding-mobile: 1rem;
 $padding-desktop: 2rem;
 
 * {
   box-sizing: border-box;
-  margin: 0;
   padding: 0;
 }
 
-// body {
-//   background-color: rgb(25, 187, 187);
-//   font-family: "Arial", sans-serif; // 任意のフォントに変更してください
-// }
-
 .profile__container {
+  // color: #fff;
   max-width: 1200px; // デザインに合わせて変更可能
   margin: 0 auto;
   padding: $padding-mobile;
-  margin-bottom: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 1rem;
 
   @media (min-width: 768px) {
     padding: $padding-desktop;
@@ -132,6 +54,10 @@ $padding-desktop: 2rem;
   font-size: 2.6rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  color: #4d5156;
+  // background-color: #fff6a4;
+  // padding: 0.5rem 1rem;
+  // border-radius: 10px;
 }
 
 .profile__edit-button {
@@ -143,14 +69,18 @@ $padding-desktop: 2rem;
 .profile__comment {
   text-align: center;
   margin-bottom: $padding-mobile;
+  font-size: 1.4rem;
+  font-weight: bold;
 }
 .comment-bubble {
   position: relative;
-  background-color: #f4ddd5; // ふきだしの背景色
+  background-color: var(--bubble-color, #f4ddd5); // ふきだしの背景色
   border-radius: 2em;
   padding: 1em;
   margin-top: 2em; // 三角形を含む十分なスペースを確保
   text-align: center;
+  border-radius: 12px; // 角を丸くする
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); // シャドウ効果
 
   &::before {
     content: "";
@@ -159,7 +89,8 @@ $padding-desktop: 2rem;
     top: -2em; // 三角形が要素の上に来るように
     border-width: 1em;
     border-style: solid;
-    border-color: transparent transparent #f4ddd5 transparent; // 上向きの三角形
+    border-color: transparent transparent var(--bubble-color, #f4ddd5)
+      transparent; // 上向きの三角形
     transform: translateX(-50%); // 横方向に50%移動して中央に配置
   }
 }
@@ -174,9 +105,10 @@ $padding-desktop: 2rem;
 .profile__link--facebook,
 .profile__link--twitter,
 .profile__link--instagram {
-  color: inherit; // 色を適切に設定してください
+  color: #4d5156; // 色を適切に設定してください
   text-decoration: none;
-  font-size: 24px; // アイコンのサイズは必要に応じて調整してください
+  font-size: 2.4rem; // アイコンのサイズは必要に応じて調整してください
+  padding: 1rem;
 }
 
 .profile__section {
@@ -201,22 +133,31 @@ $padding-desktop: 2rem;
 .profile__section-subtitle {
   font-weight: bold;
   margin-bottom: 0.5rem;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  color: #4d5156; // テキストの色s
 }
 
+// .profile__section-item-wrapper {
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 0.6rem;
+//   justify-content: center;
+// }
 .profile__section-item-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  justify-content: center;
+  flex-wrap: wrap; // 複数のバッジが一行に収まりきらない場合は次の行に移動
+  justify-content: center; // バッジを中央に配置
+  padding: 0.5rem; // バッジ周りのスペース
 }
 
 .profile__section-item {
-  background-color: #e0e0e0; // バッジの背景色
-  padding: 5px 10px; // 内側の余白
+  // background-color: #e0e0e0; // バッジの背景色
+  padding: 6px 12px; // 内側の余白
   border-radius: 12px; // 角を丸くする
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); // シャドウ効果
-  color: #333; // テキストの色
+  color: #4d5156; // テキストの色
+  font-size: 1.4rem;
+  font-weight: bold;
 
   &:not(:last-child) {
     margin-right: 10px; // 右マージンも必要に応じて調整
@@ -224,12 +165,14 @@ $padding-desktop: 2rem;
 }
 
 .profile__section--free-post-image {
-  width: 100%;
-  height: 200px;
+  width: 80%;
+  height: 180px;
   object-fit: cover;
   display: block;
   margin: 0 auto;
   margin-bottom: $padding-mobile;
+  padding: 0.5rem;
+  border-radius: 12px;
 }
 
 .profile__section-description {
@@ -255,4 +198,9 @@ $padding-desktop: 2rem;
 
 .profile__section-post-description {
   margin-bottom: $padding-mobile;
+}
+
+.profile__section--free-post-image-description {
+  font-size: 1.4rem;
+  font-weight: bold;
 }
