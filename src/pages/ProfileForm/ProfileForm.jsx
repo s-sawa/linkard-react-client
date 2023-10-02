@@ -14,15 +14,15 @@ const { Step } = Steps;
 
 const steps = [
   {
-    title: "基本情報",
+    title: "step1",
     content: "First-content",
   },
   {
-    title: "追加情報1",
+    title: "step2",
     content: "Second-content",
   },
   {
-    title: "追加情報2",
+    title: "step3",
     content: "Last-content",
   },
 ];
@@ -138,6 +138,14 @@ const ProfileForm = () => {
     setCurrent(current + 1);
   };
 
+  const colorThemes = [
+    ["#feeedc", "#bde1da", "#f5b5a7"],
+    ["#dbd2e8", "#dfe8f0", "#fff6a4"],
+    ["#ded3d6", "#c0e4f2", "#fffcd7"],
+    ["#555168", "#f5d7d6", "#e06b7b"],
+    ["#32405f", "#bdc6ca", "#889291"],
+  ];
+
   const onSubmit = async (data) => {
     const formData = new FormData();
     // appendを使ってobject形式で、formDataに入れていく
@@ -190,7 +198,7 @@ const ProfileForm = () => {
       formData.append("social_links[2][url]", data.instagram_link);
     }
 
-    console.log([...formData.entries()]);
+    // console.log([...formData.entries()]);
 
     try {
       const response = await axios.post(
@@ -203,7 +211,7 @@ const ProfileForm = () => {
           },
         }
       );
-      console.log(response);
+      // console.log(response);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -295,7 +303,7 @@ const ProfileForm = () => {
             <p className={styles["form__error"]}>
               {errors.comment ? errors.comment.message : null}
             </p>
-            <div className={styles["form__group"]}>
+            {/* <div className={styles["form__group"]}>
               <legend className={styles["form__legend"]}>
                 テーマカラー選択
                 <span className={styles["form__label-required"]}>必須</span>
@@ -349,6 +357,41 @@ const ProfileForm = () => {
                     <div className={styles["color3"]}></div>
                   </div>
                 </label>
+              </div>
+            </div> */}
+
+            <div className={styles["form__group"]}>
+              <legend className={styles["form__legend"]}>
+                テーマカラー選択
+                <span className={styles["form__label-required"]}>必須</span>
+              </legend>
+              <div className={styles["form__label-wrapper"]}>
+                {colorThemes.map((theme, index) => (
+                  <label
+                    key={index}
+                    className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
+                  >
+                    {`テーマ${index + 1}`}
+                    <input
+                      type="radio"
+                      value={index + 1}
+                      {...register("themeId", { required: true })}
+                      className={styles["form__radio"]}
+                    />
+                    <div className={styles["color-combination"]}>
+                      {theme.map((colorCode, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            backgroundColor: colorCode,
+                            width: "4rem",
+                            height: "4rem",
+                          }}
+                        ></div>
+                      ))}
+                    </div>
+                  </label>
+                ))}
               </div>
             </div>
 

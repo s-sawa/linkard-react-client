@@ -1,6 +1,5 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6";
 import styles from "./ProfileCard.module.scss";
-import { Divider } from "antd";
 import { useEffect, useState } from "react";
 import QRCodeModal from "../QR/QRCodeModal";
 import useHandleLike from "../../hooks/useHandleLike";
@@ -16,6 +15,15 @@ import useHandleOther3Like from "../../hooks/useHandleOther3Like";
 
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  // テーマカラー
+  const budgeColor = profileData.theme_colors.color1;
+  const backGroundColor = profileData.theme_colors.color2;
+  const budgeTextColor =
+    profileData.theme_color_id === 1 || profileData.theme_color_id === 2 || profileData.theme_color_id === 3
+      ? "#4d5156"
+      : "#fff";
+  console.log(budgeTextColor);
+  // const bubbleColor = profileData.theme_colors.color1;
 
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
   const { fetchOtherLikeStatus, handleOtherLike, otherLikes } =
@@ -26,13 +34,11 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
     useHandleOther3Like();
 
   const { showModal, renderModal } = useModal();
-  const { likers, error, fetchLikers } = useFetchLikers();
+  const { fetchLikers } = useFetchLikers();
 
-  const { otherLikers, otherError, fetchOtherLikers } = useFetchOtherLikers();
-  const { other2Likers, other2Error, fetchOther2Likers } =
-    useFetchOther2Likers();
-  const { other3Likers, other3Error, fetchOther3Likers } =
-    useFetchOther3Likers();
+  const { fetchOtherLikers } = useFetchOtherLikers();
+  const { fetchOther2Likers } = useFetchOther2Likers();
+  const { fetchOther3Likers } = useFetchOther3Likers();
 
   const showLikersModal = async (hobbyId) => {
     const likersList = await fetchLikers(hobbyId);
@@ -54,7 +60,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
 
   useEffect(() => {
     console.log("useEffect has run!"); // useEffectが実行された時にコンソールに表示される
-    console.log("profileData", profileData); 
+    console.log("profileData", profileData);
     profileData?.hobbies?.forEach((hobby) => {
       fetchLikeStatus(hobby.id);
     });
@@ -85,23 +91,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   ]);
 
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  // 多分使ってない
-  // const openQRModal = () => {
-  //   setIsQRModalOpen(true);
-  // };
 
   const closeQRModal = () => {
     setIsQRModalOpen(false);
   };
-
-  // 多分使ってない
-  // const handleScanResult = (result) => {
-  //   if (result) {
-  //     const url = new URL(result);
-  //     const relativePath = url.pathname;
-  //     navigate(relativePath);
-  //   }
-  // };
 
   if (!profileData) return <div>Loading...</div>;
 
@@ -113,7 +106,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
     : "";
 
   return (
-    <div className={styles["profile__container"]}>
+    <div
+      className={styles["profile__container"]}
+      style={{ backgroundColor: backGroundColor }}
+    >
       <div className={styles["profile__sub-container"]}>
         {imagePath && (
           <img
@@ -135,8 +131,14 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
           />
         </div>
 
+        {/* <div
+          className={`${styles["profile__comment"]} ${styles["comment-bubble"]}`}
+        >
+          {profileData.comment}
+        </div> */}
         <div
           className={`${styles["profile__comment"]} ${styles["comment-bubble"]}`}
+          style={{ "--bubble-color": budgeColor, color: budgeTextColor }}
         >
           {profileData.comment}
         </div>
@@ -198,21 +200,33 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                   className={styles["profile__section-item-wrapper"]}
                 >
                   {toUserId || isLikePage ? (
-                    // isLikePageがtrueのときの処理
                     <div onClick={() => handleLike(hobby.id)}>
-                      <dd className={styles["profile__section-item"]}>
+                      <dd
+                        className={styles["profile__section-item"]}
+                        style={{
+                          backgroundColor: budgeColor,
+                          color: budgeTextColor,
+                        }}
+                      >
                         {hobby.hobby}
                         {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
                       </dd>
                     </div>
                   ) : (
-                    // isLikePageがfalseのときの処理
                     <dd
                       className={styles["profile__section-item"]}
+                      style={{
+                        backgroundColor: budgeColor,
+                        color: budgeTextColor,
+                      }}
                       onClick={() => showLikersModal(hobby.id)}
                     >
                       {hobby.hobby}
-                      {hobby.isLiked ? <FcLike /> : <FcLikePlaceholder />}
+                      {hobby.isLiked ? (
+                        <FcLike color="blue" />
+                      ) : (
+                        <FcLikePlaceholder />
+                      )}
                     </dd>
                   )}
                 </div>
@@ -234,7 +248,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                 >
                   {toUserId || isLikePage ? (
                     <div onClick={() => handleOtherLike(other.id)}>
-                      <dd className={styles["profile__section-item"]}>
+                      <dd
+                        className={styles["profile__section-item"]}
+                        style={{
+                          backgroundColor: budgeColor,
+                          color: budgeTextColor,
+                        }}
+                      >
                         {other.name}
                         {otherLikes[other.id] ? (
                           <FcLike />
@@ -247,6 +267,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                     <dd
                       className={styles["profile__section-item"]}
                       onClick={() => showOtherLikersModal(other.id)}
+                      style={{
+                        backgroundColor: budgeColor,
+                        color: budgeTextColor,
+                      }}
                     >
                       {other.name}
                       {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
@@ -270,7 +294,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                 >
                   {toUserId || isLikePage ? (
                     <div onClick={() => handleOther2Like(other.id)}>
-                      <dd className={styles["profile__section-item"]}>
+                      <dd
+                        className={styles["profile__section-item"]}
+                        style={{
+                          backgroundColor: budgeColor,
+                          color: budgeTextColor,
+                        }}
+                      >
                         {other.name}
                         {other2Likes[other.id] ? (
                           <FcLike />
@@ -282,6 +312,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                   ) : (
                     <dd
                       className={styles["profile__section-item"]}
+                      style={{
+                        backgroundColor: budgeColor,
+                        color: budgeTextColor,
+                      }}
                       onClick={() => showOther2LikersModal(other.id)}
                     >
                       {other.name}
@@ -307,7 +341,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                 >
                   {toUserId || isLikePage ? (
                     <div onClick={() => handleOther3Like(other.id)}>
-                      <dd className={styles["profile__section-item"]}>
+                      <dd
+                        className={styles["profile__section-item"]}
+                        style={{
+                          backgroundColor: budgeColor,
+                          color: budgeTextColor,
+                        }}
+                      >
                         {other.name}
                         <p></p>
                         {other3Likes[other.id] ? (
@@ -320,6 +360,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                   ) : (
                     <dd
                       className={styles["profile__section-item"]}
+                      style={{
+                        backgroundColor: budgeColor,
+                        color: budgeTextColor,
+                      }}
                       onClick={() => showOther3LikersModal(other.id)}
                     >
                       {other.name}
@@ -339,9 +383,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
             <img
               src={freeImagePath}
               alt={`${profileData.name}'s freeImage`}
-              width="100"
-              height="100"
+              // width="100"
+              // height="100"
               className={styles["profile__section--free-post-image"]}
+              loading="lazy"
             />
           )}
           <p
@@ -349,15 +394,8 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
           >
             {profileData.free_posts[0].description}
           </p>
-          <div style={{ color: profileData.theme_colors.color1 }}>
-            このテキストの色は{profileData.theme_colors.color1}です。
-          </div>
-          <div style={{ color: profileData.theme_colors.color2 }}>
-            このテキストの色は{profileData.theme_colors.color2}です。
-          </div>
         </dl>
       </div>
-      <Divider>{}</Divider>
     </div>
   );
 };

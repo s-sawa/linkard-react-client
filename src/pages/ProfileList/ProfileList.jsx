@@ -52,7 +52,7 @@ const ProfileList = () => {
         ))}
       </select>
       {users.length === 0 ? (
-        <p>No users available</p>
+        <p>ユーザーが見つかりません</p>
       ) : (
         users.map((user) => (
           <ProfileCard
