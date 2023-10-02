@@ -22,12 +22,12 @@ $padding-desktop: 2rem;
 .profile__sub-container {
   margin-bottom: $padding-mobile;
 
-  @media (min-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: $padding-desktop;
-  }
+  // @media (min-width: 768px) {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   margin-bottom: $padding-desktop;
+  // }
 }
 
 .profile__image--my-image {
@@ -86,7 +86,7 @@ $padding-desktop: 2rem;
     content: "";
     position: absolute;
     left: 50%; // 左から50%の位置に配置
-    top: -2em; // 三角形が要素の上に来るように
+    top: -1.8em; // 三角形が要素の上に来るように
     border-width: 1em;
     border-style: solid;
     border-color: transparent transparent var(--bubble-color, #f4ddd5)
@@ -151,22 +151,26 @@ $padding-desktop: 2rem;
 }
 
 .profile__section-item {
-  // background-color: #e0e0e0; // バッジの背景色
   padding: 6px 12px; // 内側の余白
   border-radius: 12px; // 角を丸くする
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); // シャドウ効果
   color: #4d5156; // テキストの色
   font-size: 1.4rem;
   font-weight: bold;
+  display: flex; /* 子要素を横並びに配置 */
+  align-items: center;
 
   &:not(:last-child) {
     margin-right: 10px; // 右マージンも必要に応じて調整
   }
 }
+.profile__section-item__text {
+  margin-right: 0.6rem;
+}
 
 .profile__section--free-post-image {
   width: 80%;
-  height: 180px;
+  height: 20rem;
   object-fit: cover;
   display: block;
   margin: 0 auto;
