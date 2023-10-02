@@ -12,6 +12,7 @@ import useHandleOther2Like from "../../hooks/useHandleOther2Like";
 import useFetchOther2Likers from "../../hooks/useFetchOther2Likers";
 import useFetchOther3Likers from "../../hooks/useFetchOther3Likers";
 import useHandleOther3Like from "../../hooks/useHandleOther3Like";
+import { AiOutlineHeart, AiTwotoneHeart } from "react-icons/ai";
 
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -19,7 +20,9 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   const budgeColor = profileData.theme_colors.color1;
   const backGroundColor = profileData.theme_colors.color2;
   const budgeTextColor =
-    profileData.theme_color_id === 1 || profileData.theme_color_id === 2 || profileData.theme_color_id === 3
+    profileData.theme_color_id === 1 ||
+    profileData.theme_color_id === 2 ||
+    profileData.theme_color_id === 3
       ? "#4d5156"
       : "#fff";
   console.log(budgeTextColor);
@@ -208,8 +211,14 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                           color: budgeTextColor,
                         }}
                       >
-                        {hobby.hobby}
-                        {likes[hobby.id] ? <FcLike /> : <FcLikePlaceholder />}
+                        <span className={styles["profile__section-item__text"]}>
+                          {hobby.hobby}
+                        </span>
+                        {likes[hobby.id] ? (
+                          <AiTwotoneHeart style={{ color: "#d862ab" }} />
+                        ) : (
+                          <AiOutlineHeart />
+                        )}
                       </dd>
                     </div>
                   ) : (
@@ -221,11 +230,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       }}
                       onClick={() => showLikersModal(hobby.id)}
                     >
-                      {hobby.hobby}
+                      <span className={styles["profile__section-item__text"]}>
+                        {hobby.hobby}
+                      </span>
                       {hobby.isLiked ? (
-                        <FcLike color="blue" />
+                        <AiTwotoneHeart style={{ color: "#d862ab" }} />
                       ) : (
-                        <FcLikePlaceholder />
+                        <AiOutlineHeart />
                       )}
                     </dd>
                   )}
@@ -255,11 +266,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                           color: budgeTextColor,
                         }}
                       >
-                        {other.name}
+                        <span className={styles["profile__section-item__text"]}>
+                          {other.name}
+                        </span>
                         {otherLikes[other.id] ? (
-                          <FcLike />
+                          <AiTwotoneHeart style={{ color: "#d862ab" }} />
                         ) : (
-                          <FcLikePlaceholder />
+                          <AiOutlineHeart />
                         )}
                       </dd>
                     </div>
@@ -272,8 +285,14 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                         color: budgeTextColor,
                       }}
                     >
-                      {other.name}
-                      {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
+                      <span className={styles["profile__section-item__text"]}>
+                        {other.name}
+                      </span>
+                      {other.isLiked ? (
+                        <AiTwotoneHeart style={{ color: "#d862ab" }} />
+                      ) : (
+                        <AiOutlineHeart />
+                      )}
                     </dd>
                   )}
                 </div>
@@ -301,11 +320,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                           color: budgeTextColor,
                         }}
                       >
-                        {other.name}
+                        <span className={styles["profile__section-item__text"]}>
+                          {other.name}
+                        </span>
                         {other2Likes[other.id] ? (
-                          <FcLike />
+                          <AiTwotoneHeart style={{ color: "#d862ab" }} />
                         ) : (
-                          <FcLikePlaceholder />
+                          <AiOutlineHeart />
                         )}
                       </dd>
                     </div>
@@ -318,8 +339,14 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       }}
                       onClick={() => showOther2LikersModal(other.id)}
                     >
-                      {other.name}
-                      {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
+                      <span className={styles["profile__section-item__text"]}>
+                        {other.name}
+                      </span>
+                      {other.isLiked ? (
+                        <AiTwotoneHeart style={{ color: "#d862ab" }} />
+                      ) : (
+                        <AiOutlineHeart />
+                      )}
                     </dd>
                   )}
                 </div>
@@ -348,12 +375,13 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                           color: budgeTextColor,
                         }}
                       >
-                        {other.name}
-                        <p></p>
+                        <span className={styles["profile__section-item__text"]}>
+                          {other.name}
+                        </span>
                         {other3Likes[other.id] ? (
-                          <FcLike />
+                          <AiTwotoneHeart style={{ color: "#d862ab" }} />
                         ) : (
-                          <FcLikePlaceholder />
+                          <AiOutlineHeart />
                         )}
                       </dd>
                     </div>
@@ -366,8 +394,14 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       }}
                       onClick={() => showOther3LikersModal(other.id)}
                     >
-                      {other.name}
-                      {other.isLiked ? <FcLike /> : <FcLikePlaceholder />}
+                      <span className={styles["profile__section-item__text"]}>
+                        {other.name}
+                      </span>
+                      {other.isLiked ? (
+                        <AiTwotoneHeart style={{ color: "#d862ab" }} />
+                      ) : (
+                        <AiOutlineHeart />
+                      )}
                     </dd>
                   )}
                 </div>

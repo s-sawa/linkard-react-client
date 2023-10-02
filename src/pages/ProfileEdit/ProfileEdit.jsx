@@ -707,7 +707,7 @@ const ProfileEdit = () => {
           </div>
         </div>
 
-        <div>
+        <div className={styles["button-container"]}>
           {/* <button type="submit">更新する</button> */}
           <button type="submit" className={styles["button--submit"]}>
             更新する
