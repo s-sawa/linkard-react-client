@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
 import styles from "./FollowButton.module.scss";
 
-
 const FollowButton = ({ API_BASE_URL, toUserId }) => {
   const [reloadGroups, setReloadGroups] = useState(false);
   const { register, handleSubmit, setValue } = useForm();
@@ -39,7 +38,6 @@ const FollowButton = ({ API_BASE_URL, toUserId }) => {
       setValue("group", groups[0].id); // 初期値を設定
     }
   }, [groups, setValue]);
-
 
   const onSubmit = async (data) => {
     try {

@@ -83,19 +83,22 @@ const ProfileEdit = () => {
           },
         });
 
+        // response.data.hogehogeがnull またはundefinedなら空文字をセットする (nullが入る対策)
         setProfileData(response.data);
-        setValue("name", response.data.user.name);
+        console.log(response.data);
+        setValue("name", response.data.user.name || "");
         setValue("birthday", response.data.user.birthday);
-        setValue("comment", response.data.user.comment);
+        setValue("comment", response.data.user.comment || "");
         setValue("themeId", response.data.user.theme_colors.id.toString());
-        setValue("title", response.data.freePosts[0].title);
-        setValue("description", response.data.freePosts[0].description);
-        setValue("otherName", response.data.otherData[0].newOtherName);
-        setValue("otherName2", response.data.otherData2[0].newOtherName2);
-        setValue("otherName3", response.data.otherData3[0].newOtherName3);
-        if (response.data.socialLinks && response.data.socialLinks[0]) {
-          setValue("facebook_link", response.data.socialLinks[0].url);
-        }
+        setValue("title", response.data.freePosts[0].title || "");
+        setValue("description", response.data.freePosts[0].description || "");
+        setValue("otherName", response.data.otherData[0].newOtherName || "");
+        setValue("otherName2", response.data.otherData2[0].newOtherName2 || "");
+        setValue("otherName3", response.data.otherData3[0].newOtherName3 || "");
+        // if (response.data.socialLinks && response.data.socialLinks[0]) {
+        //   setValue("facebook_link", response.data.socialLinks[0].url);
+        // }
+        setValue("facebook_link", response.data.socialLinks[0].url || "");
         if (response.data.socialLinks && response.data.socialLinks[1]) {
           setValue("twitter_link", response.data.socialLinks[1].url);
         }
@@ -105,7 +108,6 @@ const ProfileEdit = () => {
         setNewOtherName(response.data.otherData[0].newOtherName || "その他");
         setNewOtherName2(response.data.otherData2[0].newOtherName2 || "その他");
         setNewOtherName3(response.data.otherData3[0].newOtherName3 || "その他");
-        console.log(response.data);
 
         fields.length && fields.forEach((_, index) => remove(index));
         fieldsOther.length &&
@@ -194,19 +196,36 @@ const ProfileEdit = () => {
     formData.append("comment", data.comment);
     formData.append("themeId", data.themeId);
 
+    // data.hobbies.forEach((hobbyObj, index) => {
+    //   formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
+    // });
+    // data.others.forEach((otherObj, index) => {
+    //   formData.append(`others[${index}][id]`, otherObj.id); // もし otherObj が id を持つ場合
+    //   formData.append(`others[${index}][name]`, otherObj.name);
+    // });
+    // data.others2.forEach((otherObj2, index) => {
+    //   formData.append(`others2[${index}][name]`, otherObj2.name);
+    // });
+    // data.others3.forEach((otherObj3, index) => {
+    //   formData.append(`others3[${index}][name]`, otherObj3.name);
+    // });
     data.hobbies.forEach((hobbyObj, index) => {
-      formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby);
+      formData.append(`hobbies[${index}][hobby]`, hobbyObj.hobby || "");
     });
+
     data.others.forEach((otherObj, index) => {
-      formData.append(`others[${index}][id]`, otherObj.id); // もし otherObj が id を持つ場合
-      formData.append(`others[${index}][name]`, otherObj.name);
+      formData.append(`others[${index}][id]`, otherObj.id || "");
+      formData.append(`others[${index}][name]`, otherObj.name || "");
     });
+
     data.others2.forEach((otherObj2, index) => {
-      formData.append(`others2[${index}][name]`, otherObj2.name);
+      formData.append(`others2[${index}][name]`, otherObj2.name || "");
     });
+
     data.others3.forEach((otherObj3, index) => {
-      formData.append(`others3[${index}][name]`, otherObj3.name);
+      formData.append(`others3[${index}][name]`, otherObj3.name || "");
     });
+
     formData.append("newOtherName", newOtherName);
     formData.append("newOtherName2", newOtherName2);
     formData.append("newOtherName3", newOtherName3);
@@ -234,7 +253,7 @@ const ProfileEdit = () => {
       formData.append("social_links[2][url]", data.instagram_link);
     }
 
-    // console.log([...formData.entries()]);
+    console.log([...formData.entries()]);
 
     try {
       await axios.post(`${API_BASE_URL}/api/profile/me`, formData, {
@@ -320,61 +339,6 @@ const ProfileEdit = () => {
             <p>{errors.comment ? errors.comment.message : null}</p>
           </div>
 
-          {/* <div className={styles["form__group"]}>
-            <legend className={styles["form__legend"]}>
-              テーマカラー選択 *
-            </legend>
-            <div className={styles["form__label-wrapper"]}>
-              <label
-                className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
-              >
-                テーマ1
-                <input
-                  type="radio"
-                  value="1"
-                  {...register("themeId", { required: true })}
-                  className={styles["form__radio"]}
-                />
-                <div className={styles["color-combination"]}>
-                  <div className={styles["color1"]}></div>
-                  <div className={styles["color2"]}></div>
-                  <div className={styles["color3"]}></div>
-                </div>
-              </label>
-              <label
-                className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
-              >
-                テーマ2
-                <input
-                  type="radio"
-                  value="2"
-                  {...register("themeId", { required: true })}
-                  className={styles["form__radio"]}
-                />
-                <div className={styles["color-combination"]}>
-                  <div className={styles["color4"]}></div>
-                  <div className={styles["color5"]}></div>
-                  <div className={styles["color6"]}></div>
-                </div>
-              </label>
-              <label
-                className={`${styles["form__label"]} ${styles["form__label-color-wrapper"]}`}
-              >
-                テーマ3
-                <input
-                  type="radio"
-                  value="3"
-                  {...register("themeId", { required: true })}
-                  className={styles["form__radio"]}
-                />
-                <div className={styles["color-combination"]}>
-                  <div className={styles["color7"]}></div>
-                  <div className={styles["color8"]}></div>
-                  <div className={styles["color9"]}></div>
-                </div>
-              </label>
-            </div>
-          </div> */}
           <div className={styles["form__group"]}>
             <legend className={styles["form__legend"]}>
               テーマカラー選択 *
