@@ -99,7 +99,6 @@ const ProfilePage = () => {
     );
   }
 
-
   return (
     <div className={styles["profile-page"]}>
       <div
@@ -119,10 +118,7 @@ const ProfilePage = () => {
               onClick={openQRModal}
               style={{ cursor: "pointer", color: "#4d5156" }}
             />
-            <CameraModal
-              onScan={handleScanResult}
-              color={"#4d5156"}
-            />
+            <CameraModal onScan={handleScanResult} color={"#4d5156"} />
           </>
         ) : (
           <>
