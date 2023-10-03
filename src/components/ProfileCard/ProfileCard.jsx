@@ -245,7 +245,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
             {profileData.others[0]?.newOtherName}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
-            {profileData.others &&
+            {profileData.others[0].name &&
               profileData.others.map((other, index) => (
                 <div
                   key={index}
@@ -299,7 +299,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
             {profileData.others2[0]?.newOtherName2}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
-            {profileData.others2 &&
+            {profileData.others2[0].name &&
               profileData.others2.map((other, index) => (
                 <div
                   key={index}
@@ -354,7 +354,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
           </dt>
 
           <div className={styles["profile__section-item-wrapper"]}>
-            {profileData.others3 &&
+            {profileData.others3[0].name &&
               profileData.others3.map((other, index) => (
                 <div
                   key={index}
@@ -417,15 +417,20 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
               loading="lazy"
             />
           )}
-          <p
-            className={styles["profile__section--free-post-image-description"]}
-            style={{
-              backgroundColor: budgeColor,
-              color: budgeTextColor,
-            }}
-          >
-            {profileData.free_posts[0].description}
-          </p>
+
+          {profileData.free_posts[0].description && (
+            <p
+              className={
+                styles["profile__section--free-post-image-description"]
+              }
+              style={{
+                backgroundColor: budgeColor,
+                color: budgeTextColor,
+              }}
+            >
+              {profileData.free_posts[0].description}
+            </p>
+          )}
         </dl>
       </div>
     </div>

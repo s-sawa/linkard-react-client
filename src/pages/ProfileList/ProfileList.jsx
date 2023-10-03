@@ -3,14 +3,19 @@ import axios from "axios";
 import useGroups from "../../hooks/useGroups";
 import { getTokenFromCookie } from "../../utils/cookies";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import FollowButton from "../../components/FollowButton/FollowButton";
 
 const ProfileList = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   const [users, setUsers] = useState([]);
   const [groupId, setGroupId] = useState(null);
-
   const { groups, loading: groupsLoading } = useGroups(API_BASE_URL);
+
+  const handleUnfollow = (unfollowedId) => {
+    setUsers((prevUsers) =>
+      prevUsers.filter((user) => user.id !== unfollowedId)
+    );
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -55,12 +60,22 @@ const ProfileList = () => {
         <p>ユーザーが見つかりません</p>
       ) : (
         users.map((user) => (
-          <ProfileCard
-            key={user.id}
-            profileData={user}
-            API_BASE_URL={API_BASE_URL}
-            isLikePage={true}
-          />
+          <>
+            <div
+              style={{
+                backgroundColor: user.theme_colors.color3,
+                height: "5rem",
+              }}
+            >
+              <FollowButton API_BASE_URL={API_BASE_URL} toUserId={user.id} />
+            </div>
+            <ProfileCard
+              key={user.id}
+              profileData={user}
+              API_BASE_URL={API_BASE_URL}
+              isLikePage={true}
+            />
+          </>
         ))
       )}
     </div>
