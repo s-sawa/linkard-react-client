@@ -48,14 +48,17 @@ const ProfileList = () => {
 
   return (
     <div>
-      <select onChange={(e) => setGroupId(Number(e.target.value))}>
-        <option value="">All Users</option>
-        {groups.map((group) => (
-          <option key={group.id} value={group.id}>
-            {group.name}
-          </option>
-        ))}
-      </select>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <p>グループ選択</p>
+        <select onChange={(e) => setGroupId(Number(e.target.value))}>
+          <option value="">All Users</option>
+          {groups.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+      </div>
       {users.length === 0 ? (
         <p>ユーザーが見つかりません</p>
       ) : (
