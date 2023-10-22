@@ -1,9 +1,7 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-// import ProfileLink from "../../components/ProfileLink/ProfileLink";
 import QRCodeModal from "../../components/QR/QRCodeModal";
 import { useNavigate, useParams } from "react-router-dom";
-// import "./ProfilePage.css";
 import { getTokenFromCookie } from "../../utils/cookies";
 import CameraModal from "../../components/CameraModal/CameraModal";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
@@ -22,7 +20,8 @@ const ProfilePage = () => {
 
   const navigate = useNavigate();
   const { user_id } = useParams();
-  // useConfirmModal.jsxからreturnされたconfirmModal関数が、confirmModal変数に格納される
+  // useConfirmModal.
+  // 単一の関数を返すだけなので分割代入いらない
   const confirmModal = useConfirmModal();
 
   const handleScanResult = (result) => {
@@ -63,9 +62,9 @@ const ProfilePage = () => {
         });
         setProfileData(response.data.user);
         setUser(response.data.user);
-        console.log(response.data.user);
+        // console.log(response.data.user);
       } catch (error) {
-        console.error("プロフィール情報の取得に失敗しました: ", error);
+        // console.error("プロフィール情報の取得に失敗しました: ", error);
       }
     };
 
@@ -76,16 +75,6 @@ const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  // if (!profileData.name) {
-  //   return (
-  //     <div>
-  //       <p>プロフィールが未入力です</p>
-  //       <button onClick={() => navigate("/profile/setup")}>
-  //         プロフィールを入力する
-  //       </button>
-  //     </div>
-  //   );
-  // }
   if (!profileData.name) {
     return (
       <div className={styles["profile-setup"]}>
