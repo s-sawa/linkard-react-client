@@ -13,6 +13,7 @@ import useFetchOther3Likers from "../../hooks/useFetchOther3Likers";
 import useHandleOther3Like from "../../hooks/useHandleOther3Like";
 import { AiOutlineHeart, AiTwotoneHeart } from "react-icons/ai";
 
+// profileData, API_BASE_URL, toUserIdは親コンポーネントのprofilePage.jsxから受け取るprops
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   // テーマカラー
@@ -24,9 +25,9 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
     profileData.theme_color_id === 3
       ? "#4d5156"
       : "#fff";
-  // console.log(budgeTextColor);
-  // const bubbleColor = profileData.theme_colors.color1;
 
+  // useHandleLikeカスタムフックを呼び出す
+  // レンダリング時にusehandleLikeの本体の処理が実行されて、fetchLikeStatus, handleLike, likesの3つの変数を受け取る
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
   const { fetchOtherLikeStatus, handleOtherLike, otherLikes } =
     useHandleOtherLike();

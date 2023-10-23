@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import ProfileLink from "../../components/ProfileLink/ProfileLink";
 import QRCodeModal from "../../components/QR/QRCodeModal";
 import { useNavigate, useParams } from "react-router-dom";
-// import "./ProfilePage.css";
 import { getTokenFromCookie } from "../../utils/cookies";
 import CameraModal from "../../components/CameraModal/CameraModal";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
@@ -12,14 +10,18 @@ import { AiFillEdit } from "react-icons/ai";
 import styles from "./ProfilePage.module.scss";
 import useConfirmModal from "../../hooks/useConfirmModal";
 import FollowButton from "../../components/FollowButton/FollowButton";
+import { useUser } from "../../components/ContextProvider";
 
 const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
+  const { user, setUser } = useUser();
+
   const navigate = useNavigate();
   const { user_id } = useParams();
-  // useConfirmModal.jsxからreturnされたconfirmModal関数が、confirmModal変数に格納される
+  // useConfirmModal.
+  // 単一の関数を返すだけなので分割代入いらない
   const confirmModal = useConfirmModal();
 
   const handleScanResult = (result) => {
@@ -54,15 +56,15 @@ const ProfilePage = () => {
           endpoint = `api/profile/me`;
         }
         const response = await axios.get(`${API_BASE_URL}/${endpoint}`, {
-          // const response = await axios.get(`${API_BASE_URL}/api/profile/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setProfileData(response.data.user);
-        // console.log(response.data.user.hobbies);
+        setUser(response.data.user);
+        // console.log(response.data.user);
       } catch (error) {
-        console.error("プロフィール情報の取得に失敗しました: ", error);
+        // console.error("プロフィール情報の取得に失敗しました: ", error);
       }
     };
 
@@ -73,16 +75,6 @@ const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  // if (!profileData.name) {
-  //   return (
-  //     <div>
-  //       <p>プロフィールが未入力です</p>
-  //       <button onClick={() => navigate("/profile/setup")}>
-  //         プロフィールを入力する
-  //       </button>
-  //     </div>
-  //   );
-  // }
   if (!profileData.name) {
     return (
       <div className={styles["profile-setup"]}>
