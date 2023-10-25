@@ -1,4 +1,4 @@
-# 自己紹介プロジェクト
+# 自己紹介プロダクト LINKARD
 
 <img src="./public/favicon.png" alt="プロジェクトのロゴ" width="100" height="100">
 
