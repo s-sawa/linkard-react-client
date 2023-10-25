@@ -1,6 +1,6 @@
 # 自己紹介プロジェクト
 
-![プロジェクトのロゴ](./public/favicon.png)
+<img src="./public/favicon.png" alt="プロジェクトのロゴ" width="100" height="100">
 
 ## 概要
 
