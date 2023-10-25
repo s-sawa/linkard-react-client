@@ -1,9 +1,25 @@
-# React + Vite
+# 自己紹介ページプロジェクト 🌟
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+このリポジトリは、ReactとViteを使用して構築された動的な自己紹介ページのフロントエンド部分です。モバイルファーストデザインに対応し、ユーザーが自分のプロフィールを作成し、共有するためのさまざまな機能を提供します。バックエンドはLaravelで構築されたRESTful APIによってサポートされています。
 
-Currently, two official plugins are available:
+![プロジェクトのスクリーンショットやGIF](画像のURL)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# linkard-react-client
+## 主な機能
+
+- **ユーザーアカウント管理**: 新規登録、ログイン、ログアウトが可能です（Bearer Token認証を使用）。
+- **プロフィール管理**: ユーザーは自分のプロフィールを作成、表示、編集、削除が可能です。
+- **いいね機能**: 投稿やプロフィールに対して「いいね」ができます。
+- **QRコードによるフォロー**: 自分のフォロー用QRコードを生成、表示し、他のユーザーがそのQRコードをスキャンしてフォローできます。
+- **フォロー時のグルーピング**: ユーザーをフォローする際に、特定のグループに追加することができます。
+
+## 技術スタック
+
+このセクションでは、プロジェクトに使用されている主な技術/ライブラリについて簡単に説明します。
+
+- **React**: UIを構築するためのJavaScriptライブラリ。
+- **Vite**: 高速なフロントエンドビルドツール。
+- **Laravel (API)**: バックエンドAPIとして。
+- **antd**: ReactのためのUIデザイン言語とフレームワーク。
+- **axios**: HTTPクライアント。
+- **js-cookie**: クッキーの操作を容易にするためのライブラリ。
+- **react-webcam**: ウェブカメラの機能をReactアプリケーションに統合するためのコンポーネント。
