@@ -5,7 +5,7 @@
 ## 概要
 
 LINKARDはモバイル対応の自己紹介Webサービスです。フロントエンドには、React(Vite)を使用し、バックエンドにはLaravel（API）を使用、DBはMySQLを用いています。
-Vercelにでぷお
+Vercelにデプロイしました。
 
 ## デモ
 
