@@ -17,8 +17,7 @@ Vercelにでぷお
 
 以下は、アプリのいくつかのスクリーンショットです。
 
-![スクリーンショット1](path-to-your-screenshot1.png)
-![スクリーンショット2](path-to-your-screenshot2.png)
+<img src="./public/favicon.png" alt="スクリーンショット" width="60" height="125">
 
 ## 機能
 
