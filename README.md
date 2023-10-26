@@ -17,7 +17,7 @@ Vercelにデプロイしました。
 
 以下は、アプリのいくつかのスクリーンショットです。
 
-<img src="./public/profilecard.png" alt="スクリーンショット" width="250" height="600">
+<img src="./public/profilecard.png" alt="スクリーンショット" width="125" height="300">
 自分のプロフィールカード
 
 ## 機能
