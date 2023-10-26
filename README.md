@@ -17,7 +17,7 @@ Vercelにでぷお
 
 以下は、アプリのいくつかのスクリーンショットです。
 
-<img src="./public/profilecard.png" alt="スクリーンショット" width="300" height="750">
+<img src="./public/profilecard.png" alt="スクリーンショット" width="250" height="600">
 
 ## 機能
 
