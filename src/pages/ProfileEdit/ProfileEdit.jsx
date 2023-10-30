@@ -87,7 +87,7 @@ const ProfileEdit = () => {
         setProfileData(response.data);
         console.log(response.data);
         setValue("name", response.data.user.name || "");
-        setValue("birthday", response.data.user.birthday);
+        // setValue("birthday", response.data.user.birthday);
         setValue("comment", response.data.user.comment || "");
         setValue("themeId", response.data.user.theme_colors.id.toString());
         setValue("title", response.data.freePosts[0].title || "");
@@ -95,10 +95,11 @@ const ProfileEdit = () => {
         setValue("otherName", response.data.otherData[0].newOtherName || "");
         setValue("otherName2", response.data.otherData2[0].newOtherName2 || "");
         setValue("otherName3", response.data.otherData3[0].newOtherName3 || "");
-        // if (response.data.socialLinks && response.data.socialLinks[0]) {
-        //   setValue("facebook_link", response.data.socialLinks[0].url);
-        // }
-        setValue("facebook_link", response.data.socialLinks[0].url || "");
+        if (response.data.socialLinks && response.data.socialLinks[0]) {
+          setValue("facebook_link", response.data.socialLinks[0].url);
+        }
+
+        // setValue("facebook_link", response.data.socialLinks[0]?.url || "");
         if (response.data.socialLinks && response.data.socialLinks[1]) {
           setValue("twitter_link", response.data.socialLinks[1].url);
         }
