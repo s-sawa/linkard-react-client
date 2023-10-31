@@ -22,7 +22,6 @@ const CameraModal = ({ onScan, color }) => {
 
   return (
     <div style={{ minHeight: "32px", display: "flex", alignItems: "center" }}>
-      {/* <button onClick={openModal}>カメラを開始</button> */}
       <BsFillCameraFill
         size={32}
         onClick={openModal}
