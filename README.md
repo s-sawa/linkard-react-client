@@ -1,9 +1,48 @@
-# React + Vite
+# 自己紹介Webサービス LINKARD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="./public/favicon.png" alt="プロジェクトのロゴ" width="100" height="100">
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# linkard-react-client
+LINKARDはモバイル対応の自己紹介Webサービスです。フロントエンドには、React(Vite)を使用し、バックエンドにはLaravel（API）を使用、DBはMySQLを用いています。
+Vercelにデプロイしました。
+
+## デモ
+
+以下のGIFは、このアプリのデモンストレーションです。
+
+![デモンストレーションGIF](path-to-your-demo.gif)
+
+## スクリーンショット
+
+以下は、アプリのいくつかのスクリーンショットです。
+
+<img src="./public/profilecard.png" alt="スクリーンショット" width="125" height="300">
+自分のプロフィールカード
+
+## 機能
+
+- 新規登録、ログイン、ログアウト
+- プロフィールの作成、表示、編集、削除
+- いいね
+- フォロー
+- フォロー時のグルーピング機能
+
+## 特徴
+
+- bearer tokenを用いた認証
+- 動的な入力フォーム
+- QRコードスキャンによるフォローページへの遷移
+- QRコードを使用したフォロー機能
+- フォロー時のグルーピング機能
+- アイデンティティをだすため、プロフィールカードのテーマ色設定機能
+
+## 使用技術
+
+- React: ^18.2.0
+- Vite: ^4.4.5
+- Laravel (backend)
+- antd: ^5.9.2
+- react-webcam: ^7.1.1
+- その他多数
+

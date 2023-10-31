@@ -9,18 +9,20 @@ html {
   font-size: 10px;
 }
 
-
 body {
   font-size: 16px;
   line-height: 1.6;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f5f1f1;
 }
 .container {
-  width: 100%;
-  max-width: 1200px;
+  /* width: 100%; */
+  /* max-width: 1200px; */
   margin: 0 auto;
   /* padding: 0 20px; */
-  
 }
 
 a {
@@ -35,10 +37,4 @@ a {
   body {
     font-size: 14px;
   }
-}
-
-body {
-  /* background-color: #e1b2b2; */
-  background-color: #f5f1f1;
-  /* color: #4d5156; */
 }

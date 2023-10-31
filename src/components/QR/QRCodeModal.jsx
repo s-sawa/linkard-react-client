@@ -5,11 +5,14 @@ import styles from "./QRCodeModal.module.scss";
 
 const customStyles = {
   content: {
-    width: "80vw",
-    height: "50%",
+    width: "70%",
+    height: "30%",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+    display: "flex", // Flexboxを使用
+    justifyContent: "center", // 水平方向の中央に配置
+    alignItems: "center", // 垂直方向の中央に配置
   },
 };
 
