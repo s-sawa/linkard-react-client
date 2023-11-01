@@ -1,18 +1,16 @@
 import Modal from "react-modal";
 import QRCode from "qrcode.react";
-import styles from "./QRCodeModal.module.scss";
-
 
 const customStyles = {
   content: {
-    width: "70%",
+    width: "350px",
     height: "30%",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    display: "flex", // Flexboxを使用
-    justifyContent: "center", // 水平方向の中央に配置
-    alignItems: "center", // 垂直方向の中央に配置
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 };
 
@@ -25,8 +23,7 @@ const QRCodeModal = ({ isOpen, onRequestClose, url }) => {
       contentLabel="QR Code Modal"
     >
       <div>
-        {/* <h2>Your Profile QR Code</h2> */}
-        <QRCode value={url} size={240} />
+        <QRCode value={url} size={220} />
       </div>
     </Modal>
   );

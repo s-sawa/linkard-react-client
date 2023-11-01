@@ -24,7 +24,7 @@ const BarcodeScanner = ({ onScan }, ref) => {
           stopScan(); // QRコードが読み取られたときのみスキャン停止
         }
         if (err && err.name !== "NotFoundException") {
-          console.error(err);
+          // console.error(err);
         }
         controlsRef.current = controls; // controlsをcontrolsRefに保存
       }
@@ -53,7 +53,7 @@ const BarcodeScanner = ({ onScan }, ref) => {
   return (
     <div>
       <video ref={videoRef} style={{ width: "100%" }} />
-      {isScanning ? <button onClick={stopScan}>Stop Scanning</button> : null}
+      {/* {isScanning ? <button onClick={stopScan}>Stop Scanning</button> : null} */}
     </div>
   );
 };
