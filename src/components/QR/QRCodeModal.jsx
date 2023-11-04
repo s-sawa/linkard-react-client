@@ -3,8 +3,8 @@ import QRCode from "qrcode.react";
 
 const customStyles = {
   content: {
-    width: "350px",
-    height: "30%",
+    width: "300px",
+    height: "300px",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",

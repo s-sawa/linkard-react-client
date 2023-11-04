@@ -2,12 +2,10 @@ import { Modal } from "antd";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import useConfirmModal from "../../hooks/useConfirmModal";
 
 const DeleteProfileButton = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
-  const confirmModal = useConfirmModal();
   const token = Cookies.get("token");
 
   const handleDelete = () => {
