@@ -66,5 +66,6 @@ Vercelにデプロイしました。
 ## デプロイ
 
 React：Vercel
+
 Laravel：さくらのレンタルサーバー
 
