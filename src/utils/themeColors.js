@@ -6,7 +6,10 @@ const colorThemes = [
   ["#32405f", "#bdc6ca", "#889291"],
   ["#dbaba7", "#789485", "#f0d6d4"],
   ["#e7e5e3", "#b7ccdd", "#526d98"],
-  ["#494544", "#c41a30", "#bac8c6"],
+  ["#bac8c6", "#494544", "#b3a9a6"],
+  ["#fbe3e5", "#387bbc", "#e699ac"],
+  ["#4c4f9a", "#d283b4", "#fbdbd4"],
+  ["#a7d9dd", "#fff2b2", "#f3adc5"],
 ];
 
 export default colorThemes;
