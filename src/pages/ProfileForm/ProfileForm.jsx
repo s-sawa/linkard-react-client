@@ -9,6 +9,7 @@ import defaultProfileImage from "../../assets/defaultProfileImage.svg";
 import defaultFreeImage from "../../assets/defaultFreeImage.svg";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { CgAddR } from "react-icons/cg";
+import colorThemes from "../../utils/themeColors";
 
 const { Step } = Steps;
 
@@ -138,13 +139,13 @@ const ProfileForm = () => {
     setCurrent(current + 1);
   };
 
-  const colorThemes = [
-    ["#feeedc", "#bde1da", "#f5b5a7"],
-    ["#dbd2e8", "#dfe8f0", "#fff6a4"],
-    ["#ded3d6", "#c0e4f2", "#fffcd7"],
-    ["#555168", "#f5d7d6", "#e06b7b"],
-    ["#32405f", "#bdc6ca", "#889291"],
-  ];
+  // const colorThemes = [
+  //   ["#feeedc", "#bde1da", "#f5b5a7"],
+  //   ["#dbd2e8", "#dfe8f0", "#fff6a4"],
+  //   ["#ded3d6", "#c0e4f2", "#fffcd7"],
+  //   ["#555168", "#f5d7d6", "#e06b7b"],
+  //   ["#32405f", "#bdc6ca", "#889291"],
+  // ];
 
   const onSubmit = async (data) => {
     const formData = new FormData();

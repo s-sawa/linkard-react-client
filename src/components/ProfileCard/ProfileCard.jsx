@@ -12,6 +12,7 @@ import useFetchOther2Likers from "../../hooks/useFetchOther2Likers";
 import useFetchOther3Likers from "../../hooks/useFetchOther3Likers";
 import useHandleOther3Like from "../../hooks/useHandleOther3Like";
 import { AiOutlineHeart, AiTwotoneHeart } from "react-icons/ai";
+import { getHigherContrastTextColor } from "../../utils/calcContrast";
 
 // profileData, API_BASE_URL, toUserIdは親コンポーネントのprofilePage.jsxから受け取るprops
 const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
@@ -19,13 +20,23 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
   // テーマカラー
   const budgeColor = profileData.theme_colors.color1;
   const backGroundColor = profileData.theme_colors.color2;
-  const budgeTextColor =
-    profileData.theme_color_id === 1 ||
-    profileData.theme_color_id === 2 ||
-    profileData.theme_color_id === 3
-      ? "#4d5156"
-      : "#fff";
+  // const budgeTextColor =
+  //   profileData.theme_color_id === 1 ||
+  //   profileData.theme_color_id === 2 ||
+  //   profileData.theme_color_id === 3
+  //     ? "#4d5156"
+  //     : "#fff";
+  const budgeTextColor = getHigherContrastTextColor(
+    budgeColor,
+    "#4d5156",
+    "#ebebeb"
+  );
 
+  const textColor = getHigherContrastTextColor(
+    backGroundColor,
+    "#4d5156",
+    "#ebebeb"
+  );
   // useHandleLikeカスタムフックを呼び出す
   // レンダリング時にusehandleLikeの本体の処理が実行されて、fetchLikeStatus, handleLike, likesの3つの変数を受け取る
   const { fetchLikeStatus, handleLike, likes } = useHandleLike();
@@ -125,7 +136,12 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
         )}
         <div className={styles["profile__name-icon-container"]}>
           <div className={styles["profile__name-container"]}>
-            <div className={styles["profile__name"]}>{profileData.name}</div>
+            <div
+              className={styles["profile__name"]}
+              style={{ color: textColor }}
+            >
+              {profileData.name}
+            </div>{" "}
           </div>
           <QRCodeModal
             isOpen={isQRModalOpen}
@@ -153,7 +169,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       rel="noopener noreferrer"
                       className={styles["profile__link--facebook"]}
                     >
-                      <FaFacebook size={30} />
+                      <FaFacebook size={30} style={{ color: textColor }} />
                     </a>
                   );
                 case "twitter":
@@ -165,7 +181,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       rel="noopener noreferrer"
                       className={styles["profile__link--twitter"]}
                     >
-                      <FaTwitter size={30} />
+                      <FaTwitter size={30} style={{ color: textColor }} />
                     </a>
                   );
                 case "instagram":
@@ -177,7 +193,7 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
                       rel="noopener noreferrer"
                       className={styles["profile__link--instagram"]}
                     >
-                      <FaInstagram size={30} />
+                      <FaInstagram size={30} style={{ color: textColor }} />
                     </a>
                   );
                 default:
@@ -189,7 +205,12 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
 
       <div className={styles["profile__sections"]}>
         <dl className={styles["profile__section"]}>
-          <dt className={styles["profile__section-title"]}>趣味</dt>
+          <dt
+            className={styles["profile__section-title"]}
+            style={{ color: textColor }}
+          >
+            趣味
+          </dt>
           <div className={styles["profile__section-item-wrapper"]}>
             {profileData.hobbies &&
               profileData.hobbies.map((hobby, index) => (
@@ -242,7 +263,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
         </dl>
 
         <dl className={styles["profile__section"]}>
-          <dt className={styles["profile__section-title"]}>
+          <dt
+            className={styles["profile__section-title"]}
+            style={{ color: textColor }}
+          >
             {profileData.others[0]?.newOtherName}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
@@ -296,7 +320,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
         </dl>
 
         <dl className={styles["profile__section"]}>
-          <dt className={styles["profile__section-title"]}>
+          <dt
+            className={styles["profile__section-title"]}
+            style={{ color: textColor }}
+          >
             {profileData.others2[0]?.newOtherName2}
           </dt>
           <div className={styles["profile__section-item-wrapper"]}>
@@ -350,7 +377,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
         </dl>
 
         <dl className={styles["profile__section"]}>
-          <dt className={styles["profile__section-title"]}>
+          <dt
+            className={styles["profile__section-title"]}
+            style={{ color: textColor }}
+          >
             {profileData.others3[0]?.newOtherName3}
           </dt>
 
@@ -405,7 +435,10 @@ const ProfileCard = ({ profileData, API_BASE_URL, isLikePage, toUserId }) => {
         </dl>
 
         <dl className={styles["profile__section"]}>
-          <dt className={styles["profile__section-subtitle"]}>
+          <dt
+            className={styles["profile__section-subtitle"]}
+            style={{ color: textColor }}
+          >
             {profileData.free_posts[0].title}
           </dt>
           {freeImagePath && (
