@@ -10,13 +10,14 @@ import { AiFillEdit } from "react-icons/ai";
 import styles from "./ProfilePage.module.scss";
 import useConfirmModal from "../../hooks/useConfirmModal";
 import FollowButton from "../../components/FollowButton/FollowButton";
-import { useUser } from "../../components/ContextProvider";
+// import { useUser } from "../../components/ContextProvider";
+import { getHigherContrastTextColor } from "../../utils/calcContrast";
 
 const ProfilePage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-  const { user, setUser } = useUser();
+  // const { user, setUser } = useUser();
 
   const navigate = useNavigate();
   const { user_id } = useParams();
@@ -61,8 +62,7 @@ const ProfilePage = () => {
           },
         });
         setProfileData(response.data.user);
-        setUser(response.data.user);
-        // console.log(response.data.user);
+        // setUser(response.data.user);
       } catch (error) {
         // console.error("プロフィール情報の取得に失敗しました: ", error);
       }
@@ -70,6 +70,13 @@ const ProfilePage = () => {
 
     fetchData();
   }, [user_id]);
+
+  // const iconColor = "#4d5156";
+  // const headIconColor = getHigherContrastTextColor(
+  //   iconColor,
+  //   "#4d5156",
+  //   "#ebebeb"
+  // );
 
   if (!profileData) {
     return <div>Loading...</div>;

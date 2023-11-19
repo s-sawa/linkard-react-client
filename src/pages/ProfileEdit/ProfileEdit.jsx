@@ -7,6 +7,7 @@ import styles from "./ProfileEdit.module.scss";
 import { CgAddR } from "react-icons/cg";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { Modal } from "antd";
+import colorThemes from "../../utils/themeColors";
 
 const ProfileEdit = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -62,17 +63,17 @@ const ProfileEdit = () => {
     control,
     name: "others3",
   });
-
   const [image, setImage] = useState(null);
   const [freeImage, setFreeImage] = useState(null);
-
-  const colorThemes = [
-    ["#feeedc", "#bde1da", "#f5b5a7"],
-    ["#dbd2e8", "#dfe8f0", "#fff6a4"],
-    ["#ded3d6", "#c0e4f2", "#fffcd7"],
-    ["#555168", "#f5d7d6", "#e06b7b"],
-    ["#32405f", "#bdc6ca", "#889291"],
-  ];
+  // const colorThemes = [
+  //   ["#feeedc", "#bde1da", "#f5b5a7"],
+  //   ["#dbd2e8", "#dfe8f0", "#fff6a4"],
+  //   ["#ded3d6", "#c0e4f2", "#fffcd7"],
+  //   ["#555168", "#f5d7d6", "#e06b7b"],
+  //   ["#32405f", "#bdc6ca", "#889291"],
+  //   ["#dbaba7", "#789485", "#f0d6d4"],
+  //   ["#e7e5e3", "#b7ccdd", "#526d98"],
+  // ];
 
   useEffect(() => {
     const fetchProfileData = async () => {
